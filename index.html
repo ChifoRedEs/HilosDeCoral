@@ -127,7 +127,7 @@
 
 <!-- Ventana de producto -->
 <dialog class="ventana ventana-producto" id="ventana-producto" aria-labelledby="vp-nombre">
-  <div class="ventana-marco marco-coral" id="vp-contenido"></div>
+  <div class="ventana-marco marco-coral"><div class="ventana-interior" id="vp-contenido"></div></div>
   <img class="deco-ventana deco-ventana-izq" src="img/esquina-sup-izq.webp" alt="" width="140" height="155">
   <img class="deco-ventana deco-hilo" src="img/hilo-colgante.webp" alt="" width="36" height="150">
   <button type="button" class="cerrar" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
@@ -136,8 +136,10 @@
 <!-- Ventana de páginas (envíos, devoluciones...) -->
 <dialog class="ventana ventana-pagina" id="ventana-pagina" aria-labelledby="pagina-titulo">
   <div class="ventana-marco marco-agua">
-    <h2 id="pagina-titulo"></h2>
-    <div class="texto-rico" id="pagina-texto"></div>
+    <div class="ventana-interior">
+      <h2 id="pagina-titulo"></h2>
+      <div class="texto-rico" id="pagina-texto"></div>
+    </div>
   </div>
   <img class="deco-ventana deco-ventana-der" src="img/esquina-inf-der.webp" alt="" width="130" height="132">
   <button type="button" class="cerrar" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>

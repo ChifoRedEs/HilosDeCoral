@@ -177,11 +177,12 @@ dialog::backdrop { background: rgba(20, 47, 77, .55); backdrop-filter: blur(2px)
 .ventana { width: min(980px, calc(100vw - 32px)); overflow: visible; }
 .ventana[open] { animation: aparece .2s ease; }
 @keyframes aparece { from { opacity: 0; transform: translateY(12px); } }
-.ventana-marco { position: relative; background: #fff; border-radius: 28px; padding: 46px 38px 38px; max-height: calc(100dvh - 32px); overflow-y: auto; box-shadow: var(--sombra-ventana); }
-.ventana-marco::before { content: ""; position: absolute; inset: 14px; border: 2px dashed var(--arena); border-radius: 20px; pointer-events: none; }
-.ventana-marco.marco-coral::before { border-color: var(--coral); }
-.ventana-marco.marco-agua::before { border-color: var(--agua); }
-.cerrar { position: absolute; top: 22px; right: 22px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--marino); background: #fff; color: var(--marino); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
+.ventana-marco { position: relative; background: #fff; border-radius: 28px; padding: 14px; max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; box-shadow: var(--sombra-ventana); }
+.ventana-marco::before { content: none; }
+.ventana-interior { border: 2px dashed var(--arena); border-radius: 20px; padding: 34px 26px 28px; }
+.ventana-marco.marco-coral .ventana-interior { border-color: var(--coral); }
+.ventana-marco.marco-agua .ventana-interior { border-color: var(--agua); }
+.cerrar { position: absolute; top: 26px; right: 26px; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--marino); background: #fff; color: var(--marino); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; }
 .cerrar:hover { background: var(--marino); color: #fff; }
 .deco-ventana { position: absolute; pointer-events: none; z-index: 2; height: auto; }
 .deco-ventana-izq { top: -40px; left: -34px; width: 130px; }
@@ -210,7 +211,7 @@ dialog::backdrop { background: rgba(20, 47, 77, .55); backdrop-filter: blur(2px)
 
 /* Páginas */
 .ventana-pagina { width: min(760px, calc(100vw - 32px)); }
-.ventana-pagina h2 { margin: 0 50px 8px 0; font-family: var(--fuente-titulo); font-size: 44px; line-height: 1.1; }
+.ventana-pagina h2 { margin: 0 56px 8px 0; font-family: var(--fuente-titulo); font-size: 44px; line-height: 1.1; }
 .texto-rico h3 { margin: 22px 0 6px; font-size: 19px; }
 .texto-rico p { margin: 0 0 10px; color: var(--texto-suave); }
 .texto-rico ul { margin: 0 0 10px; padding-left: 22px; color: var(--texto-suave); }
@@ -270,7 +271,8 @@ dialog:focus, dialog:focus-visible { outline: none; }
 @media (max-width: 820px) {
   .producto { grid-template-columns: 1fr; gap: 20px; }
   .deco, .deco-ventana { display: none; }
-  .ventana-marco { padding: 56px 22px 26px; }
+  .ventana-marco { padding: 10px; }
+  .ventana-interior { padding: 50px 16px 20px; border-radius: 18px; }
 }
 @media (max-width: 640px) {
   .menu-enlaces { display: none; }
@@ -293,3 +295,4 @@ dialog:focus, dialog:focus-visible { outline: none; }
   .campo-doble { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+.ventana-marco:focus, .ventana-marco:focus-visible { outline: none; }
