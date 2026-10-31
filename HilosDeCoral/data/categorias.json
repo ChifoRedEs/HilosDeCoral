@@ -1,0 +1,5 @@
+[
+  { "id": "textil", "nombre": "Textil", "descripcion": "Totebags, bolsos, camisetas y bodies de bebé decorados a mano.", "icono": "img/cat-textil.webp", "banner": "img/banner-textil.webp", "visible": true },
+  { "id": "ceramica", "nombre": "Cerámica", "descripcion": "Pendientes, colgantes, broches y vajilla de cerámica pintada.", "icono": "img/cat-ceramica.webp", "banner": "img/banner-ceramica.webp", "visible": true },
+  { "id": "bisuteria", "nombre": "Bisutería", "descripcion": "Pulseras, anillos y pendientes con abalorios y cordones.", "icono": "img/cat-bisuteria.webp", "banner": "img/banner-bisuteria.webp", "visible": true }
+]
