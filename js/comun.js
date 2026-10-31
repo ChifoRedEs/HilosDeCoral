@@ -193,7 +193,7 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.8.0';
+  const VERSION = '1.9.0';
   const FECHA_VERSION = '31/10/2026';
 
   /* Distancia en km entre dos puntos (fórmula del haversine) */
@@ -205,14 +205,60 @@
   }
 
   /* Busca un código postal o una dirección en OpenStreetMap (gratuito, sin clave) */
+  async function nominatim(ruta, params) {
+    const r = await fetch('https://nominatim.openstreetmap.org/' + ruta + '?format=json&addressdetails=1&' + params, { headers: { 'Accept-Language': 'es' } });
+    if (!r.ok) throw new Error('servicio');
+    return r.json();
+  }
+  const lugar = (x) => x ? { lat: parseFloat(x.lat), lon: parseFloat(x.lon), nombre: x.display_name, dir: x.address || {} } : null;
+
+  /* Busca un código postal (5 cifras) o un texto libre en España */
   async function buscarLugar(texto) {
     const t = String(texto || '').trim();
     const q = /^\d{5}$/.test(t) ? 'postalcode=' + t + '&country=Spain' : 'countrycodes=es&q=' + encodeURIComponent(t);
-    const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&' + q, { headers: { 'Accept-Language': 'es' } });
+    const j = await nominatim('search', 'limit=1&' + q);
+    return lugar(j[0]);
+  }
+
+  /* Dirección aproximada a partir de unas coordenadas */
+  async function lugarDeCoordenadas(lat, lon) {
+    const j = await nominatim('reverse', 'zoom=18&lat=' + lat + '&lon=' + lon);
+    return j && !j.error ? lugar(j) : null;
+  }
+
+  /* Busca una dirección completa: calle, número, municipio y código postal */
+  async function buscarDireccion(d) {
+    const p = (o) => Object.entries(o).filter(([, v]) => v).map(([k, v]) => k + '=' + encodeURIComponent(v)).join('&');
+    const ciudad = String(d.municipio || '').split('/')[0];
+    const j = await nominatim('search', 'limit=1&countrycodes=es&' + p({ street: [d.numero, d.calle].filter(Boolean).join(' '), city: ciudad, postalcode: d.cp }));
+    return lugar(j[0]);
+  }
+
+  /* Sugerencias de calles mientras se escribe (Photon, de OpenStreetMap) */
+  async function sugerirCalles(texto, municipio, cerca) {
+    const ciudad = String(municipio || '').split('/')[0];
+    let url = 'https://photon.komoot.io/api/?limit=10&layer=street&q=' + encodeURIComponent(texto + (ciudad ? ' ' + ciudad : ''));
+    if (cerca) url += '&lat=' + cerca.lat + '&lon=' + cerca.lon;
+    const r = await fetch(url);
     if (!r.ok) throw new Error('servicio');
-    const j = await r.json();
-    if (!j.length) return null;
-    return { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon), nombre: j[0].display_name };
+    const j = await r.json(), vistos = new Set();
+    return (j.features || []).map((f) => f.properties || {}).filter((x) => x.countrycode === 'ES' && x.name).map((x) => ({
+      calle: x.name, cp: x.postcode || '', municipio: x.city || x.county || '', zona: x.district || x.locality || ''
+    })).filter((x) => { const k = x.calle + '|' + x.cp; if (vistos.has(k)) return false; vistos.add(k); return true; });
+  }
+
+  /* Compara nombres sin tildes ni mayúsculas (admite nombres dobles «Alacant/Alicante») */
+  const normal = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9ñ ]/g, ' ').replace(/\s+/g, ' ').trim();
+  function mismoNombre(a, b) {
+    const pa = String(a || '').split('/').map(normal), pb = String(b || '').split('/').map(normal);
+    return pa.some((x) => x && pb.includes(x));
+  }
+
+  /* Comunidades, provincias y municipios (se carga solo cuando hace falta) */
+  let geoPromesa = null;
+  function cargarMunicipios() {
+    if (!geoPromesa) geoPromesa = fetch('data/municipios.json?v=' + VERSION).then((r) => { if (!r.ok) throw new Error('municipios'); return r.json(); }).catch((e) => { geoPromesa = null; throw e; });
+    return geoPromesa;
   }
 
   /* Pide la ubicación al navegador */
@@ -225,5 +271,5 @@
 
   const formatoKm = (km) => km.toLocaleString('es-ES', { maximumFractionDigits: km < 10 ? 1 : 0 }) + ' km';
 
-  global.HDC = { VERSION, FECHA_VERSION, distanciaKm, buscarLugar, miUbicacion, formatoKm, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
+  global.HDC = { VERSION, FECHA_VERSION, distanciaKm, buscarLugar, lugarDeCoordenadas, buscarDireccion, sugerirCalles, mismoNombre, cargarMunicipios, miUbicacion, formatoKm, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
 })(window);

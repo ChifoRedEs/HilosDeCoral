@@ -65,8 +65,9 @@ En **Copias de seguridad** puedes descargar `productos.json`, `categorias.json` 
 
 ## Historial de versiones
 
-La versión aparece en el pie de la tienda y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
+La versión aparece en el pie de la tienda (sin fecha) y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
 
+- **1.9.0** · 31/10/2026: dirección de entrega con desplegables de comunidad autónoma, provincia y municipio, buscador de calles (o calle libre si no aparece) y comprobación de la dirección: el código postal debe ser de la provincia y la distancia se vuelve a medir con la dirección real, ajustando la entrega si cambia de tramo. Nuevos iconos de la app con fondo azul. Pie sin fecha.
 - **1.8.0** · 31/10/2026: entregas según la distancia. El cliente indica su ubicación o código postal y ve solo sus opciones: entrega en mano (hasta 10 km, Bizum o +2 € en efectivo) y entrega en domicilio (hasta 25 km, 5,40 €; más de 25 km, 7,90 €; solo Bizum). Punto de referencia y tramos editables en el panel.
 - **1.7.3** · 31/10/2026: logo más grande dentro del icono de la app (un 80 % menos de espacio libre en el disco interior).
 - **1.7.2** · 31/10/2026: icono de la app más pequeño, sobre disco crema con anillo blanco exterior (y fondo azul marino en los iconos recortables).

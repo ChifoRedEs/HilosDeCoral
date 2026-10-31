@@ -458,3 +458,19 @@ dialog:focus, dialog:focus-visible { outline: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 .ventana-marco:focus, .ventana-marco:focus-visible { outline: none; }
+
+/* Dirección de entrega (v1.9.0) */
+.direccion select:disabled { opacity: .6; }
+.campo-calle { position: relative; display: flex; flex-direction: column; }
+.calle-sugerencias { position: absolute; z-index: 5; top: 100%; left: 0; right: 0; margin: 4px 0 0; padding: 4px; list-style: none; background: #fff; border: 2px solid var(--agua); border-radius: 12px; box-shadow: 0 10px 24px rgba(27, 63, 102, .18); max-height: 260px; overflow-y: auto; }
+.calle-sugerencias button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; text-align: left; background: none; border: 0; border-radius: 8px; padding: 8px 10px; font: inherit; color: inherit; cursor: pointer; }
+.calle-sugerencias button span { font-size: 13px; opacity: .75; }
+.calle-sugerencias li.activa button, .calle-sugerencias button:hover { background: #E6F4F2; }
+.calle-ayuda { margin: 6px 0 0; font-size: 14px; color: #6B5A3E; }
+.dir-estado { margin: 4px 0 0; padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 700; line-height: 1.4; }
+.dir-bien { background: #E7F5EC; color: #1E6B4A; }
+.dir-aviso { background: #FFF6E0; color: #7A5300; }
+.dir-mal { background: #FDEBE8; color: #A23A2A; }
+.direccion .campo select { width: 100%; min-width: 0; font: inherit; font-weight: 400; color: var(--marino); background: #fff; border: 2px solid var(--arena); border-radius: 12px; padding: 10px 12px; }
+.direccion .campo select:focus { outline: none; border-color: var(--agua); }
+.direccion .enlace-tallas { align-self: flex-start; font-size: 14px; }

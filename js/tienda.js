@@ -1,7 +1,7 @@
 /* Hilos de Coral · lógica de la tienda */
 (function () {
   'use strict';
-  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, distanciaKm, buscarLugar, miUbicacion, formatoKm } = window.HDC;
+  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, distanciaKm, buscarLugar, miUbicacion, formatoKm, lugarDeCoordenadas, buscarDireccion, sugerirCalles, mismoNombre, cargarMunicipios } = window.HDC;
   const tallaDe = (id) => TALLAS_BEBE.find((t) => t.id === id);
   const $ = (s, el) => (el || document).querySelector(s);
   const CLAVE_CESTA = 'hdc-cesta';
@@ -67,7 +67,7 @@
     if (po.banner) $('#portada').style.backgroundImage = 'url("' + po.banner.replace(/"/g, '') + '")';
     const meta = document.querySelector('meta[name="description"]'); if (meta && t.descripcion) meta.content = t.descripcion;
     $('#anio').textContent = new Date().getFullYear();
-    $('#version-web').textContent = 'v' + VERSION + ' · ' + FECHA_VERSION;
+    $('#version-web').textContent = 'v' + VERSION;
 
     const barra = $('#barra-superior');
     barra.textContent = po.barraSuperior || ''; barra.hidden = !po.barraSuperior;
@@ -599,12 +599,18 @@
     if (metodo === 'cp' && !/^\d{5}$/.test(cp)) { E.zona = { error: 'Escribe un código postal de 5 cifras.', cp }; pintarPedido(); return; }
     E.zona = { cargando: true, cp }; pintarPedido();
     try {
+      cargarMunicipios().then((g) => { E.geo = g; }).catch(() => {});
       const pos = metodo === 'gps' ? await miUbicacion() : await buscarLugar(cp);
       if (!pos) E.zona = { error: 'No encontramos ese código postal. Prueba con tu ubicación.', cp };
       else {
         const km = distanciaKm(parseFloat(ref.lat), parseFloat(ref.lon), pos.lat, pos.lon);
-        E.zona = { km, cp, metodo: metodo === 'gps' ? 'por ubicación' : 'por código postal ' + cp };
-        if (cp && E.pedido && !E.pedido.cp) E.pedido.cp = cp;
+        let dir = pos.dir || null;
+        if (metodo === 'gps') { try { const l = await lugarDeCoordenadas(pos.lat, pos.lon); dir = l && l.dir; } catch (e) { dir = null; } }
+        const cpZona = cp || (dir && /^\d{5}$/.test(dir.postcode || '') ? dir.postcode : '');
+        E.zona = { km, cp: cpZona, metodo: metodo === 'gps' ? 'por ubicación' : 'por código postal ' + cp, pos };
+        E.dir = null;
+        try { E.geo = E.geo || await cargarMunicipios(); } catch (e) { /* sin lista: campos libres */ }
+        prefijarDireccion(dir, cpZona, metodo === 'gps');
         const val = entregasValidas();
         if (E.pedido && !val.some((e) => e.id === E.pedido.entrega)) { E.pedido.entrega = val[0] ? val[0].id : ''; E.pedido.pago = ''; }
       }
@@ -612,6 +618,168 @@
       E.zona = { cp, error: metodo === 'gps' ? 'No pudimos obtener tu ubicación. Revisa el permiso del navegador o prueba con el código postal.' : 'No se pudo comprobar ahora mismo. Inténtalo de nuevo o usa tu ubicación.' };
     }
     pintarPedido();
+  }
+
+
+  /* ---------- Dirección de entrega ---------- */
+  const ccaaDe = (prov) => E.geo && E.geo.ccaa.find((c) => c.p.some((p) => p.id === prov));
+  const nombreProv = (id) => { const c = ccaaDe(id); const p = c && c.p.find((x) => x.id === id); return p ? p.n : ''; };
+  function enfocar(nombre) { const el = document.querySelector('#form-pedido [name="' + nombre + '"]'); if (el) el.focus({ preventScroll: true }); }
+
+  /* Rellena la dirección con lo que ya sabemos por la comprobación de distancia */
+  function prefijarDireccion(dir, cp, conCalle) {
+    E.pedido = E.pedido || {};
+    const d = E.pedido;
+    if (cp && !d.cp) d.cp = cp;
+    const c = String(d.cp || '');
+    if (E.geo && /^\d{5}$/.test(c) && !d.prov) { const cc = ccaaDe(c.slice(0, 2)); if (cc) { d.prov = c.slice(0, 2); d.ccaa = cc.n; } }
+    if (!dir) return;
+    if (E.geo && d.prov && !d.municipio) {
+      const lista = E.geo.m[d.prov] || [];
+      const cand = [dir.city, dir.town, dir.village, dir.municipality, dir.county].filter(Boolean);
+      const m = lista.find((x) => cand.some((n) => mismoNombre(x, n)));
+      if (m) d.municipio = m;
+      const ped = dir.village || dir.suburb || dir.hamlet || dir.neighbourhood || dir.quarter;
+      if (m && ped && !mismoNombre(ped, m) && !d.pedania) d.pedania = ped;
+    }
+    if (conCalle && dir.road && !d.calle) { d.calle = dir.road; if (dir.house_number && !d.numero) d.numero = dir.house_number; }
+  }
+
+  function camposDireccion(v) {
+    const d = E.pedido || {}, g = E.geo;
+    if (!g) cargarMunicipios().then((x) => { E.geo = x; if (E.vista === 'pedido' && $('#form-pedido')) { leerForm(); prefijarDireccion(null, (E.zona || {}).cp); pintarPedido(); } }).catch(() => {});
+    const cc = g ? g.ccaa.find((c) => c.n === d.ccaa) : null;
+    const provs = g ? (cc ? cc.p : g.ccaa.reduce((a, c) => a.concat(c.p), []).sort((a, b) => a.n.localeCompare(b.n, 'es'))) : [];
+    const muns = g && d.prov ? g.m[d.prov] || [] : [];
+    const opc = (lista, sel, vacio) => '<option value="">' + vacio + '</option>' + lista.map((x) => { const val = typeof x === 'string' ? x : x.val, txt = typeof x === 'string' ? x : x.txt; return '<option value="' + esc(val) + '"' + (val === sel ? ' selected' : '') + '>' + esc(txt) + '</option>'; }).join('');
+    const sel = g
+      ? '<label class="campo">Comunidad autónoma *<select name="ccaa" required>' + opc(g.ccaa.map((c) => ({ val: c.n, txt: c.n })), d.ccaa, 'Elige comunidad…') + '</select></label>' +
+        '<div class="campo-doble"><label class="campo">Provincia *<select name="prov" required>' + opc(provs.map((p) => ({ val: p.id, txt: p.n })), d.prov, 'Elige provincia…') + '</select></label>' +
+        '<label class="campo">Municipio *<select name="municipio" required' + (d.prov ? '' : ' disabled') + '>' + opc(muns, d.municipio, d.prov ? 'Elige municipio…' : 'Primero la provincia') + '</select></label></div>'
+      : '<p class="zona-estado">Cargando municipios…</p>';
+    const st = E.dir;
+    const estado = !st ? '' : st.cargando ? '<p class="dir-estado">Comprobando la dirección…</p>'
+      : '<p class="dir-estado ' + (st.bloquea ? 'dir-mal' : st.aviso ? 'dir-aviso' : 'dir-bien') + '">' + esc(st.msg) + '</p>';
+    return '<fieldset class="direccion"><legend>Dirección de entrega</legend>' + sel +
+      '<div class="campo-doble"><label class="campo">Código postal *<input name="cp" inputmode="numeric" maxlength="5" autocomplete="postal-code" required value="' + v('cp') + '"></label>' +
+      '<label class="campo">Pedanía o barrio<input name="pedania" autocomplete="address-level3" placeholder="Opcional" value="' + v('pedania') + '"></label></div>' +
+      '<div class="campo campo-calle"><label for="dir-calle">Calle *</label><input id="dir-calle" name="calle" autocomplete="off" required placeholder="' + (d.municipio ? 'Empieza a escribir y elige de la lista' : 'Elige antes el municipio') + '" value="' + v('calle') + '" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="calle-sugerencias">' +
+      '<ul class="calle-sugerencias" id="calle-sugerencias" role="listbox" hidden></ul><p class="calle-ayuda" id="calle-ayuda" hidden></p></div>' +
+      '<label class="campo">Número, piso y puerta<input name="numero" autocomplete="address-line2" placeholder="Ej.: 12, 2.º B" value="' + v('numero') + '"></label>' +
+      '<div id="dir-estado">' + estado + '</div>' +
+      (d.calle && d.cp && d.municipio && !st ? '<button type="button" class="enlace-tallas" data-comprobar-dir>Comprobar dirección</button>' : '') +
+      '</fieldset>';
+  }
+
+  /* Sugerencias de calle */
+  let tCalle = null, sugerencias = [], idxCalle = -1, pidCalle = 0;
+  function cerrarSugerencias() { const ul = $('#calle-sugerencias'); if (ul) { ul.hidden = true; ul.innerHTML = ''; } const i = $('#dir-calle'); if (i) i.setAttribute('aria-expanded', 'false'); idxCalle = -1; }
+  function escribiendoCalle(texto) {
+    if (E.pedido) E.pedido.calle = texto;
+    E.dir = null; const de = $('#dir-estado'); if (de) de.innerHTML = '';
+    clearTimeout(tCalle);
+    const ayuda = $('#calle-ayuda');
+    if (String(texto).trim().length < 3) { cerrarSugerencias(); if (ayuda) ayuda.hidden = true; return; }
+    tCalle = setTimeout(async () => {
+      const f = $('#form-pedido'); if (!f) return;
+      const muni = f.municipio ? f.municipio.value : '', cp = f.cp ? f.cp.value.trim() : '';
+      const id = ++pidCalle;
+      let lista = [];
+      try { lista = await sugerirCalles(texto, muni, (E.zona && E.zona.pos) || puntoRef()); } catch (e) { lista = null; }
+      if (id !== pidCalle || !$('#dir-calle')) return;
+      if (lista && muni) { const m = lista.filter((x) => mismoNombre(x.municipio, muni)); if (m.length) lista = m; else lista = []; }
+      if (lista && /^\d{5}$/.test(cp)) lista.sort((a, b) => (b.cp === cp) - (a.cp === cp));
+      sugerencias = (lista || []).slice(0, 6);
+      const ul = $('#calle-sugerencias');
+      if (sugerencias.length) {
+        ul.innerHTML = sugerencias.map((x, i) => '<li role="option" id="calle-op-' + i + '"><button type="button" data-calle="' + i + '" tabindex="-1"><strong>' + esc(x.calle) + '</strong><span>' + esc([x.zona, [x.cp, x.municipio].filter(Boolean).join(' ')].filter(Boolean).join(' · ')) + '</span></button></li>').join('');
+        ul.hidden = false; $('#dir-calle').setAttribute('aria-expanded', 'true'); idxCalle = -1;
+        ayuda.hidden = true;
+      } else {
+        cerrarSugerencias();
+        ayuda.textContent = lista === null ? 'No podemos buscar calles ahora mismo. Escríbela completa y la comprobaremos.' : 'No encontramos esa calle' + (muni ? ' en ' + muni : '') + '. Puedes escribirla tal cual: la daremos por buena.';
+        ayuda.hidden = false;
+      }
+    }, 400);
+  }
+  function teclaCalle(ev) {
+    const ul = $('#calle-sugerencias'); if (!ul || ul.hidden) return;
+    const n = sugerencias.length;
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+      ev.preventDefault(); idxCalle = (idxCalle + (ev.key === 'ArrowDown' ? 1 : -1) + n) % n;
+      ul.querySelectorAll('li').forEach((li, i) => li.classList.toggle('activa', i === idxCalle));
+      ev.target.setAttribute('aria-activedescendant', 'calle-op-' + idxCalle);
+    } else if (ev.key === 'Enter' && idxCalle >= 0) { ev.preventDefault(); elegirCalle(idxCalle); }
+    else if (ev.key === 'Escape') { ev.preventDefault(); cerrarSugerencias(); }
+  }
+  function elegirCalle(i) {
+    const x = sugerencias[i]; if (!x) return;
+    leerForm();
+    const d = E.pedido;
+    d.calle = x.calle;
+    if (/^\d{5}$/.test(x.cp) && !/^\d{5}$/.test(String(d.cp || ''))) d.cp = x.cp;
+    if (x.zona && !d.pedania && !mismoNombre(x.zona, d.municipio)) d.pedania = x.zona;
+    E.dir = null; pintarPedido(); enfocar('numero');
+    verificarDireccion();
+  }
+
+  let tVerif = null;
+  function programarVerificacion() { clearTimeout(tVerif); tVerif = setTimeout(() => verificarDireccion(), 300); }
+  const espera = (ms) => new Promise((ok) => setTimeout(ok, ms));
+
+  /* Comprueba la dirección: código postal de la provincia, calle en el mapa y distancia real */
+  let pidVerif = 0;
+  async function verificarDireccion() {
+    if (!$('#form-pedido')) return;
+    leerForm();
+    const d = E.pedido, cp = String(d.cp || '').trim(), calle = String(d.calle || '').trim();
+    const entregaAntes = entregasValidas().find((e) => e.id === d.entrega);
+    if (!entregaAntes || !entregaAntes.pideDireccion) return;
+    if (!calle || !d.municipio || !cp) return;
+    const pintarEstado = () => {
+      if (!$('#dir-estado')) return;
+      const a = document.activeElement, nombre = a && a.closest && a.closest('#form-pedido') ? a.name : '';
+      const ini = nombre && typeof a.selectionStart === 'number' ? [a.selectionStart, a.selectionEnd] : null;
+      const sc = $('#cesta-cuerpo').scrollTop;
+      leerForm(); pintarPedido(); $('#cesta-cuerpo').scrollTop = sc;
+      if (nombre) { const n = document.querySelector('#form-pedido [name="' + nombre + '"]'); if (n && n.type !== 'radio') { n.focus({ preventScroll: true }); if (ini) try { n.setSelectionRange(ini[0], ini[1]); } catch (e) { /* select */ } } }
+    };
+    if (!/^\d{5}$/.test(cp)) { E.dir = { bloquea: true, msg: 'El código postal debe tener 5 cifras.' }; pintarEstado(); return; }
+    if (d.prov && cp.slice(0, 2) !== d.prov) { E.dir = { bloquea: true, msg: 'El código postal ' + cp + ' no es de la provincia de ' + nombreProv(d.prov) + ' (allí empiezan por ' + d.prov + '). Revisa uno de los dos.' }; pintarEstado(); return; }
+    const id = ++pidVerif;
+    E.dir = { cargando: true }; pintarEstado();
+    let pos = null, aproximada = false, cpMapa = '';
+    try {
+      pos = await buscarDireccion({ calle, numero: String(d.numero || '').match(/^\s*(\d+)/) ? String(d.numero).match(/^\s*(\d+)/)[1] : '', municipio: d.municipio, cp });
+      if (!pos) { await espera(1100); pos = await buscarDireccion({ calle, municipio: d.municipio }); if (pos) cpMapa = pos.dir.postcode || ''; }
+      if (!pos) { await espera(1100); pos = await buscarDireccion({ municipio: d.municipio, cp }); aproximada = true; }
+      if (!pos) { await espera(1100); pos = await buscarLugar(cp); aproximada = true; }
+    } catch (e) { pos = undefined; }
+    if (id !== pidVerif) return;
+    if (pos === undefined) { E.dir = { aviso: true, msg: 'No hemos podido comprobar la dirección ahora mismo. Puedes enviar el pedido y la confirmaremos por WhatsApp.', calle }; pintarEstado(); return; }
+    if (!pos) { E.dir = { bloquea: true, msg: 'No encontramos el código postal ' + cp + ' en ' + d.municipio + '. Revísalo.' }; pintarEstado(); return; }
+    if (pos.dir && pos.dir.postcode && /^\d{5}$/.test(pos.dir.postcode) && !aproximada && pos.dir.postcode.slice(0, 2) !== cp.slice(0, 2)) {
+      E.dir = { bloquea: true, msg: 'Esa dirección no corresponde al código postal ' + cp + '. Revisa la calle, el municipio o el código postal.' }; pintarEstado(); return;
+    }
+    const ref = puntoRef();
+    const km = distanciaKm(parseFloat(ref.lat), parseFloat(ref.lon), pos.lat, pos.lon);
+    const cpZona = (E.zona || {}).cp, kmAntes = (E.zona || {}).km;
+    E.zona = { km, cp, metodo: aproximada ? 'por código postal de la dirección' : 'por dirección de entrega', pos: { lat: pos.lat, lon: pos.lon } };
+    const validas = entregasValidas().filter((e) => e.pideDireccion);
+    const msgs = [];
+    if (cpZona && cpZona !== cp) msgs.push('El código postal de la dirección (' + cp + ') no es el que usaste para calcular la entrega (' + cpZona + ').');
+    let ok = entregaAntes && entraEnRango(entregaAntes, km);
+    if (!ok) {
+      if (validas.length) {
+        d.entrega = validas[0].id; d.pago = '';
+        msgs.push('Tu dirección está a ' + formatoKm(km) + ', así que la entrega es «' + validas[0].nombre + '». Hemos actualizado el precio.');
+      } else msgs.push('Tu dirección está a ' + formatoKm(km) + ' y no tenemos entrega a domicilio para esa distancia. Escríbenos por WhatsApp.');
+    }
+    if (cpMapa && /^\d{5}$/.test(cpMapa) && cpMapa !== cp) msgs.push('Ojo: en el mapa esa calle aparece con el código postal ' + cpMapa + '.');
+    if (aproximada) msgs.push('No encontramos la calle en el mapa: la damos por buena y medimos la distancia por el código postal.');
+    const bloquea = !ok && !validas.length;
+    E.dir = { calle, aproximada, bloquea, aviso: msgs.length > 0, msg: (msgs.length ? msgs.join(' ') + ' ' : '') + (bloquea ? '' : '✓ Dirección comprobada: a ' + formatoKm(km) + (kmAntes != null && Math.abs(kmAntes - km) >= 1 && ok ? ' (antes ' + formatoKm(kmAntes) + ')' : '') + '.') };
+    pintarEstado();
   }
 
   function pintarPedido() {
@@ -645,11 +813,7 @@
       }).join('') : hayDistancia() ? '' : '<p class="aviso">Acordaremos la entrega por WhatsApp.</p>') +
       '</fieldset>' +
       (entregaSel && entregaSel.pideDireccion
-        ? '<fieldset><legend>Dirección de envío</legend>' +
-          '<label class="campo">Dirección *<input name="direccion" autocomplete="street-address" required value="' + v('direccion') + '"></label>' +
-          '<div class="campo-doble"><label class="campo">Código postal *<input name="cp" inputmode="numeric" autocomplete="postal-code" required value="' + v('cp') + '"></label>' +
-          '<label class="campo">Localidad *<input name="localidad" autocomplete="address-level2" required value="' + v('localidad') + '"></label></div>' +
-          '<label class="campo">Provincia<input name="provincia" autocomplete="address-level1" value="' + v('provincia') + '"></label></fieldset>'
+        ? camposDireccion(v)
         : '') +
       '<fieldset><legend>Pago</legend>' +
       (pendiente ? '<p class="zona-titulo">Las formas de pago aparecen cuando indiques tu ubicación.</p>' : pagos.length ? pagos.map((p) =>
@@ -699,7 +863,11 @@
     const faltan = [];
     if (!String(d.nombre || '').trim()) faltan.push('nombre');
     if (String(d.telefono || '').replace(/\D/g, '').length < 9) faltan.push('teléfono');
-    if (entrega && entrega.pideDireccion && (!String(d.direccion || '').trim() || !String(d.cp || '').trim() || !String(d.localidad || '').trim())) faltan.push('dirección completa');
+    if (entrega && entrega.pideDireccion) {
+      if (!String(d.calle || '').trim() || !/^\d{5}$/.test(String(d.cp || '').trim()) || !String(d.municipio || '').trim()) faltan.push('dirección completa (calle, código postal y municipio)');
+      else if (!E.dir || E.dir.cargando) { verificarDireccion(); faltan.push('esperar a que comprobemos tu dirección'); }
+      else if (E.dir.bloquea) faltan.push('la dirección de envío: ' + E.dir.msg);
+    }
     if (hayDistancia() && (!E.zona || E.zona.km == null)) faltan.push('indicar tu ubicación o código postal para ver las opciones de entrega');
     else if (hayDistancia() && !entrega) faltan.push('elegir una forma de entrega');
     if (!d.acepto) faltan.push('aceptar las condiciones');
@@ -724,7 +892,11 @@
     lineas.push('*TOTAL' + (hayEncargos() ? ' ESTIMADO' : '') + ': ' + pr(st + ce + rp) + '*');
     if (hayEncargos()) lineas.push('(Incluye piezas con precio a consultar: espero vuestro presupuesto final)');
     lineas.push('', '*Mis datos*', 'Nombre: ' + d.nombre.trim(), 'Teléfono: ' + d.telefono.trim());
-    if (entrega && entrega.pideDireccion) lineas.push('Dirección: ' + d.direccion.trim() + ', ' + d.cp.trim() + ' ' + d.localidad.trim() + (d.provincia ? ' (' + d.provincia.trim() + ')' : ''));
+    if (entrega && entrega.pideDireccion) {
+      lineas.push('Dirección: ' + [d.calle.trim(), String(d.numero || '').trim()].filter(Boolean).join(', '));
+      lineas.push('   ' + [String(d.pedania || '').trim(), d.cp.trim() + ' ' + d.municipio].filter(Boolean).join(' · ') + ' (' + [nombreProv(d.prov), d.ccaa].filter(Boolean).join(', ') + ')');
+      if (E.dir && E.dir.aproximada) lineas.push('   (Calle no encontrada en el mapa: distancia medida por código postal)');
+    }
     if (String(d.notas || '').trim()) lineas.push('Notas: ' + d.notas.trim());
     const desp = (E.cfg.pedido || {}).despedida; if (desp) lineas.push('', desp);
 
@@ -790,7 +962,9 @@
       if (ds.guiaTallas !== undefined) { abrirGuiaTallas(); return; }
       if (ds.zonaGps !== undefined) { comprobarZona('gps'); return; }
       if (ds.zonaCp !== undefined) { comprobarZona('cp'); return; }
-      if (ds.zonaRepetir !== undefined) { leerForm(); E.zona = { cp: (E.zona || {}).cp }; pintarPedido(); return; }
+      if (ds.zonaRepetir !== undefined) { leerForm(); E.zona = { cp: (E.zona || {}).cp }; E.dir = null; pintarPedido(); return; }
+      if (ds.calle !== undefined) { elegirCalle(+ds.calle); return; }
+      if (ds.comprobarDir !== undefined) { leerForm(); verificarDireccion(); return; }
       if (ds.cambiarEntrega) { leerForm(); E.pedido.entrega = ds.cambiarEntrega; E.pedido.pago = ''; pintarPedido(); return; }
       if (ds.foto) {
         const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
@@ -821,7 +995,24 @@
 
     document.addEventListener('change', (ev) => {
       const el = ev.target;
-      if (el.closest('#form-pedido') && (el.name === 'entrega' || el.name === 'pago')) { leerForm(); pintarPedido(); return; }
+      if (el.closest('#form-pedido') && (el.name === 'entrega' || el.name === 'pago')) { leerForm(); pintarPedido(); if (el.name === 'entrega' && !E.dir) programarVerificacion(); return; }
+      if (el.closest('#form-pedido') && ['ccaa', 'prov', 'municipio'].includes(el.name)) {
+        leerForm();
+        const d = E.pedido;
+        if (el.name === 'ccaa') { d.prov = ''; d.municipio = ''; }
+        if (el.name === 'prov') d.municipio = '';
+        if (el.name === 'prov' && d.prov && !d.ccaa) { const c = ccaaDe(d.prov); if (c) d.ccaa = c.n; }
+        E.dir = null; pintarPedido(); enfocar(el.name === 'ccaa' ? 'prov' : el.name === 'prov' ? 'municipio' : 'cp');
+        if (el.name === 'municipio') programarVerificacion();
+        return;
+      }
+      if (el.closest('#form-pedido') && el.name === 'cp') {
+        leerForm();
+        const d = E.pedido, cp = String(d.cp || '').trim();
+        if (/^\d{5}$/.test(cp) && E.geo && !d.prov) { const c = ccaaDe(cp.slice(0, 2)); if (c) { d.prov = cp.slice(0, 2); d.ccaa = c.n; E.dir = null; pintarPedido(); enfocar('municipio'); return; } }
+        E.dir = null; programarVerificacion(); return;
+      }
+      if (el.closest('#form-pedido') && el.name === 'numero') { leerForm(); E.dir = null; programarVerificacion(); return; }
       if (el.classList.contains('selector-talla')) { const e = el.closest('.campo-talla').querySelector('.error-campo'); if (e) e.hidden = true; return; }
       if (/^pers-(fuente|tamano|posicion|color)$/.test(el.name)) { E.persSel[el.name.slice(5)] = el.value; actualizarTextoPers(); return; }
       if (el.id === 'encargo-imagen') {
@@ -838,13 +1029,18 @@
         $('#ventana-encargo .ventana-marco').scrollTop = sc;
       }
     });
+    document.addEventListener('mousedown', (ev) => { if (ev.target.closest('.calle-sugerencias')) ev.preventDefault(); });
+    document.addEventListener('focusout', (ev) => {
+      if (ev.target.id === 'dir-calle') setTimeout(() => { if (!document.activeElement || !document.activeElement.closest('.calle-sugerencias')) { cerrarSugerencias(); leerForm(); if (E.dir == null || E.dir.calle !== E.pedido.calle) programarVerificacion(); } }, 200);
+    });
     document.addEventListener('submit', (ev) => {
       if (ev.target.id === 'form-pedido') { ev.preventDefault(); enviarPedido(); }
       if (ev.target.id === 'form-encargo') { ev.preventDefault(); guardarEncargo(); }
     });
-    document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; actualizarTextoPers(); } });
+    document.addEventListener('input', (ev) => { if (ev.target.id === 'dir-calle') { escribiendoCalle(ev.target.value); return; } if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; actualizarTextoPers(); } });
     document.addEventListener('keydown', (ev) => {
       if (ev.key === 'Enter' && ev.target.id === 'zona-cp') { ev.preventDefault(); comprobarZona('cp'); return; }
+      if (ev.target.id === 'dir-calle') { teclaCalle(ev); return; }
       if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-pers [data-anadir]'); if (b) b.click(); }
     });
 
