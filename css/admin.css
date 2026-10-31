@@ -25,7 +25,8 @@ a { color: var(--oceano); }
 .lateral-nav button { text-align: left; background: none; border: 0; color: #E4EDF4; padding: 10px 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 .lateral-nav button:hover { background: rgba(255,255,255,.08); color: #fff; }
 .lateral-nav button[aria-current="page"] { background: var(--papel); color: var(--marino); }
-.lateral-ver { margin: auto 18px 20px; color: var(--amarillo); font-weight: 800; text-decoration: none; }
+.lateral-version { margin: 0 18px 16px; font-size: 12px; color: #9FB6C9; }
+.lateral-ver { margin: auto 18px 8px; color: var(--amarillo); font-weight: 800; text-decoration: none; }
 
 .principal { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .barra { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 14px; padding: 12px 24px; background: rgba(251,248,244,.96); border-bottom: 1px solid var(--linea); backdrop-filter: blur(6px); }

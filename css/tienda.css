@@ -290,6 +290,9 @@ dialog:focus, dialog:focus-visible { outline: none; }
 .subir-texto { font-weight: 800; overflow-wrap: anywhere; }
 .campo-corto input { max-width: 120px; }
 
+.precio-consultar { font-size: 17px; color: var(--oceano); }
+.version-web { opacity: .75; }
+
 /* Móvil */
 @media (max-width: 820px) {
   .producto { grid-template-columns: 1fr; gap: 20px; }

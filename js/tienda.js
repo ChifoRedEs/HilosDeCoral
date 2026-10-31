@@ -1,7 +1,7 @@
 /* Hilos de Coral · lógica de la tienda */
 (function () {
   'use strict';
-  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas } = window.HDC;
+  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION } = window.HDC;
   const $ = (s, el) => (el || document).querySelector(s);
   const CLAVE_CESTA = 'hdc-cesta';
   const IMG_TODO = 'img/cat-todo.webp';
@@ -39,7 +39,10 @@
     return h;
   }
 
+  const sinPrecio = (p) => !(num(p.precio) > 0);
+
   function precioHTML(p) {
+    if (sinPrecio(p)) return '<span class="precio precio-consultar">Consultar precio</span>';
     return '<span class="precio">' + esc(pr(p.precio)) +
       (num(p.precioAnterior) > num(p.precio) ? '<s>' + esc(pr(p.precioAnterior)) + '</s>' : '') + '</span>';
   }
@@ -64,6 +67,7 @@
     if (po.banner) $('#portada').style.backgroundImage = 'url("' + po.banner.replace(/"/g, '') + '")';
     const meta = document.querySelector('meta[name="description"]'); if (meta && t.descripcion) meta.content = t.descripcion;
     $('#anio').textContent = new Date().getFullYear();
+    $('#version-web').textContent = 'v' + VERSION + ' · ' + FECHA_VERSION;
 
     const barra = $('#barra-superior');
     barra.textContent = po.barraSuperior || ''; barra.hidden = !po.barraSuperior;
@@ -123,7 +127,7 @@
     const peso = (p) => ({ disponible: 0, reservado: 1, vendido: 2 })[estadoProducto(p)];
     const orden = {
       'novedad': (a, b) => peso(a) - peso(b) || (b.novedad ? 1 : 0) - (a.novedad ? 1 : 0) || String(b.creado || '').localeCompare(String(a.creado || '')),
-      'precio-asc': (a, b) => num(a.precio) - num(b.precio),
+      'precio-asc': (a, b) => (sinPrecio(a) - sinPrecio(b)) || num(a.precio) - num(b.precio),
       'precio-desc': (a, b) => num(b.precio) - num(a.precio),
       'nombre': (a, b) => a.nombre.localeCompare(b.nombre, 'es')
     }[E.orden];
@@ -255,8 +259,8 @@
     }
     const p = prodDe(l.id), cat = catDe(p.categoria);
     return {
-      nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: num(p.precio) + (l.pers ? extraPers(p) : 0),
-      consultar: false, desde: false, detalles: l.pers ? ['Personalización: «' + l.pers + '»'] : [], max: maxUnidades(p)
+      nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: sinPrecio(p) ? 0 : num(p.precio) + (l.pers ? extraPers(p) : 0),
+      consultar: sinPrecio(p), desde: false, detalles: l.pers ? ['Personalización: «' + l.pers + '»'] : [], max: maxUnidades(p)
     };
   }
 
@@ -266,7 +270,7 @@
     return comprable(p) && (!l.pers || persActiva(p));
   }
 
-  function hayEncargos() { return E.cesta.some((l) => l.tipo === 'encargo'); }
+  function hayEncargos() { return E.cesta.some((l) => l.tipo === 'encargo' || infoLinea(l).consultar); }
 
   function guardarCesta() {
     try { localStorage.setItem(CLAVE_CESTA, JSON.stringify(E.cesta)); } catch (e) { /* sin almacenamiento */ }
@@ -343,7 +347,7 @@
     }).join('') +
       '<div class="resumen"><div><span>Subtotal' + (hayEncargos() ? ' estimado' : '') + '</span><strong>' + esc(pr(st)) + '</strong></div>' +
       '<div><span>Entrega y pago</span><span>Se eligen en el siguiente paso</span></div></div>' +
-      (hayEncargos() ? '<p class="aviso">Los diseños propios se presupuestan por WhatsApp: te confirmamos el precio final antes de empezar.</p>' : '') +
+      (hayEncargos() ? '<p class="aviso">Algunas piezas no tienen precio fijo: te confirmamos el precio final por WhatsApp antes de empezar.</p>' : '') +
       (minimo > st && !hayEncargos() ? '<p class="aviso">El pedido mínimo es de ' + esc(pr(minimo)) + '. Te faltan ' + esc(pr(minimo - st)) + '.</p>' : '') +
       '<button type="button" class="boton boton-coral" data-tramitar' + (minimo > st && !hayEncargos() ? ' disabled' : '') + '>Tramitar pedido</button>' +
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir comprando</button>';
@@ -469,7 +473,7 @@
       '<div><span>Entrega</span><span>' + (ce > 0 ? esc(pr(ce)) : 'Gratis') + '</span></div>' +
       (rp > 0 ? '<div><span>Recargo de pago</span><span>' + esc(pr(rp)) + '</span></div>' : '') +
       '<div class="total"><span>Total' + (hayEncargos() ? ' estimado' : '') + '</span><span>' + esc(pr(total)) + '</span></div></div>' +
-      (hayEncargos() ? '<p class="aviso">Incluye diseños propios: te confirmaremos el precio final por WhatsApp.</p>' : '') +
+      (hayEncargos() ? '<p class="aviso">Incluye piezas con precio a consultar: te confirmaremos el precio final por WhatsApp.</p>' : '') +
       '<label class="acepto"><input type="checkbox" name="acepto" required' + (prev.acepto ? ' checked' : '') + '><span>He leído ' +
       (politicas.length ? politicas.map((p) => '<a href="#/pagina/' + esc(p.id) + '">' + esc(p.titulo.toLowerCase()) + '</a>').join(', ') : 'las condiciones') + '.</span></label>' +
       '<p class="error-campo" id="error-pedido" hidden></p>' +
@@ -526,7 +530,7 @@
     lineas.push('Entrega: ' + (entrega ? entrega.nombre + ' — ' + (ce > 0 ? pr(ce) : 'gratis') : 'a acordar'));
     lineas.push('Pago: ' + (pago ? pago.nombre + (rp > 0 ? ' — recargo ' + pr(rp) : '') : 'a acordar'));
     lineas.push('*TOTAL' + (hayEncargos() ? ' ESTIMADO' : '') + ': ' + pr(st + ce + rp) + '*');
-    if (hayEncargos()) lineas.push('(Incluye diseños propios: espero vuestro presupuesto final)');
+    if (hayEncargos()) lineas.push('(Incluye piezas con precio a consultar: espero vuestro presupuesto final)');
     lineas.push('', '*Mis datos*', 'Nombre: ' + d.nombre.trim(), 'Teléfono: ' + d.telefono.trim());
     if (entrega && entrega.pideDireccion) lineas.push('Dirección: ' + d.direccion.trim() + ', ' + d.cp.trim() + ' ' + d.localidad.trim() + (d.provincia ? ' (' + d.provincia.trim() + ')' : ''));
     if (String(d.notas || '').trim()) lineas.push('Notas: ' + d.notas.trim());

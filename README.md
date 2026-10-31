@@ -62,3 +62,12 @@ img/productos/        Fotos de productos (las sube el panel)
 En **Copias de seguridad** puedes descargar `productos.json`, `categorias.json` o `config.json` y subirlos a mano a la carpeta `data/` del repositorio. También puedes descargar una copia completa y restaurarla cuando quieras.
 
 > Los textos legales son una plantilla orientativa. Revísalos y adáptalos a tu caso; si tienes dudas, consulta a un profesional.
+
+## Historial de versiones
+
+La versión aparece en el pie de la tienda y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
+
+- **1.3.0** · 31/10/2026: versión en el pie de página y en el panel. Productos sin precio como "Consultar precio". Archivos con `?v=` para que el navegador cargue siempre la última versión.
+- **1.2.0** · 31/10/2026: productos personalizables (nombre o texto) y encargo de diseño propio del cliente, activables por categoría (de momento, solo Textil).
+- **1.1.0** · 31/10/2026: corregido el borde punteado de las ventanas (Cómo comprar, Envíos, Cambios…).
+- **1.0.0** · 31/10/2026: primera versión de la tienda y del panel admin.

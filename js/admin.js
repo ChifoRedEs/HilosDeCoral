@@ -135,6 +135,7 @@
     const f = VISTAS[E.seccion];
     $('#contenido').innerHTML = f();
     $('#lateral-nombre').textContent = (R.config.tienda || {}).nombre || 'Mi tienda';
+    $('#lateral-version').textContent = 'v' + window.HDC.VERSION + ' · ' + window.HDC.FECHA_VERSION;
     marcar();
   }
 
@@ -194,7 +195,7 @@
     return '<div class="prod' + (p.visible === false ? ' oculto' : '') + '">' +
       (foto ? '<img src="' + esc(src(foto)) + '" alt="">' : '<img class="sin-foto" src="' + esc(src(cat ? cat.icono : 'img/cat-todo.webp')) + '" alt="">') +
       '<div><div class="prod-nombre">' + esc(p.nombre || '(sin nombre)') + '</div><div class="prod-meta">' +
-      '<span>' + esc(pr(p.precio)) + '</span><span>' + esc(cat ? cat.nombre : 'Sin categoría') + '</span>' +
+      '<span>' + (num(p.precio) > 0 ? esc(pr(p.precio)) : 'Consultar precio') + '</span><span>' + esc(cat ? cat.nombre : 'Sin categoría') + '</span>' +
       (p.unidades !== '' && p.unidades != null ? '<span>' + num(p.unidades) + ' ud.</span>' : '') +
       '<span class="chip ' + est + '">' + ESTADOS[est].txt + '</span>' +
       (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.personalizable && cat && cat.personalizable ? '<span class="chip personalizable">Personalizable</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
@@ -225,7 +226,7 @@
       '<div class="rejilla-campos">' +
       campo('Nombre *', 'edit.nombre', { requerido: true, ancho: true, placeholder: 'Ej.: Totebag ballena azul' }) +
       campo('Categoría', 'edit.categoria', { opciones: [['', 'Sin categoría']].concat(R.categorias.map((c) => [c.id, c.nombre])) }) +
-      campo('Precio (' + moneda() + ') *', 'edit.precio', { tipo: 'num', requerido: true }) +
+      campo('Precio (' + moneda() + ')', 'edit.precio', { tipo: 'num', ayuda: '(0 o vacío = consultar precio)' }) +
       campo('Precio anterior', 'edit.precioAnterior', { tipo: 'num', ayuda: '(opcional, para mostrar una oferta)' }) +
       campo('Unidades', 'edit.unidades', { tipo: 'num', paso: '1', ayuda: '(vacío = sin límite)' }) +
       campo('Estado', 'edit.estado', { opciones: Object.keys(ESTADOS).map((k) => [k, ESTADOS[k].txt]) }) +
@@ -259,10 +260,9 @@
     const ed = R.edit, err = $('#error-producto');
     const faltan = [];
     if (!String(ed.nombre || '').trim()) faltan.push('el nombre');
-    if (ed.precio === '' || ed.precio == null || num(ed.precio) < 0) faltan.push('el precio');
     if (faltan.length) { err.textContent = 'Falta ' + faltan.join(' y ') + '.'; err.hidden = false; return; }
     ed.nombre = ed.nombre.trim();
-    ed.precio = num(ed.precio);
+    ed.precio = ed.precio === '' || ed.precio == null ? 0 : Math.max(0, num(ed.precio));
     ed.precioAnterior = ed.precioAnterior === '' || ed.precioAnterior == null ? '' : num(ed.precioAnterior);
     ed.unidades = ed.unidades === '' || ed.unidades == null ? '' : Math.max(0, Math.floor(num(ed.unidades)));
     if (E.editIndice == null) {
