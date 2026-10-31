@@ -67,6 +67,8 @@ En **Copias de seguridad** puedes descargar `productos.json`, `categorias.json` 
 
 La versión aparece en el pie de la tienda y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
 
+- **1.7.3** · 31/10/2026: logo más grande dentro del icono de la app (un 80 % menos de espacio libre en el disco interior).
+- **1.7.2** · 31/10/2026: icono de la app más pequeño, sobre disco crema con anillo blanco exterior (y fondo azul marino en los iconos recortables).
 - **1.7.1** · 31/10/2026: el logo completo de Hilos de Coral como icono al instalar la tienda o crear el acceso directo (Android e iPhone).
 - **1.7.0** · 31/10/2026: la entrega en mano exige comprobar que el cliente está dentro del radio (por ubicación o código postal), configurable desde el panel. Recargo de 2 € por pagar en la entrega y aviso «Ahorras 2 €» con Bizum.
 - **1.6.1** · 31/10/2026: icono propio para el panel admin (favicon, acceso directo en el móvil y manifiesto «Admin HC»).
