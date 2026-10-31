@@ -9,7 +9,8 @@
   const IMAGENES_TIENDA = [
     ['img/cat-textil.webp', 'Totebag'], ['img/cat-ceramica.webp', 'Pendiente de cerámica'], ['img/cat-bisuteria.webp', 'Pulsera'],
     ['img/cat-todo.webp', 'Caracola'], ['img/icono-coral.webp', 'Coral (icono)'], ['img/ic-favorito.webp', 'Corazón'],
-    ['img/ic-envio.webp', 'Caja'], ['img/ic-monedero.webp', 'Monedero'], ['img/avatar.webp', 'Tortuga y coral']
+    ['img/ic-envio.webp', 'Caja'], ['img/ic-monedero.webp', 'Monedero'], ['img/avatar.webp', 'Tortuga y coral'],
+    ['img/sub-textil-totebags.webp', 'Totebag (sub)'], ['img/sub-textil-bodies.webp', 'Body (sub)'], ['img/sub-textil-baberos.webp', 'Babero (sub)'], ['img/sub-textil-camisetas.webp', 'Camiseta (sub)'], ['img/sub-ceramica-pendientes.webp', 'Pendientes cerámica (sub)'], ['img/sub-ceramica-colgantes.webp', 'Colgante cerámica (sub)'], ['img/sub-ceramica-broches.webp', 'Broche estrella (sub)'], ['img/sub-ceramica-vajilla.webp', 'Vajilla (sub)'], ['img/sub-bisuteria-pulseras.webp', 'Pulsera (sub)'], ['img/sub-bisuteria-anillos.webp', 'Anillo (sub)'], ['img/sub-bisuteria-pendientes.webp', 'Pendientes abalorios (sub)'], ['img/sub-bisuteria-colgantes.webp', 'Collar (sub)']
   ];
   const BANNERS = [['', 'Sin banner'], ['img/banner-textil.webp', 'Banner textil'], ['img/banner-ceramica.webp', 'Banner cerámica'], ['img/banner-bisuteria.webp', 'Banner bisutería'], ['img/banner-principal.webp', 'Banner principal']];
   const TITULOS = { inicio: 'Inicio', productos: 'Productos', categorias: 'Categorías', entregas: 'Entregas y envíos', pagos: 'Formas de pago', paginas: 'Páginas y políticas', tienda: 'Datos de la tienda', conexion: 'Conexión con GitHub', copias: 'Copias de seguridad' };

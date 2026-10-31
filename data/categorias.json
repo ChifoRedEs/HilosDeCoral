@@ -46,25 +46,25 @@
       {
         "id": "totebag",
         "nombre": "Totebags",
-        "icono": "img/cat-textil.webp",
+        "icono": "img/sub-textil-totebags.webp",
         "visible": true
       },
       {
         "id": "bodies",
         "nombre": "Bodies",
-        "icono": "img/cat-textil.webp",
+        "icono": "img/sub-textil-bodies.webp",
         "visible": true
       },
       {
         "id": "baberos",
         "nombre": "Baberos",
-        "icono": "img/cat-textil.webp",
+        "icono": "img/sub-textil-baberos.webp",
         "visible": true
       },
       {
         "id": "camisetas",
         "nombre": "Camisetas",
-        "icono": "img/cat-textil.webp",
+        "icono": "img/sub-textil-camisetas.webp",
         "visible": true
       }
     ]
@@ -87,25 +87,25 @@
       {
         "id": "pendientes",
         "nombre": "Pendientes",
-        "icono": "img/cat-ceramica.webp",
+        "icono": "img/sub-ceramica-pendientes.webp",
         "visible": true
       },
       {
         "id": "colgantes",
         "nombre": "Colgantes",
-        "icono": "img/hilo-colgante.webp",
+        "icono": "img/sub-ceramica-colgantes.webp",
         "visible": true
       },
       {
         "id": "broches",
         "nombre": "Broches",
-        "icono": "img/cat-ceramica.webp",
+        "icono": "img/sub-ceramica-broches.webp",
         "visible": true
       },
       {
         "id": "vajilla",
         "nombre": "Vajilla",
-        "icono": "img/cat-ceramica.webp",
+        "icono": "img/sub-ceramica-vajilla.webp",
         "visible": true
       }
     ]
@@ -128,25 +128,25 @@
       {
         "id": "pulseras",
         "nombre": "Pulseras",
-        "icono": "img/cat-bisuteria.webp",
+        "icono": "img/sub-bisuteria-pulseras.webp",
         "visible": true
       },
       {
         "id": "anillos",
         "nombre": "Anillos",
-        "icono": "img/cat-bisuteria.webp",
+        "icono": "img/sub-bisuteria-anillos.webp",
         "visible": true
       },
       {
         "id": "pendientes",
         "nombre": "Pendientes",
-        "icono": "img/cat-bisuteria.webp",
+        "icono": "img/sub-bisuteria-pendientes.webp",
         "visible": true
       },
       {
         "id": "colgantes",
         "nombre": "Colgantes",
-        "icono": "img/hilo-colgante.webp",
+        "icono": "img/sub-bisuteria-colgantes.webp",
         "visible": true
       }
     ]
