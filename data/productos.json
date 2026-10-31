@@ -1,1 +1,670 @@
-[]
+[
+  {
+    "id": "textil-ballena-mar-body",
+    "nombre": "Ballena en el mar · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con una ballena azul marino nadando sobre un mar pintado a pinceladas, con burbujas, un pececito naranja y una concha. Body de manga corta. Indica la talla en las notas del pedido. Disponible en azul y blanco: indícalo en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-mar-body-azul.webp",
+      "img/productos/textil-ballena-mar-body-blanco.webp"
+    ],
+    "creado": "2026-10-31T16:59:00"
+  },
+  {
+    "id": "textil-ballena-mar-babero",
+    "nombre": "Ballena en el mar · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con una ballena azul marino nadando sobre un mar pintado a pinceladas, con burbujas, un pececito naranja y una concha. Babero con cierre en el cuello. Disponible en azul y blanco: indícalo en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-mar-babero-azul.webp",
+      "img/productos/textil-ballena-mar-babero-blanco.webp"
+    ],
+    "creado": "2026-10-31T16:58:00"
+  },
+  {
+    "id": "textil-ballena-mar-camiseta",
+    "nombre": "Ballena en el mar · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con una ballena azul marino nadando sobre un mar pintado a pinceladas, con burbujas, un pececito naranja y una concha. Camiseta de manga corta. Indica la talla en las notas del pedido. Disponible en blanco y azul: indícalo en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-mar-camiseta-blanco.webp",
+      "img/productos/textil-ballena-mar-camiseta-azul.webp"
+    ],
+    "creado": "2026-10-31T16:57:00"
+  },
+  {
+    "id": "textil-dinosaurio-body",
+    "nombre": "Dinosaurio saliendo del huevo · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con un dinosaurio azul recién salido del cascarón, con la cáscara en la cabeza como un gorrito. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-dinosaurio-body.webp"
+    ],
+    "creado": "2026-10-31T16:56:00"
+  },
+  {
+    "id": "textil-dinosaurio-babero",
+    "nombre": "Dinosaurio saliendo del huevo · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con un dinosaurio azul recién salido del cascarón, con la cáscara en la cabeza como un gorrito. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-dinosaurio-babero.webp"
+    ],
+    "creado": "2026-10-31T16:55:00"
+  },
+  {
+    "id": "textil-dinosaurio-camiseta",
+    "nombre": "Dinosaurio saliendo del huevo · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con un dinosaurio azul recién salido del cascarón, con la cáscara en la cabeza como un gorrito. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-dinosaurio-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:54:00"
+  },
+  {
+    "id": "textil-elefante-body",
+    "nombre": "Elefante con corazones · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con un elefantito gris que sopla dos globos en forma de corazón. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-elefante-body.webp"
+    ],
+    "creado": "2026-10-31T16:53:00"
+  },
+  {
+    "id": "textil-elefante-babero",
+    "nombre": "Elefante con corazones · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con un elefantito gris que sopla dos globos en forma de corazón. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-elefante-babero.webp"
+    ],
+    "creado": "2026-10-31T16:52:00"
+  },
+  {
+    "id": "textil-elefante-camiseta",
+    "nombre": "Elefante con corazones · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con un elefantito gris que sopla dos globos en forma de corazón. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-elefante-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:51:00"
+  },
+  {
+    "id": "textil-ballena-globos-body",
+    "nombre": "Ballena con globos · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con una ballena verde dormida que flota gracias a un ramillete de globos de colores. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-globos-body.webp"
+    ],
+    "creado": "2026-10-31T16:50:00"
+  },
+  {
+    "id": "textil-ballena-globos-babero",
+    "nombre": "Ballena con globos · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con una ballena verde dormida que flota gracias a un ramillete de globos de colores. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-globos-babero.webp"
+    ],
+    "creado": "2026-10-31T16:49:00"
+  },
+  {
+    "id": "textil-ballena-globos-camiseta",
+    "nombre": "Ballena con globos · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con una ballena verde dormida que flota gracias a un ramillete de globos de colores. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-globos-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:48:00"
+  },
+  {
+    "id": "textil-zorrito-body",
+    "nombre": "Zorrito · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con un zorrito del bosque sentado, con sus mejillas sonrosadas. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-zorrito-body.webp"
+    ],
+    "creado": "2026-10-31T16:47:00"
+  },
+  {
+    "id": "textil-zorrito-babero",
+    "nombre": "Zorrito · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con un zorrito del bosque sentado, con sus mejillas sonrosadas. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-zorrito-babero.webp"
+    ],
+    "creado": "2026-10-31T16:46:00"
+  },
+  {
+    "id": "textil-zorrito-camiseta",
+    "nombre": "Zorrito · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con un zorrito del bosque sentado, con sus mejillas sonrosadas. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-zorrito-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:45:00"
+  },
+  {
+    "id": "textil-abeja-body",
+    "nombre": "Abejita · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con una abejita sonriente con alas azules y celdillas de miel. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-abeja-body.webp"
+    ],
+    "creado": "2026-10-31T16:44:00"
+  },
+  {
+    "id": "textil-abeja-babero",
+    "nombre": "Abejita · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con una abejita sonriente con alas azules y celdillas de miel. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-abeja-babero.webp"
+    ],
+    "creado": "2026-10-31T16:43:00"
+  },
+  {
+    "id": "textil-abeja-camiseta",
+    "nombre": "Abejita · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con una abejita sonriente con alas azules y celdillas de miel. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-abeja-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:42:00"
+  },
+  {
+    "id": "textil-ballena-azul-body",
+    "nombre": "Ballena azul · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con una ballena azul saltando entre las olas, con burbujas. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-azul-body.webp"
+    ],
+    "creado": "2026-10-31T16:41:00"
+  },
+  {
+    "id": "textil-ballena-azul-babero",
+    "nombre": "Ballena azul · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con una ballena azul saltando entre las olas, con burbujas. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-azul-babero.webp"
+    ],
+    "creado": "2026-10-31T16:40:00"
+  },
+  {
+    "id": "textil-ballena-azul-camiseta",
+    "nombre": "Ballena azul · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con una ballena azul saltando entre las olas, con burbujas. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-ballena-azul-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:39:00"
+  },
+  {
+    "id": "textil-globos-nombre-body",
+    "nombre": "Globos con nombre · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con un ramo de globos de colores con el nombre del bebé escrito a mano. Body de manga corta. Indica la talla en las notas del pedido. Personalizable: escribe en las notas del pedido el nombre que quieres.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-globos-nombre-body.webp"
+    ],
+    "creado": "2026-10-31T16:38:00"
+  },
+  {
+    "id": "textil-globos-nombre-babero",
+    "nombre": "Globos con nombre · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con un ramo de globos de colores con el nombre del bebé escrito a mano. Babero con cierre en el cuello. Personalizable: escribe en las notas del pedido el nombre que quieres.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-globos-nombre-babero.webp"
+    ],
+    "creado": "2026-10-31T16:37:00"
+  },
+  {
+    "id": "textil-globos-nombre-camiseta",
+    "nombre": "Globos con nombre · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con un ramo de globos de colores con el nombre del bebé escrito a mano. Camiseta de manga corta. Indica la talla en las notas del pedido. Personalizable: escribe en las notas del pedido el nombre que quieres.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-globos-nombre-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:36:00"
+  },
+  {
+    "id": "textil-jirafa-body",
+    "nombre": "Jirafa asomada · Body",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Body de bebé pintado a mano con una jirafa sonriente que se asoma por el cuello y recorre la prenda de arriba abajo. Body de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-jirafa-body.webp"
+    ],
+    "creado": "2026-10-31T16:35:00"
+  },
+  {
+    "id": "textil-jirafa-babero",
+    "nombre": "Jirafa asomada · Babero",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Babero pintado a mano con una jirafa sonriente que se asoma por el cuello y recorre la prenda de arriba abajo. Babero con cierre en el cuello.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-jirafa-babero.webp"
+    ],
+    "creado": "2026-10-31T16:34:00"
+  },
+  {
+    "id": "textil-jirafa-camiseta",
+    "nombre": "Jirafa asomada · Camiseta",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Camiseta infantil pintado a mano con una jirafa sonriente que se asoma por el cuello y recorre la prenda de arriba abajo. Camiseta de manga corta. Indica la talla en las notas del pedido.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-jirafa-camiseta.webp"
+    ],
+    "creado": "2026-10-31T16:33:00"
+  },
+  {
+    "id": "textil-totebag-hello-summer",
+    "nombre": "¡Hello Summer! · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con fondo marino lleno de vida: estrella de mar, medusas, tortuga, caballito de mar, conchas, coral y una ballena, con el saludo «¡Hello Summer!».\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-hello-summer.webp"
+    ],
+    "creado": "2026-10-31T16:32:00"
+  },
+  {
+    "id": "textil-totebag-principito",
+    "nombre": "El Principito · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con el Principito, su rosa y el zorro, y la frase «Lo esencial es invisible a los ojos».\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-principito.webp"
+    ],
+    "creado": "2026-10-31T16:31:00"
+  },
+  {
+    "id": "textil-totebag-fondo-marino",
+    "nombre": "Fondo marino · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con una escena marina enmarcada: ballena, tortuga, estrella de mar, medusa y corales.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-fondo-marino.webp"
+    ],
+    "creado": "2026-10-31T16:30:00"
+  },
+  {
+    "id": "textil-totebag-sandias",
+    "nombre": "Sandías · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con rodajas de sandía estampadas a mano dentro de un marco fino.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-sandias.webp"
+    ],
+    "creado": "2026-10-31T16:29:00"
+  },
+  {
+    "id": "textil-totebag-rodajas-fruta",
+    "nombre": "Rodajas de fruta · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag cubierta de rodajas de fruta de colores estampadas a mano.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-rodajas-fruta.webp"
+    ],
+    "creado": "2026-10-31T16:28:00"
+  },
+  {
+    "id": "textil-totebag-estrella-mar",
+    "nombre": "Estrella de mar · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con una gran estrella de mar naranja sobre franjas de agua azul.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-estrella-mar.webp"
+    ],
+    "creado": "2026-10-31T16:27:00"
+  },
+  {
+    "id": "textil-totebag-atardecer-velero",
+    "nombre": "Atardecer con velero · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con un velero navegando hacia el sol, bajo un arco dorado y sobre el mar en tonos azules.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-atardecer-velero.webp"
+    ],
+    "creado": "2026-10-31T16:26:00"
+  },
+  {
+    "id": "textil-totebag-casita-flores",
+    "nombre": "Casita y flores · Totebag",
+    "categoria": "textil",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": false,
+    "descripcion": "Totebag con un personaje soñador de colores, una casita, un árbol y flores silvestres.\n\nCada pieza se pinta a mano por encargo, así que puede variar ligeramente respecto a la foto. Te confirmamos el plazo por WhatsApp.",
+    "materiales": "Bolsa de algodón natural · pintura textil aplicada a mano",
+    "medidas": "",
+    "cuidados": "Lavar del revés en frío (máx. 30 °C). No usar secadora. Planchar del revés.",
+    "fotos": [
+      "img/productos/textil-totebag-casita-flores.webp"
+    ],
+    "creado": "2026-10-31T16:25:00"
+  }
+]
