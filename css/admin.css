@@ -168,3 +168,9 @@ a { color: var(--oceano); }
   .prod img { width: 60px; height: 60px; }
   .prod-acciones { grid-column: 1 / -1; justify-content: flex-start; }
 }
+
+/* Personalización y encargos */
+.chip.personalizable { background: var(--agua); color: var(--marino-osc); }
+.caja-pers { background: #F6FAFB; border-color: #CFE5E9; margin-bottom: 0; }
+.base-encargo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.3fr) auto auto; gap: 10px; align-items: end; background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 10px 12px; margin-top: 10px; }
+@media (max-width: 900px) { .base-encargo { grid-template-columns: 1fr 1fr; } }

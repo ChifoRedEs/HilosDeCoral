@@ -18,6 +18,9 @@
   const iconoCat = (p) => { const c = catDe(p.categoria); return (c && c.icono) || IMG_TODO; };
   const maxUnidades = (p) => (p.unidades === '' || p.unidades == null ? 99 : Math.max(0, Math.floor(num(p.unidades))));
   const comprable = (p) => p && p.visible !== false && estadoProducto(p) === 'disponible' && maxUnidades(p) > 0;
+  const persActiva = (p) => !!(p && p.personalizable && catDe(p.categoria) && catDe(p.categoria).personalizable);
+  const encargosDe = (c) => (c && c.visible !== false && c.encargos && c.encargos.activo && (c.encargos.bases || []).length ? c.encargos : null);
+  const extraPers = (p) => (persActiva(p) ? num(p.persExtra) : 0);
 
   function imgProducto(p, clase) {
     const f = fotoDe(p);
@@ -31,7 +34,8 @@
     let h = '';
     if (p.novedad && est === 'disponible') h += '<span class="etiqueta novedad">Novedad</span>';
     if (num(p.precioAnterior) > num(p.precio) && est === 'disponible') h += '<span class="etiqueta oferta">Oferta</span>';
-    if (est !== 'disponible' || !p.novedad) h += '<span class="etiqueta ' + ESTADOS[est].clase + '">' + ESTADOS[est].txt + '</span>';
+    if (persActiva(p) && est === 'disponible') h += '<span class="etiqueta personalizable">Personalizable</span>';
+    else if (est !== 'disponible' || !p.novedad) h += '<span class="etiqueta ' + ESTADOS[est].clase + '">' + ESTADOS[est].txt + '</span>';
     return h;
   }
 
@@ -104,6 +108,11 @@
       cab.style.backgroundImage = cat.banner ? 'url("' + cat.banner.replace(/"/g, '') + '")' : '';
       cab.innerHTML = cat.descripcion ? '<p>' + esc(cat.descripcion) + '</p>' : '';
     } else cab.hidden = true;
+    const enc = encargosDe(cat), bl = $('#bloque-encargo');
+    bl.hidden = !enc;
+    if (enc) bl.innerHTML = '<img src="img/ic-favorito.webp" alt="" width="88" height="84">' +
+      '<div class="bloque-encargo-texto"><h3>' + esc(enc.titulo || '¿Tienes tu propio diseño?') + '</h3><p>' + esc(enc.texto || '') + '</p></div>' +
+      '<button type="button" class="boton boton-agua" data-encargo="' + esc(cat.id) + '">Encargar mi diseño</button>';
   }
 
   function filtrados() {
@@ -132,7 +141,9 @@
 
   function tarjetaHTML(p) {
     const est = estadoProducto(p), cat = catDe(p.categoria);
-    const boton = comprable(p)
+    const boton = comprable(p) && persActiva(p)
+      ? '<button type="button" class="boton boton-coral boton-pequeno" data-ver="' + esc(p.id) + '">Personalizar</button>'
+      : comprable(p)
       ? '<button type="button" class="boton boton-coral boton-pequeno" data-anadir="' + esc(p.id) + '">Añadir</button>'
       : '<button type="button" class="boton boton-pequeno" disabled>' + ESTADOS[est].txt + '</button>';
     return '<article class="tarjeta' + (est === 'vendido' ? ' vendida' : '') + '">' +
@@ -172,14 +183,25 @@
       (ficha.length ? '<dl class="ficha">' + ficha.map((f) => '<dt>' + f[0] + '</dt><dd>' + esc(f[1]) + '</dd>').join('') + '</dl>' : '') +
       (comprable(p) && uds > 1 && uds < 99 ? '<span class="unidades">Quedan ' + uds + ' unidades</span>' : '') +
       (comprable(p) && uds === 1 ? '<span class="unidades">Pieza única</span>' : '') +
+      (comprable(p) && persActiva(p) ? camposPersonalizacion(p) : '') +
       '<img class="separador-cosido" src="img/borde-cosido.webp" alt="">' +
       '<div class="producto-botones">' +
       (comprable(p)
-        ? '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1">Añadir a la cesta</button>'
+        ? '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1"' + (persActiva(p) ? ' data-con-pers="1"' : '') + '>Añadir a la cesta</button>'
         : '<button type="button" class="boton" disabled>' + ESTADOS[estadoProducto(p)].txt + '</button>') +
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir viendo</button>' +
       '</div></div></div>';
     cerrarTodo(); abrir($('#ventana-producto'));
+  }
+
+  function camposPersonalizacion(p) {
+    const max = Math.max(1, Math.floor(num(p.persMax, 20)) || 20);
+    const extra = extraPers(p);
+    return '<label class="campo campo-pers"><span>' + esc(p.persEtiqueta || 'Nombre o texto a pintar') + (p.persObligatorio !== false ? ' *' : ' (opcional)') +
+      (extra > 0 ? ' <span class="pers-extra">(+' + esc(pr(extra)) + ')</span>' : '') + '</span>' +
+      '<input id="pers-texto" maxlength="' + max + '" autocomplete="off" placeholder="Ej.: Lucía">' +
+      '<small>Lo pintamos a mano tal como lo escribas (máx. ' + max + ' caracteres).</small></label>' +
+      '<p class="error-campo" id="error-pers" hidden></p>';
   }
 
   function verPagina(id) {
@@ -197,9 +219,55 @@
     if ((m = h.match(/^#\/producto\/(.+)$/))) verProducto(m[1]);
     else if ((m = h.match(/^#\/pagina\/(.+)$/))) verPagina(m[1]);
     else if (h === '#/cesta') abrirCesta();
+    else if ((m = h.match(/^#\/encargo\/(.+)$/))) abrirEncargo(m[1]);
   }
 
-  /* ---------- Cesta ---------- */
+  /* ---------- Cesta ----------
+     Cada línea es { k, tipo: 'producto' | 'encargo', id, cant, pers?, enc? } */
+  const archivos = {};   // imágenes de diseños propios (solo en esta sesión)
+
+  const urls = {};
+  function urlArchivo(k) { return urls[k] || (urls[k] = URL.createObjectURL(archivos[k])); }
+
+  function claveLinea(id, pers) { return 'p:' + id + '|' + (pers || '').trim().toLowerCase(); }
+
+  function baseEncargo(enc) {
+    const c = catDe(enc && enc.cat), e = encargosDe(c);
+    return e ? (e.bases || []).find((b) => b.id === enc.base) || null : null;
+  }
+
+  /* Datos de presentación de una línea de la cesta */
+  function infoLinea(l) {
+    if (l.tipo === 'encargo') {
+      const b = baseEncargo(l.enc) || { nombre: l.enc.nombreBase || 'Diseño propio', precio: '' };
+      const cat = catDe(l.enc.cat);
+      const consultar = b.precio === '' || b.precio == null || num(b.precio) <= 0;
+      const detalles = [];
+      if (l.enc.talla) detalles.push('Talla: ' + l.enc.talla);
+      if (l.enc.color) detalles.push('Color: ' + l.enc.color);
+      if (l.enc.idea) detalles.push('Idea: ' + l.enc.idea);
+      detalles.push(l.enc.imagen ? 'Imagen: ' + l.enc.imagen : 'Sin imagen adjunta');
+      return {
+        nombre: 'Diseño propio · ' + b.nombre, cat: cat ? cat.nombre : '',
+        img: archivos[l.k] ? '<img src="' + esc(urlArchivo(l.k)) + '" alt="Tu diseño">' : '<img src="' + esc((cat && cat.icono) || IMG_TODO) + '" alt="" class="sin-foto">',
+        unidad: consultar ? 0 : num(b.precio), consultar, desde: !consultar, detalles, max: 20
+      };
+    }
+    const p = prodDe(l.id), cat = catDe(p.categoria);
+    return {
+      nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: num(p.precio) + (l.pers ? extraPers(p) : 0),
+      consultar: false, desde: false, detalles: l.pers ? ['Personalización: «' + l.pers + '»'] : [], max: maxUnidades(p)
+    };
+  }
+
+  function lineaValida(l) {
+    if (l.tipo === 'encargo') return !!baseEncargo(l.enc);
+    const p = prodDe(l.id);
+    return comprable(p) && (!l.pers || persActiva(p));
+  }
+
+  function hayEncargos() { return E.cesta.some((l) => l.tipo === 'encargo'); }
+
   function guardarCesta() {
     try { localStorage.setItem(CLAVE_CESTA, JSON.stringify(E.cesta)); } catch (e) { /* sin almacenamiento */ }
     const n = E.cesta.reduce((s, l) => s + l.cant, 0);
@@ -210,29 +278,45 @@
   function leerCesta() {
     let c = [];
     try { c = JSON.parse(localStorage.getItem(CLAVE_CESTA) || '[]'); } catch (e) { c = []; }
-    E.cesta = (Array.isArray(c) ? c : []).map((l) => ({ id: String(l.id), cant: Math.max(1, Math.floor(num(l.cant, 1))) }))
-      .filter((l) => comprable(prodDe(l.id)))
-      .map((l) => ({ id: l.id, cant: Math.min(l.cant, maxUnidades(prodDe(l.id))) }));
+    E.cesta = (Array.isArray(c) ? c : []).map((l) => {
+      const tipo = l.tipo === 'encargo' ? 'encargo' : 'producto';
+      const base = { tipo, cant: Math.max(1, Math.floor(num(l.cant, 1))) };
+      if (tipo === 'encargo') return Object.assign(base, { k: String(l.k || 'e:' + Date.now()), enc: l.enc || {} });
+      const pers = l.pers ? String(l.pers).slice(0, 60) : '';
+      return Object.assign(base, { id: String(l.id), pers, k: claveLinea(l.id, pers) });
+    }).filter(lineaValida).map((l) => { l.cant = Math.min(l.cant, infoLinea(l).max); return l; });
     guardarCesta();
   }
 
-  function anadir(id, abrirLuego) {
+  function anadir(id, abrirLuego, conPers) {
     const p = prodDe(id);
     if (!comprable(p)) { aviso('Esta pieza ya no está disponible'); return; }
-    const l = E.cesta.find((x) => x.id === id);
-    if (l) {
-      if (l.cant >= maxUnidades(p)) { aviso(maxUnidades(p) === 1 ? 'Es una pieza única y ya está en tu cesta' : 'No quedan más unidades'); return; }
-      l.cant++;
-    } else E.cesta.push({ id, cant: 1 });
+    let pers = '';
+    if (persActiva(p)) {
+      const inp = $('#pers-texto'), err = $('#error-pers');
+      if (!conPers || !inp) { location.hash = '#/producto/' + encodeURIComponent(id); return; }
+      pers = inp.value.trim().replace(/\s+/g, ' ');
+      if (!pers && p.persObligatorio !== false) { err.textContent = 'Escribe el ' + (p.persEtiqueta || 'nombre o texto').toLowerCase() + ' que quieres.'; err.hidden = false; inp.focus(); return; }
+    }
+    const k = claveLinea(id, pers);
+    const total = E.cesta.filter((x) => x.tipo === 'producto' && x.id === id).reduce((s, x) => s + x.cant, 0);
+    if (total >= maxUnidades(p)) { aviso(maxUnidades(p) === 1 ? 'Es una pieza única y ya está en tu cesta' : 'No quedan más unidades'); return; }
+    const l = E.cesta.find((x) => x.k === k);
+    if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, cant: 1 });
     E.vista = 'lineas';
     guardarCesta();
-    aviso('«' + p.nombre + '» añadido a la cesta');
+    aviso('«' + p.nombre + '»' + (pers ? ' (' + pers + ')' : '') + ' añadido a la cesta');
     if (abrirLuego) { cerrarTodo(); limpiarHash(); abrirCesta(); }
   }
 
-  function subtotal() { return E.cesta.reduce((s, l) => s + num(prodDe(l.id).precio) * l.cant, 0); }
+  function subtotal() { return E.cesta.reduce((s, l) => s + infoLinea(l).unidad * l.cant, 0); }
 
   function abrirCesta() { if (E.vista !== 'pedido' && E.vista !== 'enviado') E.vista = 'lineas'; pintarCesta(); cerrarTodo(); abrir($('#cesta')); }
+
+  function precioLinea(i, l) {
+    if (i.consultar) return 'A consultar';
+    return (i.desde ? 'desde ' : '') + pr(i.unidad * l.cant);
+  }
 
   function pintarCesta() {
     const cuerpo = $('#cesta-cuerpo');
@@ -247,21 +331,89 @@
     const minimo = num((E.cfg.pedido || {}).pedidoMinimo);
     const st = subtotal();
     cuerpo.innerHTML = E.cesta.map((l) => {
-      const p = prodDe(l.id), max = maxUnidades(p);
-      return '<div class="linea">' + imgProducto(p) +
-        '<div><div class="linea-nombre">' + esc(p.nombre) + '</div><div class="linea-precio">' + esc(pr(p.precio)) + ' / ud.</div>' +
-        '<div class="cantidad"><button type="button" data-menos="' + esc(p.id) + '" aria-label="Quitar una unidad"' + (l.cant <= 1 ? ' disabled' : '') + '>−</button>' +
+      const i = infoLinea(l), k = esc(l.k);
+      return '<div class="linea">' + i.img +
+        '<div><div class="linea-nombre">' + esc(i.nombre) + '</div>' +
+        i.detalles.map((d) => '<div class="linea-detalle">' + esc(d) + '</div>').join('') +
+        '<div class="linea-precio">' + (i.consultar ? 'Precio a consultar' : (i.desde ? 'Desde ' : '') + esc(pr(i.unidad)) + ' / ud.') + '</div>' +
+        '<div class="cantidad"><button type="button" data-menos="' + k + '" aria-label="Quitar una unidad"' + (l.cant <= 1 ? ' disabled' : '') + '>−</button>' +
         '<span aria-label="Cantidad">' + l.cant + '</span>' +
-        '<button type="button" data-mas="' + esc(p.id) + '" aria-label="Añadir una unidad"' + (l.cant >= max ? ' disabled' : '') + '>+</button></div></div>' +
-        '<div><div class="linea-total">' + esc(pr(num(p.precio) * l.cant)) + '</div><button type="button" class="quitar" data-quitar="' + esc(p.id) + '">Quitar</button></div></div>';
+        '<button type="button" data-mas="' + k + '" aria-label="Añadir una unidad"' + (l.cant >= i.max ? ' disabled' : '') + '>+</button></div></div>' +
+        '<div><div class="linea-total">' + esc(precioLinea(i, l)) + '</div><button type="button" class="quitar" data-quitar="' + k + '">Quitar</button></div></div>';
     }).join('') +
-      '<div class="resumen"><div><span>Subtotal</span><strong>' + esc(pr(st)) + '</strong></div>' +
+      '<div class="resumen"><div><span>Subtotal' + (hayEncargos() ? ' estimado' : '') + '</span><strong>' + esc(pr(st)) + '</strong></div>' +
       '<div><span>Entrega y pago</span><span>Se eligen en el siguiente paso</span></div></div>' +
-      (minimo > st ? '<p class="aviso">El pedido mínimo es de ' + esc(pr(minimo)) + '. Te faltan ' + esc(pr(minimo - st)) + '.</p>' : '') +
-      '<button type="button" class="boton boton-coral" data-tramitar' + (minimo > st ? ' disabled' : '') + '>Tramitar pedido</button>' +
+      (hayEncargos() ? '<p class="aviso">Los diseños propios se presupuestan por WhatsApp: te confirmamos el precio final antes de empezar.</p>' : '') +
+      (minimo > st && !hayEncargos() ? '<p class="aviso">El pedido mínimo es de ' + esc(pr(minimo)) + '. Te faltan ' + esc(pr(minimo - st)) + '.</p>' : '') +
+      '<button type="button" class="boton boton-coral" data-tramitar' + (minimo > st && !hayEncargos() ? ' disabled' : '') + '>Tramitar pedido</button>' +
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir comprando</button>';
   }
 
+  /* ---------- Encargo de diseño propio ---------- */
+  function abrirEncargo(catId, previo) {
+    const cat = catDe(catId), enc = encargosDe(cat);
+    if (!enc) { limpiarHash(); return; }
+    const d = previo || { base: (enc.bases[0] || {}).id, cant: 1 };
+    const base = enc.bases.find((b) => b.id === d.base) || enc.bases[0];
+    const v = (k) => esc(d[k] || '');
+    $('#encargo-contenido').innerHTML =
+      '<h2 id="encargo-titulo">' + esc(enc.titulo || '¿Tienes tu propio diseño?') + '</h2>' +
+      (enc.texto ? '<p class="encargo-intro">' + esc(enc.texto) + '</p>' : '') +
+      '<form class="formulario" id="form-encargo" data-cat="' + esc(cat.id) + '" novalidate>' +
+      '<fieldset><legend>¿Dónde lo pintamos?</legend>' +
+      enc.bases.map((b) => {
+        const consultar = b.precio === '' || b.precio == null || num(b.precio) <= 0;
+        return '<label class="opcion"><input type="radio" name="base" value="' + esc(b.id) + '"' + (b.id === base.id ? ' checked' : '') + '>' +
+          '<span class="opcion-nombre">' + esc(b.nombre) + '</span><span class="opcion-precio">' + (consultar ? 'A consultar' : 'Desde ' + esc(pr(b.precio))) + '</span>' +
+          (b.descripcion ? '<span class="opcion-desc">' + esc(b.descripcion) + '</span>' : '') + '</label>';
+      }).join('') + '</fieldset>' +
+      (base.pideTalla ? '<label class="campo">Talla *<input name="talla" required placeholder="Ej.: 6-9 meses, 4 años, M…" value="' + v('talla') + '"></label>' : '') +
+      '<label class="campo">Color de la prenda <input name="color" placeholder="Ej.: blanco, crudo, azul claro…" value="' + v('color') + '"></label>' +
+      '<label class="campo">Cuéntanos tu idea *<textarea name="idea" rows="4" required placeholder="Qué quieres que pintemos, colores, si lleva nombre o frase, dónde va en la prenda…">' + v('idea') + '</textarea></label>' +
+      '<div class="campo">Imagen de tu diseño <small>(dibujo, foto o captura; opcional)</small>' +
+      '<label class="subir-imagen"><input type="file" name="imagen" accept="image/*" id="encargo-imagen">' +
+      '<span class="subir-vista" id="encargo-vista">' + (archivos.borrador ? '<img src="' + esc(URL.createObjectURL(archivos.borrador)) + '" alt="Vista previa del diseño">' : '<img src="img/ic-favorito.webp" alt="" class="sin-foto">') + '</span>' +
+      '<span class="subir-texto" id="encargo-nombre">' + (archivos.borrador ? esc(archivos.borrador.name) : 'Elegir imagen') + '</span></label>' +
+      '<small>La imagen no se sube a la web: al enviar el pedido te pediremos que la adjuntes en el chat de WhatsApp.</small></div>' +
+      '<label class="campo campo-corto">Cantidad<input name="cant" type="number" min="1" max="20" inputmode="numeric" value="' + esc(d.cant || 1) + '"></label>' +
+      '<p class="error-campo" id="error-encargo" hidden></p>' +
+      '<div class="producto-botones"><button type="submit" class="boton boton-coral">Añadir a la cesta</button>' +
+      '<button type="button" class="boton boton-borde" data-cerrar>Cancelar</button></div>' +
+      '</form>';
+    cerrarTodo(); abrir($('#ventana-encargo'));
+    $('#ventana-encargo .ventana-marco').scrollTop = 0;
+  }
+
+  function leerEncargo() {
+    const f = $('#form-encargo');
+    return f ? Object.fromEntries(Array.from(new FormData(f).entries()).filter(([k]) => k !== 'imagen')) : {};
+  }
+
+  function guardarEncargo() {
+    const f = $('#form-encargo'), err = $('#error-encargo');
+    const catId = f.dataset.cat, enc = encargosDe(catDe(catId));
+    const d = leerEncargo();
+    const base = enc.bases.find((b) => b.id === d.base);
+    const faltan = [];
+    if (!base) faltan.push('dónde lo pintamos');
+    if (base && base.pideTalla && !String(d.talla || '').trim()) faltan.push('la talla');
+    if (!String(d.idea || '').trim()) faltan.push('tu idea');
+    if (faltan.length) { err.textContent = 'Falta: ' + faltan.join(', ') + '.'; err.hidden = false; return; }
+    const k = 'e:' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    const img = archivos.borrador || null;
+    if (img) archivos[k] = img;
+    delete archivos.borrador;
+    E.cesta.push({
+      k, tipo: 'encargo', cant: Math.min(20, Math.max(1, Math.floor(num(d.cant, 1)))),
+      enc: { cat: catId, base: base.id, nombreBase: base.nombre, talla: (d.talla || '').trim(), color: (d.color || '').trim(), idea: (d.idea || '').trim(), imagen: img ? img.name : '' }
+    });
+    E.vista = 'lineas';
+    guardarCesta();
+    aviso('Tu diseño se ha añadido a la cesta');
+    cerrarTodo(); limpiarHash(); abrirCesta();
+  }
+
+  /* ---------- Pedido ---------- */
   function entregasActivas() { return (E.cfg.entregas || []).filter((e) => e.activo); }
   function pagosPara(entregaId) {
     return (E.cfg.pagos || []).filter((p) => p.activo && (!p.entregas || !p.entregas.length || p.entregas.includes(entregaId)));
@@ -316,7 +468,8 @@
       '<div class="resumen"><div><span>Subtotal</span><span>' + esc(pr(st)) + '</span></div>' +
       '<div><span>Entrega</span><span>' + (ce > 0 ? esc(pr(ce)) : 'Gratis') + '</span></div>' +
       (rp > 0 ? '<div><span>Recargo de pago</span><span>' + esc(pr(rp)) + '</span></div>' : '') +
-      '<div class="total"><span>Total</span><span>' + esc(pr(total)) + '</span></div></div>' +
+      '<div class="total"><span>Total' + (hayEncargos() ? ' estimado' : '') + '</span><span>' + esc(pr(total)) + '</span></div></div>' +
+      (hayEncargos() ? '<p class="aviso">Incluye diseños propios: te confirmaremos el precio final por WhatsApp.</p>' : '') +
       '<label class="acepto"><input type="checkbox" name="acepto" required' + (prev.acepto ? ' checked' : '') + '><span>He leído ' +
       (politicas.length ? politicas.map((p) => '<a href="#/pagina/' + esc(p.id) + '">' + esc(p.titulo.toLowerCase()) + '</a>').join(', ') : 'las condiciones') + '.</span></label>' +
       '<p class="error-campo" id="error-pedido" hidden></p>' +
@@ -361,16 +514,20 @@
 
     const st = subtotal(), ce = costeEntrega(entrega, st), rp = pago ? num(pago.recargo) : 0;
     const ref = referencia();
-    const cats = (id) => { const c = catDe(id); return c ? ' (' + c.nombre + ')' : ''; };
     const lineas = [];
     lineas.push((E.cfg.pedido || {}).saludo || 'Hola, quiero hacer este pedido:');
     lineas.push('*Pedido ' + ref + '*', '');
-    E.cesta.forEach((l) => { const p = prodDe(l.id); lineas.push('• ' + l.cant + ' × ' + p.nombre + cats(p.categoria) + ' — ' + pr(num(p.precio) * l.cant)); });
-    lineas.push('', 'Subtotal: ' + pr(st));
+    E.cesta.forEach((l) => {
+      const i = infoLinea(l);
+      lineas.push('• ' + l.cant + ' × ' + i.nombre + (i.cat ? ' (' + i.cat + ')' : '') + ' — ' + precioLinea(i, l).replace(/^desde/, 'desde'));
+      i.detalles.forEach((x) => lineas.push('   ' + (l.tipo === 'encargo' && /^Imagen:/.test(x) ? 'Imagen: te la envío a continuación (' + l.enc.imagen + ')' : x)));
+    });
+    lineas.push('', 'Subtotal' + (hayEncargos() ? ' estimado' : '') + ': ' + pr(st));
     lineas.push('Entrega: ' + (entrega ? entrega.nombre + ' — ' + (ce > 0 ? pr(ce) : 'gratis') : 'a acordar'));
     lineas.push('Pago: ' + (pago ? pago.nombre + (rp > 0 ? ' — recargo ' + pr(rp) : '') : 'a acordar'));
-    lineas.push('*TOTAL: ' + pr(st + ce + rp) + '*', '');
-    lineas.push('*Mis datos*', 'Nombre: ' + d.nombre.trim(), 'Teléfono: ' + d.telefono.trim());
+    lineas.push('*TOTAL' + (hayEncargos() ? ' ESTIMADO' : '') + ': ' + pr(st + ce + rp) + '*');
+    if (hayEncargos()) lineas.push('(Incluye diseños propios: espero vuestro presupuesto final)');
+    lineas.push('', '*Mis datos*', 'Nombre: ' + d.nombre.trim(), 'Teléfono: ' + d.telefono.trim());
     if (entrega && entrega.pideDireccion) lineas.push('Dirección: ' + d.direccion.trim() + ', ' + d.cp.trim() + ' ' + d.localidad.trim() + (d.provincia ? ' (' + d.provincia.trim() + ')' : ''));
     if (String(d.notas || '').trim()) lineas.push('Notas: ' + d.notas.trim());
     const desp = (E.cfg.pedido || {}).despedida; if (desp) lineas.push('', desp);
@@ -382,13 +539,28 @@
     if (!w) location.href = url;
   }
 
+  function imagenesPendientes() {
+    return E.cesta.filter((l) => l.tipo === 'encargo' && l.enc.imagen).map((l) => ({ l, file: archivos[l.k] || null }));
+  }
+
   function pintarEnviado() {
+    const imgs = imagenesPendientes();
+    const ficheros = imgs.map((x) => x.file).filter(Boolean);
+    const puedeCompartir = ficheros.length && navigator.canShare && navigator.canShare({ files: ficheros });
     $('#cesta-cuerpo').innerHTML = '<div class="cesta-vacia"><img src="img/avatar.webp" alt="" style="width:180px">' +
       '<p style="font-size:22px;font-weight:800">¡Pedido preparado!</p>' +
       '<p>Referencia <strong>' + esc(E.ultimaRef) + '</strong>. Envía el mensaje en WhatsApp y te responderemos para confirmarlo.</p>' +
-      '<a class="boton boton-marino" href="' + esc(E.ultimaUrl) + '" target="_blank" rel="noopener"><img src="img/ic-mensaje.webp" alt="">Abrir WhatsApp de nuevo</a>' +
+      (imgs.length ? '<p class="aviso">Último paso: adjunta en el chat de WhatsApp la imagen de tu diseño' + (imgs.length > 1 ? ' (' + imgs.map((x) => x.l.enc.imagen).join(', ') + ')' : ' (' + esc(imgs[0].l.enc.imagen) + ')') + '.</p>' : '') +
+      (puedeCompartir ? '<button type="button" class="boton boton-agua" data-compartir-imagen>Enviar la imagen del diseño</button>' : '') +
+      '<a class="boton boton-marino" href="' + esc(E.ultimaUrl) + '" target="_blank" rel="noopener"><img src="img/ic-mensaje.webp" alt=""><span>Abrir WhatsApp de nuevo</span></a>' +
       '<button type="button" class="boton boton-coral" data-vaciar>He enviado el pedido: vaciar cesta</button>' +
       '<button type="button" class="volver" data-volver>Volver a la cesta</button></div>';
+  }
+
+  async function compartirImagenes() {
+    const ficheros = imagenesPendientes().map((x) => x.file).filter(Boolean);
+    try { await navigator.share({ files: ficheros, text: 'Diseño para el pedido ' + E.ultimaRef }); }
+    catch (e) { if (e && e.name !== 'AbortError') aviso('No se pudo compartir. Adjunta la imagen desde WhatsApp.'); }
   }
 
   /* ---------- Eventos ---------- */
@@ -402,21 +574,27 @@
       const ds = t.dataset;
       if (ds.cat) { E.cat = ds.cat; pintarPestanas(); pintarRejilla(); return; }
       if (ds.ver) { location.hash = '#/producto/' + encodeURIComponent(ds.ver); return; }
-      if (ds.anadir) { anadir(ds.anadir, !!ds.yCesta); return; }
+      if (ds.anadir) { anadir(ds.anadir, !!ds.yCesta, !!ds.conPers); return; }
+      if (ds.encargo) { delete archivos.borrador; location.hash = '#/encargo/' + encodeURIComponent(ds.encargo); return; }
+      if (ds.compartirImagen !== undefined) { compartirImagenes(); return; }
       if (ds.foto) {
         const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
         return;
       }
       if (ds.mas || ds.menos) {
-        const id = ds.mas || ds.menos, l = E.cesta.find((x) => x.id === id);
-        if (l) { l.cant = Math.max(1, Math.min(maxUnidades(prodDe(id)), l.cant + (ds.mas ? 1 : -1))); guardarCesta(); pintarCesta(); }
+        const l = E.cesta.find((x) => x.k === (ds.mas || ds.menos));
+        if (l) {
+          let max = infoLinea(l).max;
+          if (l.tipo === 'producto') max -= E.cesta.filter((x) => x !== l && x.tipo === 'producto' && x.id === l.id).reduce((s, x) => s + x.cant, 0);
+          l.cant = Math.max(1, Math.min(max, l.cant + (ds.mas ? 1 : -1))); guardarCesta(); pintarCesta();
+        }
         return;
       }
-      if (ds.quitar) { E.cesta = E.cesta.filter((x) => x.id !== ds.quitar); guardarCesta(); pintarCesta(); return; }
+      if (ds.quitar) { E.cesta = E.cesta.filter((x) => x.k !== ds.quitar); delete archivos[ds.quitar]; guardarCesta(); pintarCesta(); return; }
       if (ds.tramitar !== undefined) { E.vista = 'pedido'; pintarCesta(); $('#cesta-cuerpo').scrollTop = 0; return; }
       if (ds.volver !== undefined) { leerForm(); E.vista = 'lineas'; pintarCesta(); return; }
-      if (ds.vaciar !== undefined) { E.cesta = []; E.pedido = null; guardarCesta(); E.vista = 'lineas'; pintarCesta(); return; }
+      if (ds.vaciar !== undefined) { E.cesta = []; E.pedido = null; Object.keys(archivos).forEach((k) => delete archivos[k]); guardarCesta(); E.vista = 'lineas'; pintarCesta(); return; }
       if (ds.cerrar !== undefined) {
         const dlg = t.closest('dialog'); if (dlg) dlg.close();
         if (ds.irTienda !== undefined) $('#tienda').scrollIntoView();
@@ -427,9 +605,30 @@
     });
 
     document.addEventListener('change', (ev) => {
-      if (ev.target.closest('#form-pedido') && (ev.target.name === 'entrega' || ev.target.name === 'pago')) { leerForm(); pintarPedido(); }
+      const el = ev.target;
+      if (el.closest('#form-pedido') && (el.name === 'entrega' || el.name === 'pago')) { leerForm(); pintarPedido(); return; }
+      if (el.id === 'encargo-imagen') {
+        const f = el.files && el.files[0];
+        if (f && !/^image\//.test(f.type)) { aviso('Elige un archivo de imagen'); el.value = ''; return; }
+        if (f) archivos.borrador = f;
+        $('#encargo-vista').innerHTML = f ? '<img src="' + esc(URL.createObjectURL(f)) + '" alt="Vista previa del diseño">' : '';
+        $('#encargo-nombre').textContent = f ? f.name : 'Elegir imagen';
+        return;
+      }
+      if (el.closest('#form-encargo') && el.name === 'base') {
+        const f = $('#form-encargo'), sc = $('#ventana-encargo .ventana-marco').scrollTop;
+        abrirEncargo(f.dataset.cat, leerEncargo());
+        $('#ventana-encargo .ventana-marco').scrollTop = sc;
+      }
     });
-    document.addEventListener('submit', (ev) => { if (ev.target.id === 'form-pedido') { ev.preventDefault(); enviarPedido(); } });
+    document.addEventListener('submit', (ev) => {
+      if (ev.target.id === 'form-pedido') { ev.preventDefault(); enviarPedido(); }
+      if (ev.target.id === 'form-encargo') { ev.preventDefault(); guardarEncargo(); }
+    });
+    document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; } });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-producto [data-anadir]'); if (b) b.click(); }
+    });
 
     document.querySelectorAll('dialog').forEach((d) => d.addEventListener('close', () => {
       if (d.id === 'cesta') leerForm();

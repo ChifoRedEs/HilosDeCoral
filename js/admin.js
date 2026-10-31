@@ -197,7 +197,7 @@
       '<span>' + esc(pr(p.precio)) + '</span><span>' + esc(cat ? cat.nombre : 'Sin categoría') + '</span>' +
       (p.unidades !== '' && p.unidades != null ? '<span>' + num(p.unidades) + ' ud.</span>' : '') +
       '<span class="chip ' + est + '">' + ESTADOS[est].txt + '</span>' +
-      (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
+      (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.personalizable && cat && cat.personalizable ? '<span class="chip personalizable">Personalizable</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
       '</div></div>' +
       '<div class="prod-acciones">' +
       '<select data-estado-prod="' + i + '" aria-label="Estado de ' + esc(p.nombre) + '">' + Object.keys(ESTADOS).map((k) => '<option value="' + k + '"' + ((p.estado || 'disponible') === k ? ' selected' : '') + '>' + ESTADOS[k].txt + '</option>').join('') + '</select>' +
@@ -231,6 +231,7 @@
       campo('Estado', 'edit.estado', { opciones: Object.keys(ESTADOS).map((k) => [k, ESTADOS[k].txt]) }) +
       '</div>' +
       '<div class="fila">' + campo('Marcar como novedad', 'edit.novedad', { tipo: 'bool' }) + campo('Visible en la tienda', 'edit.visible', { tipo: 'bool' }) + '</div>' +
+      '<div id="pers-edit">' + persHTML() + '</div>' +
       '<div class="rejilla-campos">' +
       campo('Descripción', 'edit.descripcion', { area: true, filas: 4, ancho: true }) +
       campo('Materiales', 'edit.materiales', { placeholder: 'Ej.: algodón orgánico, pintura textil' }) +
@@ -332,6 +333,46 @@
       '</div></div>';
   }
 
+  /* --- Personalización (solo en categorías que lo permiten) --- */
+  function persHTML() {
+    const ed = R.edit; if (!ed) return '';
+    const cat = catDe(ed.categoria);
+    if (!cat || !cat.personalizable) return '';
+    if (ed.persEtiqueta == null) ed.persEtiqueta = 'Nombre a pintar';
+    if (ed.persMax == null || ed.persMax === '') ed.persMax = 20;
+    if (ed.persObligatorio == null) ed.persObligatorio = true;
+    return '<div class="caja caja-pers"><h3>Personalizable / por encargo</h3><p class="caja-ayuda">El cliente escribe un nombre o texto al añadir el producto, y lo recibes en el pedido de WhatsApp.</p>' +
+      campo('Producto personalizable', 'edit.personalizable', { tipo: 'bool' }) +
+      (ed.personalizable ? '<div class="rejilla-campos separa">' +
+        campo('Qué se le pide al cliente', 'edit.persEtiqueta', { placeholder: 'Ej.: Nombre del bebé' }) +
+        campo('Máximo de caracteres', 'edit.persMax', { tipo: 'num', paso: '1' }) +
+        campo('Suplemento (' + moneda() + ')', 'edit.persExtra', { tipo: 'num', ayuda: '(vacío = sin suplemento)' }) +
+        '<div class="campo" style="justify-content:flex-end">' + campo('Obligatorio', 'edit.persObligatorio', { tipo: 'bool' }) + '</div>' +
+        '</div>' : '') + '</div>';
+  }
+
+  function opcionesEncargo(c, i) {
+    const enc = c.encargos || {};
+    const bases = enc.bases || [];
+    const r = 'categorias.' + i + '.encargos';
+    return '<div class="separa caja-pers caja"><h3>Personalización y encargos</h3><p class="caja-ayuda">Opciones extra para esta categoría.</p>' +
+      '<div class="fila">' + campo('Permite productos personalizables (nombre o texto)', 'categorias.' + i + '.personalizable', { tipo: 'bool' }) + '</div>' +
+      '<div class="fila separa">' + campo('Permite encargar un diseño propio del cliente', r + '.activo', { tipo: 'bool', repinta: true }) + '</div>' +
+      (enc.activo ? '<div class="rejilla-campos separa">' +
+        campo('Título del bloque', r + '.titulo', { placeholder: '¿Tienes tu propio diseño?' }) +
+        campo('Texto', r + '.texto', { area: true, filas: 2, ancho: true }) + '</div>' +
+        '<div class="fila-entre separa"><strong>Modelos que se pueden encargar</strong><button type="button" class="btn btn-peq" data-nueva-base="' + i + '">Añadir modelo</button></div>' +
+        bases.map((b, j) => '<div class="base-encargo">' +
+          campo('Modelo', r + '.bases.' + j + '.nombre') +
+          campo('Precio desde (' + moneda() + ')', r + '.bases.' + j + '.precio', { tipo: 'num', ayuda: '(vacío = a consultar)' }) +
+          campo('Detalle', r + '.bases.' + j + '.descripcion', { placeholder: 'Ej.: algodón natural' }) +
+          '<div class="campo" style="justify-content:flex-end">' + campo('Pedir talla', r + '.bases.' + j + '.pideTalla', { tipo: 'bool' }) + '</div>' +
+          '<div class="campo" style="justify-content:flex-end"><button type="button" class="btn btn-peq btn-peligro" data-borrar="' + r + '.bases" data-i="' + j + '">Quitar</button></div>' +
+          '</div>').join('') +
+        (bases.length ? '' : '<p class="caja-ayuda separa">Añade al menos un modelo para que el bloque aparezca en la tienda.</p>')
+        : '') + '</div>';
+  }
+
   /* --- Categorías --- */
   VISTAS.categorias = function () {
     return '<div class="fila-entre" style="margin-bottom:14px"><p class="seccion-intro" style="margin:0">Las categorías aparecen como pestañas en la tienda, en este orden.</p>' +
@@ -346,7 +387,7 @@
           '<div class="rejilla-campos">' + campo('Nombre', 'categorias.' + i + '.nombre') + campo('Descripción', 'categorias.' + i + '.descripcion', { ayuda: '(se muestra al elegir la categoría)' }) +
           selectorImagen('Icono de la pestaña', 'categorias.' + i + '.icono', IMAGENES_TIENDA, 400) +
           selectorImagen('Banner de la categoría', 'categorias.' + i + '.banner', BANNERS, 1920, true) +
-          '</div></div>';
+          '</div>' + opcionesEncargo(c, i) + '</div>';
       }).join('');
   };
 
@@ -585,6 +626,7 @@
       const el = ev.target;
       if (el.dataset.bind && (el.type === 'checkbox' || el.tagName === 'SELECT')) {
         fijar(el.dataset.bind, convertir(el));
+        if (el.dataset.bind === 'edit.categoria' || el.dataset.bind === 'edit.personalizable') { $('#pers-edit').innerHTML = persHTML(); marcar(); return; }
         if (el.dataset.repinta) pintar(); else marcar();
         return;
       }
@@ -659,7 +701,12 @@
       if (d.nuevaCat != null) {
         const nombre = prompt('Nombre de la nueva categoría:'); if (!nombre || !nombre.trim()) return;
         let id = slug(nombre); while (catDe(id)) id += '-2';
-        R.categorias.push({ id, nombre: nombre.trim(), descripcion: '', icono: 'img/cat-todo.webp', banner: '', visible: true }); pintar(); return;
+        R.categorias.push({ id, nombre: nombre.trim(), descripcion: '', icono: 'img/cat-todo.webp', banner: '', visible: true, personalizable: false, encargos: { activo: false, titulo: '', texto: '', bases: [] } }); pintar(); return;
+      }
+      if (d.nuevaBase != null) {
+        const c = R.categorias[num(d.nuevaBase)];
+        c.encargos = c.encargos || { activo: true, titulo: '', texto: '', bases: [] }; c.encargos.bases = c.encargos.bases || [];
+        c.encargos.bases.push({ id: uid('base-'), nombre: 'Nuevo modelo', precio: '', pideTalla: false, descripcion: '' }); pintar(); return;
       }
       if (d.nuevaEntrega != null) {
         R.config.entregas.push({ id: uid('entrega-'), nombre: 'Nueva forma de entrega', descripcion: '', precio: 0, gratisDesde: '', plazo: '', pideDireccion: true, activo: false }); pintar(); return;
