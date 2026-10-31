@@ -1,7 +1,8 @@
 /* Hilos de Coral · lógica de la tienda */
 (function () {
   'use strict';
-  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, PERS, estiloPersonalizacion, describirPersonalizacion } = window.HDC;
+  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion } = window.HDC;
+  const tallaDe = (id) => TALLAS_BEBE.find((t) => t.id === id);
   const $ = (s, el) => (el || document).querySelector(s);
   const CLAVE_CESTA = 'hdc-cesta';
   const IMG_TODO = 'img/cat-todo.webp';
@@ -197,6 +198,25 @@
   function cerrarTodo() { document.querySelectorAll('dialog[open]').forEach((d) => d.close()); }
   function limpiarHash() { if (location.hash.startsWith('#/')) history.replaceState(null, '', location.pathname + location.search); }
 
+  /* ---------- Tallas ---------- */
+  function pideTalla(p) { const c = catDe(p && p.categoria); return !!(c && (c.subcategorias || []).some((x) => x.id === p.subcategoria && x.pideTalla)); }
+
+  function selectorTalla(idSel, valor) {
+    return '<div class="campo campo-talla"><label for="' + idSel + '">Talla *</label>' +
+      '<div class="talla-fila"><select id="' + idSel + '" class="selector-talla">' +
+      '<option value="">Elige la talla</option>' +
+      TALLAS_BEBE.map((t) => '<option value="' + t.id + '"' + (t.id === valor ? ' selected' : '') + '>' + esc(t.talla) + ' · ' + esc(t.edad) + '</option>').join('') +
+      '</select><button type="button" class="enlace-tallas" data-guia-tallas>Guía de tallas</button></div>' +
+      '<p class="error-campo" hidden>Elige una talla.</p></div>';
+  }
+
+  function abrirGuiaTallas() {
+    $('#tallas-tabla').innerHTML = '<table class="tabla-tallas"><thead><tr><th scope="col">Talla</th><th scope="col">Edad</th><th scope="col">Peso</th><th scope="col">Altura</th></tr></thead><tbody>' +
+      TALLAS_BEBE.map((t) => '<tr><th scope="row">' + esc(t.talla) + '</th><td>' + esc(t.edad) + '</td><td>' + esc(t.peso) + '</td><td>' + esc(t.altura) + '</td></tr>').join('') +
+      '</tbody></table>';
+    abrir($('#ventana-tallas'));
+  }
+
   function verProducto(id) {
     const p = prodDe(id);
     if (!p || p.visible === false) { aviso('Esta pieza ya no está disponible'); limpiarHash(); return; }
@@ -218,6 +238,7 @@
       (ficha.length ? '<dl class="ficha">' + ficha.map((f) => '<dt>' + f[0] + '</dt><dd>' + esc(f[1]) + '</dd>').join('') + '</dl>' : '') +
       (comprable(p) && uds > 1 && uds < 99 ? '<span class="unidades">Quedan ' + uds + ' unidades</span>' : '') +
       (comprable(p) && uds === 1 ? '<span class="unidades">Pieza única</span>' : '') +
+      (comprable(p) && pideTalla(p) ? selectorTalla('ficha-talla') : '') +
       '<img class="separador-cosido" src="img/borde-cosido.webp" alt="">' +
       '<div class="producto-botones">' +
       (comprable(p)
@@ -277,7 +298,7 @@
       '<div class="pers-layout">' +
       '<div class="pers-lado-vista"><div class="vista-lienzo"><img src="' + esc(foto) + '" alt="' + esc(p.nombre) + ' con tu texto"><span class="texto-pers ejemplo" aria-hidden="true"></span></div>' +
       '<p class="vista-nota">Vista previa orientativa: el texto se pinta a mano y puede variar ligeramente.</p></div>' +
-      '<div class="pers-lado-opciones">' + camposPersonalizacion(p) +
+      '<div class="pers-lado-opciones">' + (pideTalla(p) ? selectorTalla('pers-talla', ($('#ficha-talla') || {}).value) : '') + camposPersonalizacion(p) +
       '<div class="producto-botones"><button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1" data-con-pers="1">Añadir a la cesta</button>' +
       '<button type="button" class="boton boton-borde" data-cerrar>Cancelar</button></div></div>' +
       '</div>';
@@ -312,7 +333,7 @@
   const urls = {};
   function urlArchivo(k) { return urls[k] || (urls[k] = URL.createObjectURL(archivos[k])); }
 
-  function claveLinea(id, pers) { return 'p:' + id + '|' + (pers ? JSON.stringify([pers.texto.toLowerCase(), pers.fuente, pers.tamano, pers.posicion, pers.color]) : ''); }
+  function claveLinea(id, pers, talla) { return 'p:' + id + '|' + (talla || '') + '|' + (pers ? JSON.stringify([pers.texto.toLowerCase(), pers.fuente, pers.tamano, pers.posicion, pers.color]) : ''); }
 
   function normalPers(v) {
     if (!v) return null;
@@ -348,7 +369,7 @@
     const p = prodDe(l.id), cat = catDe(p.categoria);
     return {
       nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: sinPrecio(p) ? 0 : num(p.precio) + (l.pers ? extraPers(p) : 0),
-      consultar: sinPrecio(p), desde: false, detalles: l.pers ? describirPersonalizacion(l.pers) : [], max: maxUnidades(p)
+      consultar: sinPrecio(p), desde: false, detalles: (tallaDe(l.talla) ? ['Talla: ' + tallaDe(l.talla).talla + ' (' + tallaDe(l.talla).edad + ')'] : []).concat(l.pers ? describirPersonalizacion(l.pers) : []), max: maxUnidades(p)
     };
   }
 
@@ -375,7 +396,8 @@
       const base = { tipo, cant: Math.max(1, Math.floor(num(l.cant, 1))) };
       if (tipo === 'encargo') return Object.assign(base, { k: String(l.k || 'e:' + Date.now()), enc: l.enc || {} });
       const pers = normalPers(l.pers);
-      return Object.assign(base, { id: String(l.id), pers, k: claveLinea(l.id, pers) });
+      const talla = tallaDe(l.talla) ? l.talla : '';
+      return Object.assign(base, { id: String(l.id), pers, talla, k: claveLinea(l.id, pers, talla) });
     }).filter(lineaValida).map((l) => { l.cant = Math.min(l.cant, infoLinea(l).max); return l; });
     guardarCesta();
   }
@@ -393,14 +415,21 @@
       if (!pers && p.persObligatorio === true) { err.textContent = 'Escribe el ' + (p.persEtiqueta || 'nombre o texto').toLowerCase() + ' que quieres.'; err.hidden = false; inp.focus(); return; }
       }
     }
-    const k = claveLinea(id, pers);
+    let talla = '';
+    if (pideTalla(p)) {
+      const sel = conPers ? $('#pers-talla') : $('#ventana-producto[open] #ficha-talla');
+      if (!sel) { location.hash = '#/producto/' + encodeURIComponent(id); aviso('Elige la talla antes de añadirlo'); return; }
+      talla = sel.value;
+      if (!tallaDe(talla)) { const e = sel.closest('.campo-talla').querySelector('.error-campo'); e.hidden = false; sel.focus(); return; }
+    }
+    const k = claveLinea(id, pers, talla);
     const total = E.cesta.filter((x) => x.tipo === 'producto' && x.id === id).reduce((s, x) => s + x.cant, 0);
     if (total >= maxUnidades(p)) { aviso(maxUnidades(p) === 1 ? 'Es una pieza única y ya está en tu cesta' : 'No quedan más unidades'); return; }
     const l = E.cesta.find((x) => x.k === k);
-    if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, cant: 1 });
+    if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, talla, cant: 1 });
     E.vista = 'lineas';
     guardarCesta();
-    aviso('«' + p.nombre + '»' + (pers ? ' (' + pers.texto + ')' : '') + ' añadido a la cesta');
+    aviso('«' + p.nombre + '»' + (talla ? ' talla ' + tallaDe(talla).talla : '') + (pers ? ' (' + pers.texto + ')' : '') + ' añadido a la cesta');
     if (abrirLuego) { cerrarTodo(); limpiarHash(); abrirCesta(); }
   }
 
@@ -686,6 +715,7 @@
       if (ds.encargo) { delete archivos.borrador; location.hash = '#/encargo/' + encodeURIComponent(ds.encargo); return; }
       if (ds.compartirImagen !== undefined) { compartirImagenes(); return; }
       if (ds.personalizar) { abrirPersonalizar(ds.personalizar); return; }
+      if (ds.guiaTallas !== undefined) { abrirGuiaTallas(); return; }
       if (ds.foto) {
         const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
@@ -716,6 +746,7 @@
     document.addEventListener('change', (ev) => {
       const el = ev.target;
       if (el.closest('#form-pedido') && (el.name === 'entrega' || el.name === 'pago')) { leerForm(); pintarPedido(); return; }
+      if (el.classList.contains('selector-talla')) { const e = el.closest('.campo-talla').querySelector('.error-campo'); if (e) e.hidden = true; return; }
       if (/^pers-(fuente|tamano|posicion|color)$/.test(el.name)) { E.persSel[el.name.slice(5)] = el.value; actualizarTextoPers(); return; }
       if (el.id === 'encargo-imagen') {
         const f = el.files && el.files[0];

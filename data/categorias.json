@@ -47,25 +47,29 @@
         "id": "totebag",
         "nombre": "Totebags",
         "icono": "img/sub-textil-totebags.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "bodies",
         "nombre": "Bodies",
         "icono": "img/sub-textil-bodies.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": true
       },
       {
         "id": "baberos",
         "nombre": "Baberos",
         "icono": "img/sub-textil-baberos.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "camisetas",
         "nombre": "Camisetas",
         "icono": "img/sub-textil-camisetas.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": true
       }
     ]
   },
@@ -88,25 +92,29 @@
         "id": "pendientes",
         "nombre": "Pendientes",
         "icono": "img/sub-ceramica-pendientes.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "colgantes",
         "nombre": "Colgantes",
         "icono": "img/sub-ceramica-colgantes.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "broches",
         "nombre": "Broches",
         "icono": "img/sub-ceramica-broches.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "vajilla",
         "nombre": "Vajilla",
         "icono": "img/sub-ceramica-vajilla.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       }
     ]
   },
@@ -129,25 +137,29 @@
         "id": "pulseras",
         "nombre": "Pulseras",
         "icono": "img/sub-bisuteria-pulseras.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "anillos",
         "nombre": "Anillos",
         "icono": "img/sub-bisuteria-anillos.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "pendientes",
         "nombre": "Pendientes",
         "icono": "img/sub-bisuteria-pendientes.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       },
       {
         "id": "colgantes",
         "nombre": "Colgantes",
         "icono": "img/sub-bisuteria-colgantes.webp",
-        "visible": true
+        "visible": true,
+        "pideTalla": false
       }
     ]
   }

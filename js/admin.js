@@ -358,7 +358,7 @@
         return '<div class="sub-fila' + (x.visible === false ? ' inactivo' : '') + '">' +
           campo('Nombre · ' + n + ' producto(s)', r + '.' + j + '.nombre') +
           selectorImagen('Imagen', r + '.' + j + '.icono', IMAGENES_TIENDA, 400) +
-          '<div class="fila sub-acciones">' + campo('Visible', r + '.' + j + '.visible', { tipo: 'bool' }) +
+          '<div class="fila sub-acciones">' + campo('Visible', r + '.' + j + '.visible', { tipo: 'bool' }) + campo('Pedir talla de bebé', r + '.' + j + '.pideTalla', { tipo: 'bool' }) +
           '<button type="button" class="btn btn-peq btn-icono" data-mover="' + r + '" data-i="' + j + '" data-dir="-1" aria-label="Subir"' + (j === 0 ? ' disabled' : '') + '>↑</button>' +
           '<button type="button" class="btn btn-peq btn-icono" data-mover="' + r + '" data-i="' + j + '" data-dir="1" aria-label="Bajar"' + (j === subs.length - 1 ? ' disabled' : '') + '>↓</button>' +
           '<button type="button" class="btn btn-peq btn-peligro" data-borrar-sub="' + i + '" data-j="' + j + '">Quitar</button></div>' +

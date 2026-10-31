@@ -67,6 +67,7 @@ En **Copias de seguridad** puedes descargar `productos.json`, `categorias.json` 
 
 La versión aparece en el pie de la tienda y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
 
+- **1.6.0** · 31/10/2026: selector de talla de bebé (de 1 a 24 meses) en bodies y camisetas, con guía de tallas. Se activa por subcategoría desde el panel.
 - **1.5.1** · 31/10/2026: todas las fichas con el mismo diseño y el botón «Añadir». En Textil, un botón «Personalizar» abre una ventana emergente con las opciones y la vista previa.
 - **1.5.0** · 31/10/2026: todos los productos textiles son personalizables con texto. El cliente elige tipo de letra (5), tamaño, color y posición, y lo ve en directo sobre la foto y en una vista previa grande.
 - **1.4.1** · 31/10/2026: imágenes propias para las 12 subcategorías.

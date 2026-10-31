@@ -391,6 +391,30 @@ dialog:focus, dialog:focus-visible { outline: none; }
   .ventana-pers h2 { font-size: 32px; }
 }
 
+/* Tallas */
+.campo-talla label { font-weight: 800; }
+.talla-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.selector-talla { font: inherit; color: var(--marino); background: #fff; border: 2px solid var(--arena); border-radius: 12px; padding: 10px 12px; min-width: 220px; flex: 1 1 220px; max-width: 320px; }
+.selector-talla:focus { outline: none; border-color: var(--agua); }
+.enlace-tallas { border: 0; background: none; padding: 4px 0; font: inherit; font-weight: 800; color: var(--oceano); text-decoration: underline; cursor: pointer; }
+.enlace-tallas:hover { color: var(--terracota); }
+.ventana-tallas { width: min(640px, calc(100vw - 32px)); }
+.tallas-intro, .tallas-consejo { color: var(--texto-suave); margin: 0 0 14px; }
+.tallas-consejo { margin: 14px 0 0; font-weight: 700; }
+.tabla-tallas-caja { overflow-x: auto; }
+.tabla-tallas { width: 100%; border-collapse: collapse; font-size: 15px; }
+.tabla-tallas th, .tabla-tallas td { padding: 9px 10px; text-align: left; border-bottom: 1px dashed var(--arena); white-space: nowrap; }
+.tabla-tallas thead th { background: var(--agua-claro); font-weight: 800; }
+.tabla-tallas thead th:first-child { border-radius: 10px 0 0 10px; }
+.tabla-tallas thead th:last-child { border-radius: 0 10px 10px 0; }
+.tabla-tallas tbody th { font-weight: 800; color: var(--terracota-osc); }
+.tabla-tallas tbody tr:hover { background: #FBF4EC; }
+@media (max-width: 640px) {
+  .tabla-tallas { font-size: 13px; }
+  .tabla-tallas th, .tabla-tallas td { padding: 8px 5px; white-space: normal; }
+  .ventana-tallas h2 { font-size: 34px; }
+}
+
 /* Móvil */
 @media (max-width: 820px) {
   .producto { grid-template-columns: 1fr; gap: 20px; }

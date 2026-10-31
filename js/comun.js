@@ -124,6 +124,17 @@
     return 'disponible';
   }
 
+  /* Tallas de bebé (bodies y camisetas): talla, edad, peso y altura */
+  const TALLAS_BEBE = [
+    { id: '1m', talla: '1 mes', edad: '0 a 1 mes', peso: '3,5 – 4,5 kg', altura: '50 – 56 cm' },
+    { id: '3m', talla: '3 meses', edad: '1 a 3 meses', peso: '4,5 – 6 kg', altura: '56 – 62 cm' },
+    { id: '6m', talla: '6 meses', edad: '3 a 6 meses', peso: '6 – 8 kg', altura: '62 – 68 cm' },
+    { id: '9m', talla: '9 meses', edad: '6 a 9 meses', peso: '8 – 9 kg', altura: '68 – 74 cm' },
+    { id: '12m', talla: '12 meses', edad: '9 a 12 meses', peso: '9 – 11 kg', altura: '74 – 80 cm' },
+    { id: '18m', talla: '18 meses', edad: '12 a 18 meses', peso: '11 – 12,5 kg', altura: '80 – 86 cm' },
+    { id: '24m', talla: '24 meses', edad: '18 a 24 meses', peso: '12,5 – 14 kg', altura: '86 – 92 cm' }
+  ];
+
   /* Opciones de personalización de texto */
   const PERS = {
     fuentes: [
@@ -180,8 +191,8 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.5.1';
+  const VERSION = '1.6.0';
   const FECHA_VERSION = '31/10/2026';
 
-  global.HDC = { VERSION, FECHA_VERSION, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
+  global.HDC = { VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
 })(window);
