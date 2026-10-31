@@ -109,7 +109,7 @@
     },
     {
       "id": "sobre-mi",
-      "titulo": "Sobre mí",
+      "titulo": "Conócenos",
       "menu": "cabecera",
       "visible": true,
       "texto": "## Hola, soy [tu nombre]\n[Cuenta aquí tu historia: cómo empezaste, qué te inspira el mar, cómo trabajas cada pieza...]\n\n## Hecho a mano\nCada pieza de {nombreTienda} está hecha una a una, por eso no hay dos iguales. Las pequeñas diferencias de color, forma o trazo son parte de su encanto."
