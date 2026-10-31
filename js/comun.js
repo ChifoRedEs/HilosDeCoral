@@ -124,8 +124,64 @@
     return 'disponible';
   }
 
-  const VERSION = '1.4.1';
+  /* Opciones de personalización de texto */
+  const PERS = {
+    fuentes: [
+      { id: 'manuscrita', nombre: 'Manuscrita', css: "'Dancing Script', cursive", peso: 700 },
+      { id: 'retro', nombre: 'Retro', css: "'Pacifico', cursive", peso: 400 },
+      { id: 'a-mano', nombre: 'A mano', css: "'Caveat', cursive", peso: 700 },
+      { id: 'redondeada', nombre: 'Redondeada', css: "'Fredoka', sans-serif", peso: 600 },
+      { id: 'alta', nombre: 'Alta y fina', css: "'Amatic SC', cursive", peso: 700 }
+    ],
+    tamanos: [
+      { id: 'pequeno', nombre: 'Pequeño', escala: 5 },
+      { id: 'mediano', nombre: 'Mediano', escala: 7.5 },
+      { id: 'grande', nombre: 'Grande', escala: 10.5 }
+    ],
+    posiciones: [
+      { id: 'arriba', nombre: 'Arriba' },
+      { id: 'centro', nombre: 'Centro' },
+      { id: 'abajo', nombre: 'Abajo' },
+      { id: 'esquina', nombre: 'Esquina (pequeño)' }
+    ],
+    colores: [
+      { id: 'marino', nombre: 'Azul marino', hex: '#1B3F66' },
+      { id: 'coral', nombre: 'Coral', hex: '#D9714F' },
+      { id: 'aguamarina', nombre: 'Aguamarina', hex: '#3E8E9B' },
+      { id: 'mostaza', nombre: 'Mostaza', hex: '#D99A2B' },
+      { id: 'negro', nombre: 'Negro', hex: '#2B2B2B' }
+    ],
+    /* Dónde cae el texto en la foto de cada tipo de prenda (en % de la imagen): x central, ancho máximo y altura de cada posición */
+    zonas: {
+      totebag: { x: 50, w: 50, arriba: 41, centro: 62, abajo: 87, esquina: [64, 42] },
+      bodies: { x: 50, w: 34, arriba: 27, centro: 47, abajo: 70, esquina: [61, 27] },
+      baberos: { x: 50, w: 42, arriba: 31, centro: 55, abajo: 78, esquina: [62, 34] },
+      camisetas: { x: 50, w: 38, arriba: 26, centro: 50, abajo: 74, esquina: [61, 27] },
+      defecto: { x: 50, w: 46, arriba: 28, centro: 52, abajo: 76, esquina: [63, 30] }
+    },
+    defecto: { fuente: 'manuscrita', tamano: 'mediano', posicion: 'abajo', color: 'marino' }
+  };
+
+  /* Calcula dónde y cómo se dibuja el texto sobre la foto */
+  function estiloPersonalizacion(pers, subcategoria) {
+    const z = PERS.zonas[subcategoria] || PERS.zonas.defecto;
+    const f = PERS.fuentes.find((x) => x.id === pers.fuente) || PERS.fuentes[0];
+    const t = PERS.tamanos.find((x) => x.id === pers.tamano) || PERS.tamanos[1];
+    const c = PERS.colores.find((x) => x.id === pers.color) || PERS.colores[0];
+    let x = z.x, y = z[pers.posicion] != null ? z[pers.posicion] : z.abajo, escala = t.escala, ancho = z.w;
+    if (pers.posicion === 'esquina') { x = z.esquina[0]; y = z.esquina[1]; escala = t.escala * 0.55; ancho = z.w * 0.45; }
+    return 'left:' + x.toFixed(1) + '%;top:' + y.toFixed(1) + '%;max-width:' + ancho.toFixed(1) + '%;font-family:' + f.css + ';font-weight:' + f.peso +
+      ';font-size:' + escala.toFixed(2) + 'cqw;color:' + c.hex;
+  }
+
+  function describirPersonalizacion(pers) {
+    const nom = (lista, id) => (PERS[lista].find((x) => x.id === id) || {}).nombre || id;
+    return ['Texto: «' + pers.texto + '»', 'Letra: ' + nom('fuentes', pers.fuente) + ' · Tamaño: ' + nom('tamanos', pers.tamano),
+      'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
+  }
+
+  const VERSION = '1.5.0';
   const FECHA_VERSION = '31/10/2026';
 
-  global.HDC = { VERSION, FECHA_VERSION, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
+  global.HDC = { VERSION, FECHA_VERSION, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
 })(window);

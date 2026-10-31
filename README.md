@@ -67,6 +67,7 @@ En **Copias de seguridad** puedes descargar `productos.json`, `categorias.json` 
 
 La versión aparece en el pie de la tienda y en el menú del panel. Está definida en `js/comun.js` (`VERSION` y `FECHA_VERSION`).
 
+- **1.5.0** · 31/10/2026: todos los productos textiles son personalizables con texto. El cliente elige tipo de letra (5), tamaño, color y posición, y lo ve en directo sobre la foto y en una vista previa grande.
 - **1.4.1** · 31/10/2026: imágenes propias para las 12 subcategorías.
 - **1.4.0** · 31/10/2026: subcategorías (Textil: totebags, bodies, baberos y camisetas; Cerámica: pendientes, colgantes, broches y vajilla; Bisutería: pulseras, anillos, pendientes y colgantes). Nueva navegación: tres categorías con desplegable de subcategorías y novedades en la portada.
 - **1.3.0** · 31/10/2026: versión en el pie de página y en el panel. Productos sin precio como "Consultar precio". Archivos con `?v=` para que el navegador cargue siempre la última versión.

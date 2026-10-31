@@ -201,7 +201,7 @@
       '<span>' + (num(p.precio) > 0 ? esc(pr(p.precio)) : 'Consultar precio') + '</span><span>' + esc(cat ? cat.nombre + (subDe(cat, p.subcategoria) ? ' › ' + subDe(cat, p.subcategoria).nombre : '') : 'Sin categoría') + '</span>' +
       (p.unidades !== '' && p.unidades != null ? '<span>' + num(p.unidades) + ' ud.</span>' : '') +
       '<span class="chip ' + est + '">' + ESTADOS[est].txt + '</span>' +
-      (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.personalizable && cat && cat.personalizable ? '<span class="chip personalizable">Personalizable</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
+      (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.personalizable !== false && cat && cat.personalizable ? '<span class="chip personalizable">Personalizable</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
       '</div></div>' +
       '<div class="prod-acciones">' +
       '<select data-estado-prod="' + i + '" aria-label="Estado de ' + esc(p.nombre) + '">' + Object.keys(ESTADOS).map((k) => '<option value="' + k + '"' + ((p.estado || 'disponible') === k ? ' selected' : '') + '>' + ESTADOS[k].txt + '</option>').join('') + '</select>' +
@@ -372,16 +372,17 @@
     const ed = R.edit; if (!ed) return '';
     const cat = catDe(ed.categoria);
     if (!cat || !cat.personalizable) return '';
-    if (ed.persEtiqueta == null) ed.persEtiqueta = 'Nombre a pintar';
+    if (ed.personalizable == null) ed.personalizable = true;
+    if (ed.persEtiqueta == null) ed.persEtiqueta = 'Texto personalizado';
     if (ed.persMax == null || ed.persMax === '') ed.persMax = 20;
-    if (ed.persObligatorio == null) ed.persObligatorio = true;
-    return '<div class="caja caja-pers"><h3>Personalizable / por encargo</h3><p class="caja-ayuda">El cliente escribe un nombre o texto al añadir el producto, y lo recibes en el pedido de WhatsApp.</p>' +
+    if (ed.persObligatorio == null) ed.persObligatorio = false;
+    return '<div class="caja caja-pers"><h3>Personalizable / por encargo</h3><p class="caja-ayuda">El cliente escribe un nombre o texto, elige tipo de letra, tamaño, color y posición, y lo ve en una vista previa sobre la foto. Lo recibes todo en el pedido de WhatsApp.</p>' +
       campo('Producto personalizable', 'edit.personalizable', { tipo: 'bool' }) +
       (ed.personalizable ? '<div class="rejilla-campos separa">' +
         campo('Qué se le pide al cliente', 'edit.persEtiqueta', { placeholder: 'Ej.: Nombre del bebé' }) +
         campo('Máximo de caracteres', 'edit.persMax', { tipo: 'num', paso: '1' }) +
         campo('Suplemento (' + moneda() + ')', 'edit.persExtra', { tipo: 'num', ayuda: '(vacío = sin suplemento)' }) +
-        '<div class="campo" style="justify-content:flex-end">' + campo('Obligatorio', 'edit.persObligatorio', { tipo: 'bool' }) + '</div>' +
+        '<div class="campo" style="justify-content:flex-end">' + campo('Texto obligatorio', 'edit.persObligatorio', { tipo: 'bool' }) + '</div>' +
         '</div>' : '') + '</div>';
   }
 
@@ -390,7 +391,7 @@
     const bases = enc.bases || [];
     const r = 'categorias.' + i + '.encargos';
     return '<div class="separa caja-pers caja"><h3>Personalización y encargos</h3><p class="caja-ayuda">Opciones extra para esta categoría.</p>' +
-      '<div class="fila">' + campo('Permite productos personalizables (nombre o texto)', 'categorias.' + i + '.personalizable', { tipo: 'bool' }) + '</div>' +
+      '<div class="fila">' + campo('Productos personalizables con texto (todos, salvo los que desactives en su ficha)', 'categorias.' + i + '.personalizable', { tipo: 'bool' }) + '</div>' +
       '<div class="fila separa">' + campo('Permite encargar un diseño propio del cliente', r + '.activo', { tipo: 'bool', repinta: true }) + '</div>' +
       (enc.activo ? '<div class="rejilla-campos separa">' +
         campo('Título del bloque', r + '.titulo', { placeholder: '¿Tienes tu propio diseño?' }) +

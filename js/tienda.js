@@ -1,7 +1,7 @@
 /* Hilos de Coral · lógica de la tienda */
 (function () {
   'use strict';
-  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION } = window.HDC;
+  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, PERS, estiloPersonalizacion, describirPersonalizacion } = window.HDC;
   const $ = (s, el) => (el || document).querySelector(s);
   const CLAVE_CESTA = 'hdc-cesta';
   const IMG_TODO = 'img/cat-todo.webp';
@@ -18,7 +18,7 @@
   const iconoCat = (p) => { const c = catDe(p.categoria); return (c && c.icono) || IMG_TODO; };
   const maxUnidades = (p) => (p.unidades === '' || p.unidades == null ? 99 : Math.max(0, Math.floor(num(p.unidades))));
   const comprable = (p) => p && p.visible !== false && estadoProducto(p) === 'disponible' && maxUnidades(p) > 0;
-  const persActiva = (p) => !!(p && p.personalizable && catDe(p.categoria) && catDe(p.categoria).personalizable);
+  const persActiva = (p) => !!(p && p.personalizable !== false && catDe(p.categoria) && catDe(p.categoria).personalizable);
   const encargosDe = (c) => (c && c.visible !== false && c.encargos && c.encargos.activo && (c.encargos.bases || []).length ? c.encargos : null);
   const extraPers = (p) => (persActiva(p) ? num(p.persExtra) : 0);
 
@@ -209,7 +209,7 @@
     const uds = maxUnidades(p);
     $('#vp-contenido').innerHTML =
       '<div class="producto">' +
-      '<div><div class="galeria-principal" id="galeria-principal">' + imgProducto(p) + '</div>' +
+      '<div><div class="galeria-principal" id="galeria-principal">' + imgProducto(p) + (persActiva(p) ? '<span class="texto-pers" id="texto-pers" aria-hidden="true"></span>' : '') + '</div>' +
       (fotos.length > 1 ? '<div class="miniaturas">' + fotos.map((f, i) =>
         '<button type="button" data-foto="' + esc(f) + '" aria-label="Foto ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + esc(f) + '" alt=""></button>').join('') + '</div>' : '') +
       '</div>' +
@@ -228,18 +228,64 @@
         ? '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1"' + (persActiva(p) ? ' data-con-pers="1"' : '') + '>Añadir a la cesta</button>'
         : '<button type="button" class="boton" disabled>' + ESTADOS[estadoProducto(p)].txt + '</button>') +
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir viendo</button>' +
-      '</div></div></div>';
+      '</div></div></div>' +
+      (comprable(p) && persActiva(p) ? '<div class="capa-vista" id="capa-vista" hidden></div>' : '');
+    E.persProd = p.id; E.persSel = Object.assign({}, PERS.defecto);
     cerrarTodo(); abrir($('#ventana-producto'));
+    if (persActiva(p)) actualizarTextoPers();
   }
 
   function camposPersonalizacion(p) {
     const max = Math.max(1, Math.floor(num(p.persMax, 20)) || 20);
     const extra = extraPers(p);
-    return '<label class="campo campo-pers"><span>' + esc(p.persEtiqueta || 'Nombre o texto a pintar') + (p.persObligatorio !== false ? ' *' : ' (opcional)') +
+    const obligatorio = p.persObligatorio === true;
+    const d = PERS.defecto;
+    const grupo = (nombre, titulo, lista, pinta) => '<fieldset class="pers-grupo"><legend>' + titulo + '</legend><div class="pers-opciones pers-g-' + nombre + '">' +
+      lista.map((o) => '<label class="pers-op"><input type="radio" name="pers-' + nombre + '" value="' + esc(o.id) + '"' + (o.id === d[{ fuente: 'fuente', tamano: 'tamano', posicion: 'posicion', color: 'color' }[nombre]] ? ' checked' : '') + '>' + pinta(o) + '</label>').join('') +
+      '</div></fieldset>';
+    return '<div class="pers-caja">' +
+      '<label class="campo campo-pers"><span>' + esc(p.persEtiqueta || 'Texto personalizado') + (obligatorio ? ' *' : ' <small>(opcional)</small>') +
       (extra > 0 ? ' <span class="pers-extra">(+' + esc(pr(extra)) + ')</span>' : '') + '</span>' +
       '<input id="pers-texto" maxlength="' + max + '" autocomplete="off" placeholder="Ej.: Lucía">' +
       '<small>Lo pintamos a mano tal como lo escribas (máx. ' + max + ' caracteres).</small></label>' +
-      '<p class="error-campo" id="error-pers" hidden></p>';
+      grupo('fuente', 'Tipo de letra', PERS.fuentes, (o) => '<span class="pers-letra" style="font-family:' + esc(o.css) + ';font-weight:' + o.peso + '">Aa</span><span class="pers-nombre">' + esc(o.nombre) + '</span>') +
+      '<div class="pers-fila">' +
+      grupo('tamano', 'Tamaño', PERS.tamanos, (o) => '<span class="pers-chip">' + esc(o.nombre) + '</span>') +
+      grupo('color', 'Color', PERS.colores, (o) => '<span class="pers-color" style="background:' + o.hex + '" title="' + esc(o.nombre) + '"></span><span class="visualmente-oculto">' + esc(o.nombre) + '</span>') +
+      '</div>' +
+      grupo('posicion', 'Dónde lo pintamos', PERS.posiciones, (o) => '<span class="pers-chip">' + esc(o.nombre) + '</span>') +
+      '<button type="button" class="boton boton-agua boton-pequeno" data-vista-previa>Ver vista previa</button>' +
+      '<p class="error-campo" id="error-pers" hidden></p></div>';
+  }
+
+  /* Dibuja el texto personalizado sobre la foto (en la ficha y en la vista previa) */
+  function actualizarTextoPers() {
+    const p = prodDe(E.persProd), inp = $('#pers-texto');
+    if (!p || !inp) return;
+    const texto = inp.value.trim().replace(/\s+/g, ' ');
+    const estilo = estiloPersonalizacion(E.persSel, p.subcategoria);
+    document.querySelectorAll('#ventana-producto .texto-pers').forEach((el) => {
+      el.textContent = texto || (el.id === 'texto-pers' ? '' : 'Tu texto aquí');
+      el.style.cssText = estilo;
+      el.classList.toggle('ejemplo', !texto);
+    });
+  }
+
+  function abrirVistaPrevia() {
+    const p = prodDe(E.persProd), capa = $('#capa-vista');
+    if (!p || !capa) return;
+    const img = $('#galeria-principal img');
+    const texto = $('#pers-texto').value.trim();
+    const desc = texto ? describirPersonalizacion(Object.assign({}, E.persSel, { texto })) : ['Escribe un texto para verlo en la prenda.'];
+    capa.innerHTML = '<div class="vista-cab"><h3>Vista previa</h3><button type="button" class="cerrar cerrar-capa" data-cerrar-vista aria-label="Volver a la ficha"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>' +
+      '<div class="vista-lienzo"><img src="' + esc(img ? img.getAttribute('src') : '') + '" alt="' + esc(p.nombre) + ' con tu texto"><span class="texto-pers" aria-hidden="true"></span></div>' +
+      '<div class="vista-info"><p class="vista-nombre">' + esc(p.nombre) + '</p>' + desc.map((x) => '<p>' + esc(x) + '</p>').join('') +
+      '<p class="vista-nota">Es una simulación orientativa: el texto se pinta a mano y puede variar ligeramente.</p></div>' +
+      '<div class="producto-botones"><button type="button" class="boton boton-borde" data-cerrar-vista>Volver a editar</button>' +
+      '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1" data-con-pers="1">Añadir a la cesta</button></div>';
+    capa.hidden = false;
+    actualizarTextoPers();
+    $('#ventana-producto .ventana-marco').scrollTop = 0;
   }
 
   function verPagina(id) {
@@ -267,7 +313,16 @@
   const urls = {};
   function urlArchivo(k) { return urls[k] || (urls[k] = URL.createObjectURL(archivos[k])); }
 
-  function claveLinea(id, pers) { return 'p:' + id + '|' + (pers || '').trim().toLowerCase(); }
+  function claveLinea(id, pers) { return 'p:' + id + '|' + (pers ? JSON.stringify([pers.texto.toLowerCase(), pers.fuente, pers.tamano, pers.posicion, pers.color]) : ''); }
+
+  function normalPers(v) {
+    if (!v) return null;
+    if (typeof v === 'string') v = { texto: v };
+    const ok = (lista, id) => (PERS[lista].some((x) => x.id === id) ? id : PERS.defecto[{ fuentes: 'fuente', tamanos: 'tamano', posiciones: 'posicion', colores: 'color' }[lista]]);
+    const texto = String(v.texto || '').trim().slice(0, 60);
+    if (!texto) return null;
+    return { texto, fuente: ok('fuentes', v.fuente), tamano: ok('tamanos', v.tamano), posicion: ok('posiciones', v.posicion), color: ok('colores', v.color) };
+  }
 
   function baseEncargo(enc) {
     const c = catDe(enc && enc.cat), e = encargosDe(c);
@@ -294,7 +349,7 @@
     const p = prodDe(l.id), cat = catDe(p.categoria);
     return {
       nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: sinPrecio(p) ? 0 : num(p.precio) + (l.pers ? extraPers(p) : 0),
-      consultar: sinPrecio(p), desde: false, detalles: l.pers ? ['Personalización: «' + l.pers + '»'] : [], max: maxUnidades(p)
+      consultar: sinPrecio(p), desde: false, detalles: l.pers ? describirPersonalizacion(l.pers) : [], max: maxUnidades(p)
     };
   }
 
@@ -320,7 +375,7 @@
       const tipo = l.tipo === 'encargo' ? 'encargo' : 'producto';
       const base = { tipo, cant: Math.max(1, Math.floor(num(l.cant, 1))) };
       if (tipo === 'encargo') return Object.assign(base, { k: String(l.k || 'e:' + Date.now()), enc: l.enc || {} });
-      const pers = l.pers ? String(l.pers).slice(0, 60) : '';
+      const pers = normalPers(l.pers);
       return Object.assign(base, { id: String(l.id), pers, k: claveLinea(l.id, pers) });
     }).filter(lineaValida).map((l) => { l.cant = Math.min(l.cant, infoLinea(l).max); return l; });
     guardarCesta();
@@ -329,12 +384,12 @@
   function anadir(id, abrirLuego, conPers) {
     const p = prodDe(id);
     if (!comprable(p)) { aviso('Esta pieza ya no está disponible'); return; }
-    let pers = '';
+    let pers = null;
     if (persActiva(p)) {
       const inp = $('#pers-texto'), err = $('#error-pers');
       if (!conPers || !inp) { location.hash = '#/producto/' + encodeURIComponent(id); return; }
-      pers = inp.value.trim().replace(/\s+/g, ' ');
-      if (!pers && p.persObligatorio !== false) { err.textContent = 'Escribe el ' + (p.persEtiqueta || 'nombre o texto').toLowerCase() + ' que quieres.'; err.hidden = false; inp.focus(); return; }
+      pers = normalPers(Object.assign({}, E.persSel, { texto: inp.value.replace(/\s+/g, ' ') }));
+      if (!pers && p.persObligatorio === true) { err.textContent = 'Escribe el ' + (p.persEtiqueta || 'nombre o texto').toLowerCase() + ' que quieres.'; err.hidden = false; inp.focus(); return; }
     }
     const k = claveLinea(id, pers);
     const total = E.cesta.filter((x) => x.tipo === 'producto' && x.id === id).reduce((s, x) => s + x.cant, 0);
@@ -343,7 +398,7 @@
     if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, cant: 1 });
     E.vista = 'lineas';
     guardarCesta();
-    aviso('«' + p.nombre + '»' + (pers ? ' (' + pers + ')' : '') + ' añadido a la cesta');
+    aviso('«' + p.nombre + '»' + (pers ? ' (' + pers.texto + ')' : '') + ' añadido a la cesta');
     if (abrirLuego) { cerrarTodo(); limpiarHash(); abrirCesta(); }
   }
 
@@ -628,8 +683,10 @@
       if (ds.anadir) { anadir(ds.anadir, !!ds.yCesta, !!ds.conPers); return; }
       if (ds.encargo) { delete archivos.borrador; location.hash = '#/encargo/' + encodeURIComponent(ds.encargo); return; }
       if (ds.compartirImagen !== undefined) { compartirImagenes(); return; }
+      if (ds.vistaPrevia !== undefined) { abrirVistaPrevia(); return; }
+      if (ds.cerrarVista !== undefined) { const c = $('#capa-vista'); if (c) c.hidden = true; return; }
       if (ds.foto) {
-        const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
+        const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto'); actualizarTextoPers();
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
         return;
       }
@@ -658,6 +715,7 @@
     document.addEventListener('change', (ev) => {
       const el = ev.target;
       if (el.closest('#form-pedido') && (el.name === 'entrega' || el.name === 'pago')) { leerForm(); pintarPedido(); return; }
+      if (/^pers-(fuente|tamano|posicion|color)$/.test(el.name)) { E.persSel[el.name.slice(5)] = el.value; actualizarTextoPers(); return; }
       if (el.id === 'encargo-imagen') {
         const f = el.files && el.files[0];
         if (f && !/^image\//.test(f.type)) { aviso('Elige un archivo de imagen'); el.value = ''; return; }
@@ -676,7 +734,7 @@
       if (ev.target.id === 'form-pedido') { ev.preventDefault(); enviarPedido(); }
       if (ev.target.id === 'form-encargo') { ev.preventDefault(); guardarEncargo(); }
     });
-    document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; } });
+    document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; actualizarTextoPers(); } });
     document.addEventListener('keydown', (ev) => {
       if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-producto [data-anadir]'); if (b) b.click(); }
     });

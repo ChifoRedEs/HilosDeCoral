@@ -615,9 +615,6 @@
       "img/productos/textil-totebag-fondo-marino.webp"
     ],
     "creado": "2026-10-31T16:30:00",
-    "persEtiqueta": "Nombre a pintar",
-    "persMax": 20,
-    "persObligatorio": true,
     "modificado": "2026-10-31T17:12:21.159Z",
     "subcategoria": "totebag"
   },
@@ -639,9 +636,6 @@
       "img/productos/textil-totebag-sandias.webp"
     ],
     "creado": "2026-10-31T16:29:00",
-    "persEtiqueta": "Nombre a pintar",
-    "persMax": 20,
-    "persObligatorio": true,
     "modificado": "2026-10-31T17:12:08.638Z",
     "subcategoria": "totebag"
   },
@@ -663,9 +657,6 @@
       "img/productos/textil-totebag-rodajas-fruta.webp"
     ],
     "creado": "2026-10-31T16:28:00",
-    "persEtiqueta": "Nombre a pintar",
-    "persMax": 20,
-    "persObligatorio": true,
     "modificado": "2026-10-31T17:12:01.290Z",
     "subcategoria": "totebag"
   },
