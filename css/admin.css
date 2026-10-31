@@ -18,7 +18,7 @@ a { color: var(--oceano); }
 /* Menú lateral */
 .lateral { width: 250px; flex: none; background: var(--marino); color: var(--papel); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
 .lateral-marca { display: flex; align-items: center; gap: 10px; padding: 18px 18px 14px; border-bottom: 1px solid rgba(255,255,255,.12); }
-.lateral-marca img { width: 44px; height: 46px; object-fit: contain; background: var(--papel); border-radius: 12px; padding: 3px; }
+.lateral-marca img { width: 44px; height: 44px; object-fit: contain; border-radius: 50%; }
 .lateral-nombre { display: block; font-family: 'Dancing Script', cursive; font-size: 24px; font-weight: 700; line-height: 1.1; }
 .lateral-sub { display: block; font-size: 12px; color: #C9D8E4; }
 .lateral-nav { display: flex; flex-direction: column; padding: 12px 10px; gap: 2px; }
