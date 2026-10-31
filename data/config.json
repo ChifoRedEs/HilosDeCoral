@@ -30,12 +30,19 @@
     {
       "id": "mano",
       "nombre": "Entrega en mano",
-      "descripcion": "En zona local. Acordamos día, hora y lugar por WhatsApp.",
+      "descripcion": "Acordamos día, hora y lugar por WhatsApp.",
       "precio": 0,
       "gratisDesde": null,
       "plazo": "1 a 3 días",
       "pideDireccion": false,
-      "activo": true
+      "activo": true,
+      "zona": {
+        "activa": true,
+        "radioKm": 10,
+        "nombre": "Los Dolores (Murcia)",
+        "lat": 37.98,
+        "lon": -1.1
+      }
     },
     {
       "id": "mensajeria",
@@ -62,7 +69,7 @@
     {
       "id": "bizum",
       "nombre": "Bizum (pago anticipado)",
-      "descripcion": "Al confirmar el pedido te indicamos el número de Bizum. Preparamos el pedido en cuanto recibimos el pago.",
+      "descripcion": "Sin recargo. Al confirmar el pedido te indicamos el número de Bizum y preparamos el pedido en cuanto recibimos el pago.",
       "recargo": 0,
       "entregas": [],
       "activo": true
@@ -70,7 +77,7 @@
     {
       "id": "reembolso",
       "nombre": "Contra reembolso",
-      "descripcion": "Pagas en efectivo al recibir el pedido.",
+      "descripcion": "Pagas en efectivo al recibir el pedido. Si pagas por adelantado con Bizum, te ahorras este recargo.",
       "recargo": 2,
       "entregas": [
         "mensajeria"
@@ -80,8 +87,8 @@
     {
       "id": "efectivo",
       "nombre": "Efectivo en la entrega",
-      "descripcion": "Pagas en mano al recoger tu pedido.",
-      "recargo": 0,
+      "descripcion": "Pagas en efectivo al recibir el pedido en mano. Si pagas por adelantado con Bizum, te ahorras este recargo.",
+      "recargo": 2,
       "entregas": [
         "mano"
       ],

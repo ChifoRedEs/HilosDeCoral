@@ -191,8 +191,37 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.6.1';
+  const VERSION = '1.7.0';
   const FECHA_VERSION = '31/10/2026';
 
-  global.HDC = { VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
+  /* Distancia en km entre dos puntos (fórmula del haversine) */
+  function distanciaKm(lat1, lon1, lat2, lon2) {
+    const R = 6371, rad = (g) => g * Math.PI / 180;
+    const dLat = rad(lat2 - lat1), dLon = rad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(a));
+  }
+
+  /* Busca un código postal o una dirección en OpenStreetMap (gratuito, sin clave) */
+  async function buscarLugar(texto) {
+    const t = String(texto || '').trim();
+    const q = /^\d{5}$/.test(t) ? 'postalcode=' + t + '&country=Spain' : 'countrycodes=es&q=' + encodeURIComponent(t);
+    const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&' + q, { headers: { 'Accept-Language': 'es' } });
+    if (!r.ok) throw new Error('servicio');
+    const j = await r.json();
+    if (!j.length) return null;
+    return { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon), nombre: j[0].display_name };
+  }
+
+  /* Pide la ubicación al navegador */
+  function miUbicacion() {
+    return new Promise((ok, mal) => {
+      if (!navigator.geolocation) { mal(new Error('sin-gps')); return; }
+      navigator.geolocation.getCurrentPosition((p) => ok({ lat: p.coords.latitude, lon: p.coords.longitude }), mal, { enableHighAccuracy: false, timeout: 15000, maximumAge: 600000 });
+    });
+  }
+
+  const formatoKm = (km) => km.toLocaleString('es-ES', { maximumFractionDigits: km < 10 ? 1 : 0 }) + ' km';
+
+  global.HDC = { VERSION, FECHA_VERSION, distanciaKm, buscarLugar, miUbicacion, formatoKm, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };
 })(window);

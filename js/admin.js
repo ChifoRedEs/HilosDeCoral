@@ -1,7 +1,7 @@
 /* Hilos de Coral · panel de administración */
 (function () {
   'use strict';
-  const { esc, num, precio, slug, uid, ESTADOS, estadoProducto, paginaHTML, cargarJSON } = window.HDC;
+  const { esc, num, precio, slug, uid, ESTADOS, estadoProducto, paginaHTML, cargarJSON, buscarLugar, miUbicacion } = window.HDC;
   const $ = (s, el) => (el || document).querySelector(s);
   const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
   const CLAVE_GH = 'hdc-admin-github';
@@ -442,15 +442,50 @@
         campo('Gratis a partir de (' + moneda() + ')', 'config.entregas.' + i + '.gratisDesde', { tipo: 'num', ayuda: '(vacío = nunca)' }) +
         campo('Plazo', 'config.entregas.' + i + '.plazo', { placeholder: 'Ej.: 2 a 4 días laborables' }) +
         campo('Descripción', 'config.entregas.' + i + '.descripcion', { ancho: true, placeholder: 'Zona, condiciones, cómo se acuerda…' }) +
-        '</div><div class="separa">' + campo('Pedir la dirección de envío al cliente', 'config.entregas.' + i + '.pideDireccion', { tipo: 'bool' }) + '</div></div>').join('') +
+        '</div><div class="separa">' + campo('Pedir la dirección de envío al cliente', 'config.entregas.' + i + '.pideDireccion', { tipo: 'bool' }) + '</div>' + zonaHTML(e, i) + '</div>').join('') +
       (ents.length ? '' : '<div class="vacio">No hay formas de entrega. Los pedidos dirán "entrega a acordar".</div>');
   };
+
+  /* Zona de entrega por distancia (por ejemplo, entrega en mano) */
+  function zonaHTML(e, i) {
+    const z = e.zona || {};
+    const r = 'config.entregas.' + i + '.zona';
+    const tienePunto = isFinite(parseFloat(z.lat)) && isFinite(parseFloat(z.lon));
+    return '<div class="caja caja-pers separa"><h3>Zona de entrega por distancia</h3>' +
+      '<p class="caja-ayuda">Si la activas, el cliente tiene que comprobar (con su ubicación o su código postal) que está dentro del radio para poder elegir esta entrega.</p>' +
+      campo('Limitar por distancia', r + '.activa', { tipo: 'bool', repinta: true }) +
+      (z.activa ? '<div class="rejilla-campos separa">' +
+        campo('Radio (km)', r + '.radioKm', { tipo: 'num', ayuda: '(por ejemplo, 10)' }) +
+        campo('Nombre del punto de referencia', r + '.nombre', { placeholder: 'Ej.: Los Dolores (Murcia)', ayuda: '(se muestra al cliente)' }) +
+        '<div class="campo ancho">Punto de referencia <small>' + (tienePunto ? '(' + Number(z.lat).toFixed(2) + ', ' + Number(z.lon).toFixed(2) + ')' : '(sin definir)') + '</small>' +
+        '<div class="fila"><button type="button" class="btn btn-peq btn-marino" data-zona-gps="' + i + '">Usar mi ubicación actual</button>' +
+        '<button type="button" class="btn btn-peq" data-zona-buscar="' + i + '">Buscar por dirección o código postal</button>' +
+        (tienePunto ? '<a class="btn btn-peq" href="https://www.openstreetmap.org/?mlat=' + Number(z.lat).toFixed(2) + '&mlon=' + Number(z.lon).toFixed(2) + '#map=12/' + Number(z.lat).toFixed(2) + '/' + Number(z.lon).toFixed(2) + '" target="_blank" rel="noopener">Ver en el mapa ↗</a>' : '') + '</div>' +
+        '<small>Por privacidad, el punto se guarda redondeado (unos 500 m): los datos de la tienda son públicos y así no se publica tu dirección exacta. Para un radio de varios km no afecta.</small></div>' +
+        '</div>' : '') + '</div>';
+  }
+
+  async function fijarPuntoZona(i, metodo) {
+    const e = R.config.entregas[i];
+    try {
+      let pos;
+      if (metodo === 'gps') { toast('Obteniendo tu ubicación…'); pos = await miUbicacion(); }
+      else {
+        const q = prompt('Escribe una dirección o un código postal (por ejemplo: 30011 o "Los Dolores, Murcia"):');
+        if (!q || !q.trim()) return;
+        toast('Buscando…'); pos = await buscarLugar(q);
+        if (!pos) { toast('No se ha encontrado esa dirección', true); return; }
+      }
+      e.zona = Object.assign(e.zona || {}, { lat: Math.round(pos.lat * 100) / 100, lon: Math.round(pos.lon * 100) / 100 });
+      pintar(); toast('Punto de referencia guardado. Recuerda publicar.');
+    } catch (err) { toast(metodo === 'gps' ? 'No se pudo obtener la ubicación (revisa el permiso del navegador)' : 'No se pudo buscar ahora mismo', true); }
+  }
 
   /* --- Pagos --- */
   VISTAS.pagos = function () {
     const pagos = R.config.pagos = R.config.pagos || [];
     const ents = R.config.entregas || [];
-    return '<div class="fila-entre" style="margin-bottom:14px"><p class="seccion-intro" style="margin:0">Formas de pago que se ofrecen en el pedido. Puedes limitar cada una a ciertas formas de entrega (por ejemplo, contra reembolso solo con mensajería).</p>' +
+    return '<div class="fila-entre" style="margin-bottom:14px"><p class="seccion-intro" style="margin:0">Formas de pago que se ofrecen en el pedido. Puedes limitar cada una a ciertas formas de entrega (por ejemplo, contra reembolso solo con mensajería). Si una forma tiene recargo, las que no lo tienen muestran al cliente «Ahorras X €».</p>' +
       '<button type="button" class="btn btn-coral" data-nuevo-pago>Añadir forma de pago</button></div>' +
       pagos.map((p, i) => '<div class="elemento' + (p.activo ? '' : ' inactivo') + '"><div class="elemento-cab"><h3>' + esc(p.nombre || 'Nueva forma de pago') + '</h3>' +
         '<div class="fila">' + campo('Activa', 'config.pagos.' + i + '.activo', { tipo: 'bool', repinta: true }) +
@@ -756,6 +791,8 @@
         if (confirm('¿Quitar la subcategoría «' + x.nombre + '»?')) { c.subcategorias.splice(num(d.j), 1); pintar(); }
         return;
       }
+      if (d.zonaGps != null) { fijarPuntoZona(num(d.zonaGps), 'gps'); return; }
+      if (d.zonaBuscar != null) { fijarPuntoZona(num(d.zonaBuscar), 'buscar'); return; }
       if (d.nuevaBase != null) {
         const c = R.categorias[num(d.nuevaBase)];
         c.encargos = c.encargos || { activo: true, titulo: '', texto: '', bases: [] }; c.encargos.bases = c.encargos.bases || [];

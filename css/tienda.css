@@ -415,6 +415,20 @@ dialog:focus, dialog:focus-visible { outline: none; }
   .ventana-tallas h2 { font-size: 34px; }
 }
 
+/* Zona de entrega y ahorro */
+.caja-zona { background: #fff; border: 2px dashed var(--agua); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.zona-titulo { margin: 0; font-size: 14px; color: var(--texto-suave); }
+.zona-estado { margin: 0; font-weight: 800; }
+.zona-ok { color: #1E6B4A; }
+.zona-fuera { color: #A33A1F; }
+.zona-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.zona-o { font-weight: 700; color: var(--texto-suave); }
+.zona-cp input { font: inherit; width: 140px; border: 2px solid var(--arena); border-radius: 999px; padding: 8px 14px; }
+.zona-cp input:focus { outline: none; border-color: var(--agua); }
+.caja-zona .enlace-tallas { align-self: flex-start; font-size: 14px; }
+.caja-zona .boton { align-self: flex-start; }
+.ahorro { display: inline-block; background: #D6EEE2; color: #1E5C41; border-radius: 999px; padding: 2px 10px; font-size: 13px; font-weight: 800; }
+
 /* Móvil */
 @media (max-width: 820px) {
   .producto { grid-template-columns: 1fr; gap: 20px; }

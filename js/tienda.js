@@ -1,7 +1,7 @@
 /* Hilos de Coral · lógica de la tienda */
 (function () {
   'use strict';
-  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion } = window.HDC;
+  const { esc, num, precio, ESTADOS, estadoProducto, paginaHTML, cargarJSON, listaEntregas, VERSION, FECHA_VERSION, TALLAS_BEBE, PERS, estiloPersonalizacion, describirPersonalizacion, distanciaKm, buscarLugar, miUbicacion, formatoKm } = window.HDC;
   const tallaDe = (id) => TALLAS_BEBE.find((t) => t.id === id);
   const $ = (s, el) => (el || document).querySelector(s);
   const CLAVE_CESTA = 'hdc-cesta';
@@ -548,6 +548,46 @@
     return num(e.precio);
   }
 
+  /* ---------- Zona de entrega en mano ---------- */
+  function zonaActiva(e) { return !!(e && e.zona && e.zona.activa && num(e.zona.radioKm) > 0 && isFinite(parseFloat(e.zona.lat)) && isFinite(parseFloat(e.zona.lon))); }
+
+  function cajaZona(e) {
+    const z = E.zona && E.zona.entrega === e.id ? E.zona : null;
+    const radio = formatoKm(num(e.zona.radioKm));
+    const otra = entregasActivas().find((x) => x.id !== e.id && !zonaActiva(x));
+    let estado;
+    if (z && z.cargando) estado = '<p class="zona-estado">Comprobando…</p>';
+    else if (z && z.ok) estado = '<p class="zona-estado zona-ok">✓ Estás a ' + esc(formatoKm(z.km)) + ': entrega en mano disponible.</p><button type="button" class="enlace-tallas" data-zona-repetir>Comprobar otra ubicación</button>';
+    else if (z && z.ok === false) estado = '<p class="zona-estado zona-fuera">Estás a ' + esc(formatoKm(z.km)) + ': la entrega en mano solo llega a ' + esc(radio) + '. Puedes recibirlo por mensajería.</p>' +
+      (otra ? '<button type="button" class="boton boton-agua boton-pequeno" data-cambiar-entrega="' + esc(otra.id) + '">Cambiar a ' + esc(otra.nombre.toLowerCase()) + '</button>' : '') +
+      '<button type="button" class="enlace-tallas" data-zona-repetir>Comprobar otra ubicación</button>';
+    else estado = (z && z.error ? '<p class="zona-estado zona-fuera">' + esc(z.error) + '</p>' : '') +
+      '<div class="zona-acciones"><button type="button" class="boton boton-marino boton-pequeno" data-zona-gps>Usar mi ubicación</button>' +
+      '<span class="zona-o">o</span><label class="zona-cp"><span class="visualmente-oculto">Código postal</span><input id="zona-cp" inputmode="numeric" maxlength="5" placeholder="Código postal" value="' + esc((z && z.cp) || '') + '"></label>' +
+      '<button type="button" class="boton boton-borde boton-pequeno" data-zona-cp>Comprobar</button></div>';
+    return '<div class="caja-zona"><p class="zona-titulo">La entrega en mano solo está disponible a menos de <strong>' + esc(radio) + '</strong> de ' + esc(e.zona.nombre || 'nuestro taller') + '. Comprueba si estás dentro:</p>' + estado + '</div>';
+  }
+
+  async function comprobarZona(metodo) {
+    leerForm();
+    const e = entregasActivas().find((x) => x.id === (E.pedido || {}).entrega) || entregasActivas()[0];
+    if (!zonaActiva(e)) return;
+    const cp = metodo === 'cp' ? ($('#zona-cp') || {}).value || '' : '';
+    if (metodo === 'cp' && !/^\d{5}$/.test(cp.trim())) { E.zona = { entrega: e.id, error: 'Escribe un código postal de 5 cifras.', cp }; pintarPedido(); return; }
+    E.zona = { entrega: e.id, cargando: true, cp }; pintarPedido();
+    try {
+      const pos = metodo === 'gps' ? await miUbicacion() : await buscarLugar(cp.trim());
+      if (!pos) { E.zona = { entrega: e.id, error: 'No encontramos ese código postal. Prueba con tu ubicación.', cp }; }
+      else {
+        const km = distanciaKm(parseFloat(e.zona.lat), parseFloat(e.zona.lon), pos.lat, pos.lon);
+        E.zona = { entrega: e.id, ok: km <= num(e.zona.radioKm), km, cp, metodo: metodo === 'gps' ? 'por ubicación' : 'por código postal ' + cp.trim() };
+      }
+    } catch (err) {
+      E.zona = { entrega: e.id, cp, error: metodo === 'gps' ? 'No pudimos obtener tu ubicación. Revisa el permiso del navegador o prueba con el código postal.' : 'No se pudo comprobar ahora mismo. Inténtalo de nuevo o usa tu ubicación.' };
+    }
+    pintarPedido();
+  }
+
   function pintarPedido() {
     const cuerpo = $('#cesta-cuerpo');
     const prev = E.pedido || {};
@@ -558,6 +598,7 @@
     const pagoSel = pagos.find((p) => p.id === prev.pago) || pagos[0];
     const ce = costeEntrega(entregaSel, st), rp = pagoSel ? num(pagoSel.recargo) : 0;
     const total = st + ce + rp;
+    const maxRecargo = Math.max(0, ...pagos.map((p) => num(p.recargo)));
     const politicas = (E.cfg.paginas || []).filter((p) => p.visible !== false && ['envios', 'devoluciones', 'privacidad'].includes(p.id));
     const v = (k) => esc(prev[k] || '');
     cuerpo.innerHTML =
@@ -572,8 +613,9 @@
         const c = costeEntrega(e, st);
         return '<label class="opcion"><input type="radio" name="entrega" value="' + esc(e.id) + '"' + (entregaSel && e.id === entregaSel.id ? ' checked' : '') + '>' +
           '<span class="opcion-nombre">' + esc(e.nombre) + '</span><span class="opcion-precio">' + (c > 0 ? esc(pr(c)) : 'Gratis') + '</span>' +
-          '<span class="opcion-desc">' + esc([e.descripcion, e.plazo ? 'Plazo: ' + e.plazo : '', e.gratisDesde && c > 0 ? 'Gratis desde ' + pr(e.gratisDesde) : ''].filter(Boolean).join(' · ')) + '</span></label>';
+          '<span class="opcion-desc">' + esc([zonaActiva(e) ? 'Hasta ' + formatoKm(num(e.zona.radioKm)) + ' de ' + (e.zona.nombre || 'nuestro taller') : '', e.descripcion, e.plazo ? 'Plazo: ' + e.plazo : '', e.gratisDesde && c > 0 ? 'Gratis desde ' + pr(e.gratisDesde) : ''].filter(Boolean).join(' · ')) + '</span></label>';
       }).join('') : '<p class="aviso">Acordaremos la entrega por WhatsApp.</p>') +
+      (zonaActiva(entregaSel) ? cajaZona(entregaSel) : '') +
       '</fieldset>' +
       (entregaSel && entregaSel.pideDireccion
         ? '<fieldset><legend>Dirección de envío</legend>' +
@@ -585,7 +627,7 @@
       '<fieldset><legend>Pago</legend>' +
       (pagos.length ? pagos.map((p) =>
         '<label class="opcion"><input type="radio" name="pago" value="' + esc(p.id) + '"' + (pagoSel && p.id === pagoSel.id ? ' checked' : '') + '>' +
-        '<span class="opcion-nombre">' + esc(p.nombre) + '</span><span class="opcion-precio">' + (num(p.recargo) > 0 ? '+' + esc(pr(p.recargo)) : '') + '</span>' +
+        '<span class="opcion-nombre">' + esc(p.nombre) + '</span><span class="opcion-precio">' + (num(p.recargo) > 0 ? '+' + esc(pr(p.recargo)) : (maxRecargo > 0 ? '<span class="ahorro">Ahorras ' + esc(pr(maxRecargo)) + '</span>' : '')) + '</span>' +
         (p.descripcion ? '<span class="opcion-desc">' + esc(p.descripcion) + '</span>' : '') + '</label>').join('') : '<p class="aviso">Acordaremos el pago por WhatsApp.</p>') +
       '</fieldset>' +
       '<label class="campo">Notas para el pedido<textarea name="notas" rows="3" placeholder="Por ejemplo: es para regalo, horario de entrega…">' + v('notas') + '</textarea></label>' +
@@ -631,6 +673,7 @@
     if (!String(d.nombre || '').trim()) faltan.push('nombre');
     if (String(d.telefono || '').replace(/\D/g, '').length < 9) faltan.push('teléfono');
     if (entrega && entrega.pideDireccion && (!String(d.direccion || '').trim() || !String(d.cp || '').trim() || !String(d.localidad || '').trim())) faltan.push('dirección completa');
+    if (zonaActiva(entrega) && !(E.zona && E.zona.entrega === entrega.id && E.zona.ok)) faltan.push(E.zona && E.zona.entrega === entrega.id && !E.zona.ok ? 'tu ubicación está fuera de la zona de entrega en mano: elige envío por mensajería' : 'comprobar que estás dentro de la zona de entrega en mano');
     if (!d.acepto) faltan.push('aceptar las condiciones');
     if (faltan.length) { err.textContent = 'Revisa: ' + faltan.join(', ') + '.'; err.hidden = false; return; }
     const num_ = numeroWhatsApp();
@@ -648,6 +691,7 @@
     });
     lineas.push('', 'Subtotal' + (hayEncargos() ? ' estimado' : '') + ': ' + pr(st));
     lineas.push('Entrega: ' + (entrega ? entrega.nombre + ' — ' + (ce > 0 ? pr(ce) : 'gratis') : 'a acordar'));
+    if (zonaActiva(entrega) && E.zona && E.zona.ok) lineas.push('   Zona comprobada: a ' + formatoKm(E.zona.km) + ' (' + E.zona.metodo + ')');
     lineas.push('Pago: ' + (pago ? pago.nombre + (rp > 0 ? ' — recargo ' + pr(rp) : '') : 'a acordar'));
     lineas.push('*TOTAL' + (hayEncargos() ? ' ESTIMADO' : '') + ': ' + pr(st + ce + rp) + '*');
     if (hayEncargos()) lineas.push('(Incluye piezas con precio a consultar: espero vuestro presupuesto final)');
@@ -716,6 +760,10 @@
       if (ds.compartirImagen !== undefined) { compartirImagenes(); return; }
       if (ds.personalizar) { abrirPersonalizar(ds.personalizar); return; }
       if (ds.guiaTallas !== undefined) { abrirGuiaTallas(); return; }
+      if (ds.zonaGps !== undefined) { comprobarZona('gps'); return; }
+      if (ds.zonaCp !== undefined) { comprobarZona('cp'); return; }
+      if (ds.zonaRepetir !== undefined) { leerForm(); E.zona = null; pintarPedido(); return; }
+      if (ds.cambiarEntrega) { leerForm(); E.pedido.entrega = ds.cambiarEntrega; E.pedido.pago = ''; pintarPedido(); return; }
       if (ds.foto) {
         const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
@@ -768,6 +816,7 @@
     });
     document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; actualizarTextoPers(); } });
     document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' && ev.target.id === 'zona-cp') { ev.preventDefault(); comprobarZona('cp'); return; }
       if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-pers [data-anadir]'); if (b) b.click(); }
     });
 
