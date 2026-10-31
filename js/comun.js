@@ -124,7 +124,7 @@
     return 'disponible';
   }
 
-  const VERSION = '1.3.0';
+  const VERSION = '1.4.0';
   const FECHA_VERSION = '31/10/2026';
 
   global.HDC = { VERSION, FECHA_VERSION, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };

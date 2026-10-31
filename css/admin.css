@@ -175,3 +175,12 @@ a { color: var(--oceano); }
 .caja-pers { background: #F6FAFB; border-color: #CFE5E9; margin-bottom: 0; }
 .base-encargo { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.3fr) auto auto; gap: 10px; align-items: end; background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 10px 12px; margin-top: 10px; }
 @media (max-width: 900px) { .base-encargo { grid-template-columns: 1fr 1fr; } }
+
+/* Subcategorías */
+.caja-sub { background: #FFFBF6; border-color: var(--arena); margin-bottom: 0; }
+.sub-fila { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 12px; align-items: end; background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 10px 12px; margin-top: 10px; }
+.sub-fila.inactivo { background: #F7F3EE; }
+.sub-fila .campo.ancho { grid-column: auto; }
+.sub-fila .selector-img .vista { width: 56px; height: 56px; }
+.sub-acciones { flex-wrap: nowrap; }
+@media (max-width: 900px) { .sub-fila { grid-template-columns: 1fr; } }

@@ -41,7 +41,33 @@
           "descripcion": "Infantil o de adulto"
         }
       ]
-    }
+    },
+    "subcategorias": [
+      {
+        "id": "totebag",
+        "nombre": "Totebags",
+        "icono": "img/cat-textil.webp",
+        "visible": true
+      },
+      {
+        "id": "bodies",
+        "nombre": "Bodies",
+        "icono": "img/cat-textil.webp",
+        "visible": true
+      },
+      {
+        "id": "baberos",
+        "nombre": "Baberos",
+        "icono": "img/cat-textil.webp",
+        "visible": true
+      },
+      {
+        "id": "camisetas",
+        "nombre": "Camisetas",
+        "icono": "img/cat-textil.webp",
+        "visible": true
+      }
+    ]
   },
   {
     "id": "ceramica",
@@ -56,7 +82,33 @@
       "titulo": "",
       "texto": "",
       "bases": []
-    }
+    },
+    "subcategorias": [
+      {
+        "id": "pendientes",
+        "nombre": "Pendientes",
+        "icono": "img/cat-ceramica.webp",
+        "visible": true
+      },
+      {
+        "id": "colgantes",
+        "nombre": "Colgantes",
+        "icono": "img/hilo-colgante.webp",
+        "visible": true
+      },
+      {
+        "id": "broches",
+        "nombre": "Broches",
+        "icono": "img/cat-ceramica.webp",
+        "visible": true
+      },
+      {
+        "id": "vajilla",
+        "nombre": "Vajilla",
+        "icono": "img/cat-ceramica.webp",
+        "visible": true
+      }
+    ]
   },
   {
     "id": "bisuteria",
@@ -71,6 +123,32 @@
       "titulo": "",
       "texto": "",
       "bases": []
-    }
+    },
+    "subcategorias": [
+      {
+        "id": "pulseras",
+        "nombre": "Pulseras",
+        "icono": "img/cat-bisuteria.webp",
+        "visible": true
+      },
+      {
+        "id": "anillos",
+        "nombre": "Anillos",
+        "icono": "img/cat-bisuteria.webp",
+        "visible": true
+      },
+      {
+        "id": "pendientes",
+        "nombre": "Pendientes",
+        "icono": "img/cat-bisuteria.webp",
+        "visible": true
+      },
+      {
+        "id": "colgantes",
+        "nombre": "Colgantes",
+        "icono": "img/hilo-colgante.webp",
+        "visible": true
+      }
+    ]
   }
 ]

@@ -6,7 +6,7 @@
   const CLAVE_CESTA = 'hdc-cesta';
   const IMG_TODO = 'img/cat-todo.webp';
 
-  const E = { cfg: {}, cats: [], prods: [], cat: 'todo', q: '', orden: 'novedad', cesta: [], vista: 'lineas', pedido: null };
+  const E = { cfg: {}, cats: [], prods: [], cat: '', sub: '', abierto: '', q: '', orden: 'novedad', cesta: [], vista: 'lineas', pedido: null };
 
   /* ---------- Utilidades ---------- */
   const moneda = () => (E.cfg.pedido || {}).moneda || '€';
@@ -99,15 +99,36 @@
   }
 
   /* ---------- Catálogo ---------- */
+  function subsDe(cat) { return ((cat && cat.subcategorias) || []).filter((s) => s.visible !== false); }
+  function subDe(cat, id) { return subsDe(cat).find((s) => s.id === id); }
+  const flecha = '<svg class="flecha" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
   function pintarPestanas() {
     const cats = E.cats.filter((c) => c.visible !== false);
-    const items = [{ id: 'todo', nombre: 'Todo', icono: IMG_TODO }].concat(cats);
-    $('#pestanas').innerHTML = items.map((c) =>
-      '<button type="button" class="pestana" role="tab" data-cat="' + esc(c.id) + '" aria-selected="' + (E.cat === c.id) + '">' +
-      '<img src="' + esc(c.icono || IMG_TODO) + '" alt="">' + esc(c.nombre) + '</button>').join('');
+    $('#pestanas').innerHTML = cats.map((c) => {
+      const n = visibles().filter((p) => p.categoria === c.id).length;
+      return '<button type="button" class="pestana-cat" data-cat="' + esc(c.id) + '" aria-expanded="' + (E.abierto === c.id) + '" aria-controls="subcategorias" aria-pressed="' + (E.cat === c.id) + '">' +
+        '<img src="' + esc(c.icono || IMG_TODO) + '" alt="">' +
+        '<span class="pestana-textos"><span class="pestana-nombre">' + esc(c.nombre) + '</span><span class="pestana-num">' + (n ? n + (n === 1 ? ' pieza' : ' piezas') : 'Muy pronto') + '</span></span>' + flecha + '</button>';
+    }).join('');
+
+    const panel = $('#subcategorias');
+    const abierta = catDe(E.abierto);
+    if (abierta) {
+      const subs = subsDe(abierta);
+      const cuenta = (s) => visibles().filter((p) => p.categoria === abierta.id && (!s || p.subcategoria === s)).length;
+      panel.hidden = false;
+      panel.innerHTML = '<div class="sub-rejilla">' +
+        '<button type="button" class="sub" data-sub="" data-de="' + esc(abierta.id) + '" aria-pressed="' + (E.cat === abierta.id && !E.sub) + '">' +
+        '<span class="sub-img"><img src="' + esc(abierta.icono || IMG_TODO) + '" alt=""></span><span class="sub-nombre">Todo ' + esc(abierta.nombre.toLowerCase()) + '</span><span class="sub-num">' + cuenta('') + '</span></button>' +
+        subs.map((s) => '<button type="button" class="sub" data-sub="' + esc(s.id) + '" data-de="' + esc(abierta.id) + '" aria-pressed="' + (E.cat === abierta.id && E.sub === s.id) + '">' +
+          '<span class="sub-img"><img src="' + esc(s.icono || abierta.icono || IMG_TODO) + '" alt=""></span><span class="sub-nombre">' + esc(s.nombre) + '</span><span class="sub-num">' + cuenta(s.id) + '</span></button>').join('') +
+        '</div>';
+    } else { panel.hidden = true; panel.innerHTML = ''; }
+
     const cab = $('#cabecera-categoria');
     const cat = catDe(E.cat);
-    if (cat && (cat.banner || cat.descripcion)) {
+    if (cat && !E.sub && (cat.banner || cat.descripcion)) {
       cab.hidden = false;
       cab.style.backgroundImage = cat.banner ? 'url("' + cat.banner.replace(/"/g, '') + '")' : '';
       cab.innerHTML = cat.descripcion ? '<p>' + esc(cat.descripcion) + '</p>' : '';
@@ -119,11 +140,17 @@
       '<button type="button" class="boton boton-agua" data-encargo="' + esc(cat.id) + '">Encargar mi diseño</button>';
   }
 
+  const normal = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
   function filtrados() {
-    const q = E.q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    let lista = visibles().filter((p) => E.cat === 'todo' || p.categoria === E.cat);
-    if (q) lista = lista.filter((p) => (p.nombre + ' ' + (p.descripcion || '') + ' ' + (p.materiales || '')).toLowerCase()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '').includes(q));
+    const q = normal(E.q.trim());
+    let lista;
+    if (q) lista = visibles().filter((p) => normal(p.nombre + ' ' + (p.descripcion || '') + ' ' + (p.materiales || '')).includes(q));
+    else if (E.cat) lista = visibles().filter((p) => p.categoria === E.cat && (!E.sub || p.subcategoria === E.sub));
+    else {
+      lista = visibles().filter((p) => p.novedad && estadoProducto(p) === 'disponible');
+      if (!lista.length) lista = visibles().filter((p) => estadoProducto(p) === 'disponible').sort((a, b) => String(b.creado || '').localeCompare(String(a.creado || ''))).slice(0, 8);
+    }
     const peso = (p) => ({ disponible: 0, reservado: 1, vendido: 2 })[estadoProducto(p)];
     const orden = {
       'novedad': (a, b) => peso(a) - peso(b) || (b.novedad ? 1 : 0) - (a.novedad ? 1 : 0) || String(b.creado || '').localeCompare(String(a.creado || '')),
@@ -137,10 +164,17 @@
   function pintarRejilla() {
     const lista = filtrados();
     const hayProductos = visibles().length > 0;
+    const cat = catDe(E.cat), sub = subDe(cat, E.sub);
+    let titulo;
+    if (E.q.trim()) titulo = 'Resultados para «' + E.q.trim() + '»';
+    else if (cat) titulo = cat.nombre + (sub ? ' · ' + sub.nombre : '');
+    else titulo = visibles().some((p) => p.novedad) ? 'Novedades' : 'Últimas piezas';
+    $('#titulo-listado').innerHTML = esc(titulo) + ' <span>' + lista.length + (lista.length === 1 ? ' pieza' : ' piezas') + '</span>';
+    $('#ayuda-listado').hidden = !!(cat || E.q.trim());
     $('#rejilla').innerHTML = lista.map(tarjetaHTML).join('');
     $('#vacio').hidden = lista.length > 0;
-    $('#vacio-titulo').textContent = hayProductos ? 'No hay piezas con esos filtros' : 'Muy pronto, nuevas piezas';
-    $('#vacio-texto').textContent = hayProductos ? 'Prueba con otra categoría o con otra búsqueda.' : 'Estamos terminando las primeras creaciones. ¡Vuelve en unos días!';
+    $('#vacio-titulo').textContent = hayProductos ? (sub ? 'Muy pronto, nuevas piezas de ' + sub.nombre.toLowerCase() : 'No hay piezas aquí todavía') : 'Muy pronto, nuevas piezas';
+    $('#vacio-texto').textContent = hayProductos ? (E.q.trim() ? 'Prueba con otra búsqueda.' : 'Estamos preparando nuevas creaciones. Mientras tanto, echa un vistazo a las otras categorías.') : 'Estamos terminando las primeras creaciones. ¡Vuelve en unos días!';
   }
 
   function tarjetaHTML(p) {
@@ -576,7 +610,20 @@
         return;
       }
       const ds = t.dataset;
-      if (ds.cat) { E.cat = ds.cat; pintarPestanas(); pintarRejilla(); return; }
+      if (ds.cat) {
+        if (E.abierto === ds.cat) E.abierto = '';
+        else { E.abierto = ds.cat; if (E.cat !== ds.cat) { E.cat = ds.cat; E.sub = ''; } }
+        if (E.q) { E.q = ''; $('#buscar').value = ''; }
+        pintarPestanas(); pintarRejilla(); return;
+      }
+      if (ds.sub !== undefined && ds.de) {
+        E.cat = ds.de; E.sub = ds.sub;
+        if (E.q) { E.q = ''; $('#buscar').value = ''; }
+        pintarPestanas(); pintarRejilla();
+        const t = $('#titulo-listado'); if (t && t.getBoundingClientRect().top > window.innerHeight * 0.75) t.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      if (ds.verTodo !== undefined) { E.cat = ''; E.sub = ''; E.abierto = ''; pintarPestanas(); pintarRejilla(); return; }
       if (ds.ver) { location.hash = '#/producto/' + encodeURIComponent(ds.ver); return; }
       if (ds.anadir) { anadir(ds.anadir, !!ds.yCesta, !!ds.conPers); return; }
       if (ds.encargo) { delete archivos.borrador; location.hash = '#/encargo/' + encodeURIComponent(ds.encargo); return; }

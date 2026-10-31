@@ -17,7 +17,8 @@
       "img/productos/textil-ballena-mar-body-azul.webp",
       "img/productos/textil-ballena-mar-body-blanco.webp"
     ],
-    "creado": "2026-10-31T16:59:00"
+    "creado": "2026-10-31T16:59:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-ballena-mar-babero",
@@ -37,7 +38,8 @@
       "img/productos/textil-ballena-mar-babero-azul.webp",
       "img/productos/textil-ballena-mar-babero-blanco.webp"
     ],
-    "creado": "2026-10-31T16:58:00"
+    "creado": "2026-10-31T16:58:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-ballena-mar-camiseta",
@@ -57,7 +59,8 @@
       "img/productos/textil-ballena-mar-camiseta-blanco.webp",
       "img/productos/textil-ballena-mar-camiseta-azul.webp"
     ],
-    "creado": "2026-10-31T16:57:00"
+    "creado": "2026-10-31T16:57:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-dinosaurio-body",
@@ -76,7 +79,8 @@
     "fotos": [
       "img/productos/textil-dinosaurio-body.webp"
     ],
-    "creado": "2026-10-31T16:56:00"
+    "creado": "2026-10-31T16:56:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-dinosaurio-babero",
@@ -95,7 +99,8 @@
     "fotos": [
       "img/productos/textil-dinosaurio-babero.webp"
     ],
-    "creado": "2026-10-31T16:55:00"
+    "creado": "2026-10-31T16:55:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-dinosaurio-camiseta",
@@ -114,7 +119,8 @@
     "fotos": [
       "img/productos/textil-dinosaurio-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:54:00"
+    "creado": "2026-10-31T16:54:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-elefante-body",
@@ -133,7 +139,8 @@
     "fotos": [
       "img/productos/textil-elefante-body.webp"
     ],
-    "creado": "2026-10-31T16:53:00"
+    "creado": "2026-10-31T16:53:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-elefante-babero",
@@ -152,7 +159,8 @@
     "fotos": [
       "img/productos/textil-elefante-babero.webp"
     ],
-    "creado": "2026-10-31T16:52:00"
+    "creado": "2026-10-31T16:52:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-elefante-camiseta",
@@ -171,7 +179,8 @@
     "fotos": [
       "img/productos/textil-elefante-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:51:00"
+    "creado": "2026-10-31T16:51:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-ballena-globos-body",
@@ -190,7 +199,8 @@
     "fotos": [
       "img/productos/textil-ballena-globos-body.webp"
     ],
-    "creado": "2026-10-31T16:50:00"
+    "creado": "2026-10-31T16:50:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-ballena-globos-babero",
@@ -209,7 +219,8 @@
     "fotos": [
       "img/productos/textil-ballena-globos-babero.webp"
     ],
-    "creado": "2026-10-31T16:49:00"
+    "creado": "2026-10-31T16:49:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-ballena-globos-camiseta",
@@ -228,7 +239,8 @@
     "fotos": [
       "img/productos/textil-ballena-globos-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:48:00"
+    "creado": "2026-10-31T16:48:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-zorrito-body",
@@ -247,7 +259,8 @@
     "fotos": [
       "img/productos/textil-zorrito-body.webp"
     ],
-    "creado": "2026-10-31T16:47:00"
+    "creado": "2026-10-31T16:47:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-zorrito-babero",
@@ -266,7 +279,8 @@
     "fotos": [
       "img/productos/textil-zorrito-babero.webp"
     ],
-    "creado": "2026-10-31T16:46:00"
+    "creado": "2026-10-31T16:46:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-zorrito-camiseta",
@@ -285,7 +299,8 @@
     "fotos": [
       "img/productos/textil-zorrito-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:45:00"
+    "creado": "2026-10-31T16:45:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-abeja-body",
@@ -304,7 +319,8 @@
     "fotos": [
       "img/productos/textil-abeja-body.webp"
     ],
-    "creado": "2026-10-31T16:44:00"
+    "creado": "2026-10-31T16:44:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-abeja-babero",
@@ -323,7 +339,8 @@
     "fotos": [
       "img/productos/textil-abeja-babero.webp"
     ],
-    "creado": "2026-10-31T16:43:00"
+    "creado": "2026-10-31T16:43:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-abeja-camiseta",
@@ -342,7 +359,8 @@
     "fotos": [
       "img/productos/textil-abeja-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:42:00"
+    "creado": "2026-10-31T16:42:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-ballena-azul-body",
@@ -361,7 +379,8 @@
     "fotos": [
       "img/productos/textil-ballena-azul-body.webp"
     ],
-    "creado": "2026-10-31T16:41:00"
+    "creado": "2026-10-31T16:41:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-ballena-azul-babero",
@@ -380,7 +399,8 @@
     "fotos": [
       "img/productos/textil-ballena-azul-babero.webp"
     ],
-    "creado": "2026-10-31T16:40:00"
+    "creado": "2026-10-31T16:40:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-ballena-azul-camiseta",
@@ -399,7 +419,8 @@
     "fotos": [
       "img/productos/textil-ballena-azul-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:39:00"
+    "creado": "2026-10-31T16:39:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-globos-nombre-body",
@@ -423,7 +444,8 @@
     "persEtiqueta": "Nombre del bebé",
     "persMax": 15,
     "persObligatorio": true,
-    "persExtra": ""
+    "persExtra": "",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-globos-nombre-babero",
@@ -447,7 +469,8 @@
     "persEtiqueta": "Nombre del bebé",
     "persMax": 15,
     "persObligatorio": true,
-    "persExtra": ""
+    "persExtra": "",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-globos-nombre-camiseta",
@@ -471,7 +494,8 @@
     "persEtiqueta": "Nombre del bebé",
     "persMax": 15,
     "persObligatorio": true,
-    "persExtra": ""
+    "persExtra": "",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-jirafa-body",
@@ -490,7 +514,8 @@
     "fotos": [
       "img/productos/textil-jirafa-body.webp"
     ],
-    "creado": "2026-10-31T16:35:00"
+    "creado": "2026-10-31T16:35:00",
+    "subcategoria": "bodies"
   },
   {
     "id": "textil-jirafa-babero",
@@ -509,7 +534,8 @@
     "fotos": [
       "img/productos/textil-jirafa-babero.webp"
     ],
-    "creado": "2026-10-31T16:34:00"
+    "creado": "2026-10-31T16:34:00",
+    "subcategoria": "baberos"
   },
   {
     "id": "textil-jirafa-camiseta",
@@ -528,7 +554,8 @@
     "fotos": [
       "img/productos/textil-jirafa-camiseta.webp"
     ],
-    "creado": "2026-10-31T16:33:00"
+    "creado": "2026-10-31T16:33:00",
+    "subcategoria": "camisetas"
   },
   {
     "id": "textil-totebag-hello-summer",
@@ -547,7 +574,8 @@
     "fotos": [
       "img/productos/textil-totebag-hello-summer.webp"
     ],
-    "creado": "2026-10-31T16:32:00"
+    "creado": "2026-10-31T16:32:00",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-principito",
@@ -566,7 +594,8 @@
     "fotos": [
       "img/productos/textil-totebag-principito.webp"
     ],
-    "creado": "2026-10-31T16:31:00"
+    "creado": "2026-10-31T16:31:00",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-fondo-marino",
@@ -589,7 +618,8 @@
     "persEtiqueta": "Nombre a pintar",
     "persMax": 20,
     "persObligatorio": true,
-    "modificado": "2026-10-31T17:12:21.159Z"
+    "modificado": "2026-10-31T17:12:21.159Z",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-sandias",
@@ -612,7 +642,8 @@
     "persEtiqueta": "Nombre a pintar",
     "persMax": 20,
     "persObligatorio": true,
-    "modificado": "2026-10-31T17:12:08.638Z"
+    "modificado": "2026-10-31T17:12:08.638Z",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-rodajas-fruta",
@@ -635,7 +666,8 @@
     "persEtiqueta": "Nombre a pintar",
     "persMax": 20,
     "persObligatorio": true,
-    "modificado": "2026-10-31T17:12:01.290Z"
+    "modificado": "2026-10-31T17:12:01.290Z",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-estrella-mar",
@@ -654,7 +686,8 @@
     "fotos": [
       "img/productos/textil-totebag-estrella-mar.webp"
     ],
-    "creado": "2026-10-31T16:27:00"
+    "creado": "2026-10-31T16:27:00",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-atardecer-velero",
@@ -673,7 +706,8 @@
     "fotos": [
       "img/productos/textil-totebag-atardecer-velero.webp"
     ],
-    "creado": "2026-10-31T16:26:00"
+    "creado": "2026-10-31T16:26:00",
+    "subcategoria": "totebag"
   },
   {
     "id": "textil-totebag-casita-flores",
@@ -692,6 +726,7 @@
     "fotos": [
       "img/productos/textil-totebag-casita-flores.webp"
     ],
-    "creado": "2026-10-31T16:25:00"
+    "creado": "2026-10-31T16:25:00",
+    "subcategoria": "totebag"
   }
 ]

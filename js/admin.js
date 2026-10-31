@@ -18,7 +18,7 @@
   const base = { config: '', categorias: '', productos: '' };
   const pendientes = new Map();   // ruta -> { blob, url } imágenes nuevas sin publicar
   const recientes = new Map();    // ruta -> url (imágenes ya publicadas que GitHub Pages aún no sirve)
-  const E = { seccion: 'inicio', gh: null, lectura: true, publicando: false, filtro: { q: '', cat: '', estado: '' }, paginaAbierta: null };
+  const E = { seccion: 'inicio', gh: null, lectura: true, publicando: false, filtro: { q: '', cat: '', sub: '', estado: '' }, paginaAbierta: null };
 
   /* ---------- Utilidades ---------- */
   const moneda = () => (R.config.pedido || {}).moneda || '€';
@@ -178,12 +178,14 @@
     const q = f.q.trim().toLowerCase();
     const lista = R.productos.map((p, i) => ({ p, i })).filter(({ p }) =>
       (!q || (p.nombre || '').toLowerCase().includes(q)) && (!f.cat || p.categoria === f.cat) &&
+      (!f.sub || p.subcategoria === f.sub) &&
       (!f.estado || (f.estado === 'oculto' ? p.visible === false : estadoProducto(p) === f.estado)));
     return '<div class="fila-entre" style="margin-bottom:14px"><p class="seccion-intro" style="margin:0">Añade piezas nuevas, edítalas o cambia su estado cuando se reserven o se vendan.</p>' +
       '<button type="button" class="btn btn-coral" data-nuevo-producto>Añadir producto</button></div>' +
       '<div class="filtros">' +
       '<input type="search" id="f-q" placeholder="Buscar por nombre…" value="' + esc(f.q) + '" aria-label="Buscar">' +
       '<select id="f-cat" aria-label="Categoría"><option value="">Todas las categorías</option>' + R.categorias.map((c) => '<option value="' + esc(c.id) + '"' + (f.cat === c.id ? ' selected' : '') + '>' + esc(c.nombre) + '</option>').join('') + '</select>' +
+      (catDe(f.cat) && subsDe(catDe(f.cat)).length ? '<select id="f-sub" aria-label="Subcategoría"><option value="">Todas las subcategorías</option>' + subsDe(catDe(f.cat)).map((x) => '<option value="' + esc(x.id) + '"' + (f.sub === x.id ? ' selected' : '') + '>' + esc(x.nombre) + '</option>').join('') + '</select>' : '') +
       '<select id="f-estado" aria-label="Estado"><option value="">Todos los estados</option>' + ['disponible', 'reservado', 'vendido', 'oculto'].map((e) => '<option value="' + e + '"' + (f.estado === e ? ' selected' : '') + '>' + (ESTADOS[e] ? ESTADOS[e].txt : 'Ocultos') + '</option>').join('') + '</select>' +
       '</div>' +
       (lista.length ? '<div class="productos">' + lista.map(({ p, i }) => filaProducto(p, i)).join('') + '</div>'
@@ -195,7 +197,7 @@
     return '<div class="prod' + (p.visible === false ? ' oculto' : '') + '">' +
       (foto ? '<img src="' + esc(src(foto)) + '" alt="">' : '<img class="sin-foto" src="' + esc(src(cat ? cat.icono : 'img/cat-todo.webp')) + '" alt="">') +
       '<div><div class="prod-nombre">' + esc(p.nombre || '(sin nombre)') + '</div><div class="prod-meta">' +
-      '<span>' + (num(p.precio) > 0 ? esc(pr(p.precio)) : 'Consultar precio') + '</span><span>' + esc(cat ? cat.nombre : 'Sin categoría') + '</span>' +
+      '<span>' + (num(p.precio) > 0 ? esc(pr(p.precio)) : 'Consultar precio') + '</span><span>' + esc(cat ? cat.nombre + (subDe(cat, p.subcategoria) ? ' › ' + subDe(cat, p.subcategoria).nombre : '') : 'Sin categoría') + '</span>' +
       (p.unidades !== '' && p.unidades != null ? '<span>' + num(p.unidades) + ' ud.</span>' : '') +
       '<span class="chip ' + est + '">' + ESTADOS[est].txt + '</span>' +
       (p.novedad ? '<span class="chip novedad">Novedad</span>' : '') + (p.personalizable && cat && cat.personalizable ? '<span class="chip personalizable">Personalizable</span>' : '') + (p.visible === false ? '<span class="chip oculto">Oculto</span>' : '') +
@@ -226,6 +228,7 @@
       '<div class="rejilla-campos">' +
       campo('Nombre *', 'edit.nombre', { requerido: true, ancho: true, placeholder: 'Ej.: Totebag ballena azul' }) +
       campo('Categoría', 'edit.categoria', { opciones: [['', 'Sin categoría']].concat(R.categorias.map((c) => [c.id, c.nombre])) }) +
+      '<div id="sub-edit">' + subEditHTML() + '</div>' +
       campo('Precio (' + moneda() + ')', 'edit.precio', { tipo: 'num', ayuda: '(0 o vacío = consultar precio)' }) +
       campo('Precio anterior', 'edit.precioAnterior', { tipo: 'num', ayuda: '(opcional, para mostrar una oferta)' }) +
       campo('Unidades', 'edit.unidades', { tipo: 'num', paso: '1', ayuda: '(vacío = sin límite)' }) +
@@ -333,6 +336,36 @@
       '</div></div>';
   }
 
+  /* --- Subcategorías --- */
+  function subsDe(c) { return (c && c.subcategorias) || []; }
+  function subDe(c, id) { return subsDe(c).find((x) => x.id === id); }
+
+  function subEditHTML() {
+    const ed = R.edit; if (!ed) return '';
+    const subs = subsDe(catDe(ed.categoria));
+    if (!subs.length) return '';
+    return campo('Subcategoría', 'edit.subcategoria', { opciones: [['', 'Sin subcategoría']].concat(subs.map((x) => [x.id, x.nombre])) });
+  }
+
+  function subcatsHTML(c, i) {
+    const subs = c.subcategorias = c.subcategorias || [];
+    const r = 'categorias.' + i + '.subcategorias';
+    return '<div class="separa caja caja-sub"><div class="fila-entre"><div><h3>Subcategorías</h3><p class="caja-ayuda" style="margin:0">Aparecen en el desplegable al pulsar la categoría en la tienda.</p></div>' +
+      '<button type="button" class="btn btn-peq" data-nueva-sub="' + i + '">Añadir subcategoría</button></div>' +
+      subs.map((x, j) => {
+        const n = R.productos.filter((p) => p.categoria === c.id && p.subcategoria === x.id).length;
+        return '<div class="sub-fila' + (x.visible === false ? ' inactivo' : '') + '">' +
+          campo('Nombre · ' + n + ' producto(s)', r + '.' + j + '.nombre') +
+          selectorImagen('Imagen', r + '.' + j + '.icono', IMAGENES_TIENDA, 400) +
+          '<div class="fila sub-acciones">' + campo('Visible', r + '.' + j + '.visible', { tipo: 'bool' }) +
+          '<button type="button" class="btn btn-peq btn-icono" data-mover="' + r + '" data-i="' + j + '" data-dir="-1" aria-label="Subir"' + (j === 0 ? ' disabled' : '') + '>↑</button>' +
+          '<button type="button" class="btn btn-peq btn-icono" data-mover="' + r + '" data-i="' + j + '" data-dir="1" aria-label="Bajar"' + (j === subs.length - 1 ? ' disabled' : '') + '>↓</button>' +
+          '<button type="button" class="btn btn-peq btn-peligro" data-borrar-sub="' + i + '" data-j="' + j + '">Quitar</button></div>' +
+          '</div>';
+      }).join('') +
+      (subs.length ? '' : '<p class="caja-ayuda separa">Sin subcategorías: al pulsar la categoría se mostrarán todas sus piezas.</p>') + '</div>';
+  }
+
   /* --- Personalización (solo en categorías que lo permiten) --- */
   function persHTML() {
     const ed = R.edit; if (!ed) return '';
@@ -387,7 +420,7 @@
           '<div class="rejilla-campos">' + campo('Nombre', 'categorias.' + i + '.nombre') + campo('Descripción', 'categorias.' + i + '.descripcion', { ayuda: '(se muestra al elegir la categoría)' }) +
           selectorImagen('Icono de la pestaña', 'categorias.' + i + '.icono', IMAGENES_TIENDA, 400) +
           selectorImagen('Banner de la categoría', 'categorias.' + i + '.banner', BANNERS, 1920, true) +
-          '</div>' + opcionesEncargo(c, i) + '</div>';
+          '</div>' + subcatsHTML(c, i) + opcionesEncargo(c, i) + '</div>';
       }).join('');
   };
 
@@ -626,12 +659,16 @@
       const el = ev.target;
       if (el.dataset.bind && (el.type === 'checkbox' || el.tagName === 'SELECT')) {
         fijar(el.dataset.bind, convertir(el));
-        if (el.dataset.bind === 'edit.categoria' || el.dataset.bind === 'edit.personalizable') { $('#pers-edit').innerHTML = persHTML(); marcar(); return; }
+        if (el.dataset.bind === 'edit.categoria' || el.dataset.bind === 'edit.personalizable') {
+          if (el.dataset.bind === 'edit.categoria' && !subsDe(catDe(R.edit.categoria)).some((x) => x.id === R.edit.subcategoria)) R.edit.subcategoria = '';
+          $('#pers-edit').innerHTML = persHTML(); $('#sub-edit').innerHTML = subEditHTML(); marcar(); return;
+        }
         if (el.dataset.repinta) pintar(); else marcar();
         return;
       }
       if (el.dataset.bind) return;
-      if (el.id === 'f-cat') { E.filtro.cat = el.value; pintar(); return; }
+      if (el.id === 'f-cat') { E.filtro.cat = el.value; E.filtro.sub = ''; pintar(); return; }
+      if (el.id === 'f-sub') { E.filtro.sub = el.value; pintar(); return; }
       if (el.id === 'f-estado') { E.filtro.estado = el.value; pintar(); return; }
       if (el.dataset.estadoProd != null) { const p = R.productos[num(el.dataset.estadoProd)]; p.estado = el.value; if (el.value === 'disponible' && p.unidades === 0) p.unidades = 1; pintar(); return; }
       if (el.dataset.pagoEntrega != null) {
@@ -701,7 +738,21 @@
       if (d.nuevaCat != null) {
         const nombre = prompt('Nombre de la nueva categoría:'); if (!nombre || !nombre.trim()) return;
         let id = slug(nombre); while (catDe(id)) id += '-2';
-        R.categorias.push({ id, nombre: nombre.trim(), descripcion: '', icono: 'img/cat-todo.webp', banner: '', visible: true, personalizable: false, encargos: { activo: false, titulo: '', texto: '', bases: [] } }); pintar(); return;
+        R.categorias.push({ id, nombre: nombre.trim(), descripcion: '', icono: 'img/cat-todo.webp', banner: '', visible: true, subcategorias: [], personalizable: false, encargos: { activo: false, titulo: '', texto: '', bases: [] } }); pintar(); return;
+      }
+      if (d.nuevaSub != null) {
+        const c = R.categorias[num(d.nuevaSub)];
+        const nombre = prompt('Nombre de la nueva subcategoría de ' + c.nombre + ':'); if (!nombre || !nombre.trim()) return;
+        c.subcategorias = c.subcategorias || [];
+        let id = slug(nombre); while (c.subcategorias.some((x) => x.id === id)) id += '-2';
+        c.subcategorias.push({ id, nombre: nombre.trim(), icono: c.icono || 'img/cat-todo.webp', visible: true }); pintar(); return;
+      }
+      if (d.borrarSub != null) {
+        const c = R.categorias[num(d.borrarSub)], x = c.subcategorias[num(d.j)];
+        const n = R.productos.filter((p) => p.categoria === c.id && p.subcategoria === x.id).length;
+        if (n) { alert('La subcategoría «' + x.nombre + '» tiene ' + n + ' producto(s). Cámbialos de subcategoría antes de quitarla, u ocúltala.'); return; }
+        if (confirm('¿Quitar la subcategoría «' + x.nombre + '»?')) { c.subcategorias.splice(num(d.j), 1); pintar(); }
+        return;
       }
       if (d.nuevaBase != null) {
         const c = R.categorias[num(d.nuevaBase)];
