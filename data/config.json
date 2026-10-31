@@ -14,7 +14,7 @@
     "email": "hilosdecoral@gmail.com"
   },
   "portada": {
-    "barraSuperior": "Entrega en mano en zona local · Envíos por mensajería a toda España",
+    "barraSuperior": "Entrega en mano hasta 10 km · Entrega en domicilio desde 5,40 €",
     "titulo": "Artesanía hippie hecha a mano",
     "subtitulo": "Textil, cerámica y bisutería con alma de mar. Piezas únicas, hechas una a una.",
     "banner": "img/banner-principal.webp"
@@ -36,23 +36,41 @@
       "plazo": "1 a 3 días",
       "pideDireccion": false,
       "activo": true,
-      "zona": {
+      "distancia": {
         "activa": true,
-        "radioKm": 10,
-        "nombre": "Los Dolores (Murcia)",
-        "lat": 37.98,
-        "lon": -1.1
+        "desdeKm": "",
+        "hastaKm": 10
       }
     },
     {
-      "id": "mensajeria",
-      "nombre": "Envío por mensajería",
-      "descripcion": "Península. Te enviamos el número de seguimiento al hacer el envío.",
-      "precio": 5.95,
-      "gratisDesde": 60,
+      "id": "domicilio-25",
+      "nombre": "Entrega en domicilio (hasta 25 km)",
+      "descripcion": "Te lo llevamos a tu domicilio.",
+      "precio": 5.4,
+      "gratisDesde": null,
+      "plazo": "1 a 3 días",
+      "pideDireccion": true,
+      "activo": true,
+      "distancia": {
+        "activa": true,
+        "desdeKm": "",
+        "hastaKm": 25
+      }
+    },
+    {
+      "id": "domicilio-lejos",
+      "nombre": "Entrega en domicilio (más de 25 km)",
+      "descripcion": "Envío por mensajería. Te pasamos el número de seguimiento al enviarlo.",
+      "precio": 7.9,
+      "gratisDesde": null,
       "plazo": "2 a 4 días laborables",
       "pideDireccion": true,
-      "activo": true
+      "activo": true,
+      "distancia": {
+        "activa": true,
+        "desdeKm": 25,
+        "hastaKm": ""
+      }
     },
     {
       "id": "baleares",
@@ -79,10 +97,8 @@
       "nombre": "Contra reembolso",
       "descripcion": "Pagas en efectivo al recibir el pedido. Si pagas por adelantado con Bizum, te ahorras este recargo.",
       "recargo": 2,
-      "entregas": [
-        "mensajeria"
-      ],
-      "activo": true
+      "entregas": [],
+      "activo": false
     },
     {
       "id": "efectivo",
@@ -170,5 +186,10 @@
       "visible": true,
       "texto": "## Cookies\nEsta web no usa cookies de seguimiento ni de publicidad.\n\n## Almacenamiento en tu navegador\nTu cesta se guarda en tu propio navegador para que no la pierdas al cerrar la página. Puedes borrarla vaciando la cesta.\n\n## Servicios externos\nLas tipografías se cargan desde Google Fonts."
     }
-  ]
+  ],
+  "ubicacionEnvios": {
+    "nombre": "Los Dolores (Murcia)",
+    "lat": 37.98,
+    "lon": -1.1
+  }
 }

@@ -86,7 +86,9 @@
     return '<ul class="lista-metodos">' + act.map((e) => {
       const coste = num(e.precio) > 0 ? precio(e.precio, m) : 'Gratis';
       const gratis = e.gratisDesde ? ' · gratis desde ' + precio(e.gratisDesde, m) : '';
-      return '<li><strong>' + esc(e.nombre) + '</strong> · ' + esc(coste) + esc(gratis) +
+      const d = e.distancia || {}, desde = num(d.desdeKm), hasta = d.hastaKm === '' || d.hastaKm == null ? null : num(d.hastaKm);
+      const tramo = !d.activa ? '' : hasta != null && desde > 0 ? ' · de ' + desde + ' a ' + hasta + ' km' : hasta != null ? ' · hasta ' + hasta + ' km' : desde > 0 ? ' · a más de ' + desde + ' km' : '';
+      return '<li><strong>' + esc(e.nombre) + '</strong> · ' + esc(coste) + esc(gratis) + esc(tramo) +
         (e.plazo ? ' · ' + esc(e.plazo) : '') + (e.descripcion ? '<br><span>' + esc(e.descripcion) + '</span>' : '') + '</li>';
     }).join('') + '</ul>';
   }
@@ -191,7 +193,7 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.7.3';
+  const VERSION = '1.8.0';
   const FECHA_VERSION = '31/10/2026';
 
   /* Distancia en km entre dos puntos (fórmula del haversine) */

@@ -431,42 +431,51 @@
     const ents = R.config.entregas = R.config.entregas || [];
     return '<div class="fila-entre" style="margin-bottom:14px"><p class="seccion-intro" style="margin:0">Formas de entrega que el cliente puede elegir al hacer el pedido. Solo se muestran las activas.</p>' +
       '<button type="button" class="btn btn-coral" data-nueva-entrega>Añadir forma de entrega</button></div>' +
+      puntoHTML() +
       ents.map((e, i) => '<div class="elemento' + (e.activo ? '' : ' inactivo') + '"><div class="elemento-cab"><h3>' + esc(e.nombre || 'Nueva forma de entrega') + '</h3>' +
         '<div class="fila">' + campo('Activa', 'config.entregas.' + i + '.activo', { tipo: 'bool', repinta: true }) +
         '<button type="button" class="btn btn-peq btn-icono" data-mover="config.entregas" data-i="' + i + '" data-dir="-1" aria-label="Subir"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
         '<button type="button" class="btn btn-peq btn-icono" data-mover="config.entregas" data-i="' + i + '" data-dir="1" aria-label="Bajar"' + (i === ents.length - 1 ? ' disabled' : '') + '>↓</button>' +
         '<button type="button" class="btn btn-peq btn-peligro" data-borrar="config.entregas" data-i="' + i + '">Eliminar</button></div></div>' +
         '<div class="rejilla-campos">' +
-        campo('Nombre', 'config.entregas.' + i + '.nombre', { placeholder: 'Ej.: Envío por mensajería' }) +
-        campo('Precio (' + moneda() + ')', 'config.entregas.' + i + '.precio', { tipo: 'num', ayuda: '(0 = gratis)' }) +
+        campo('Nombre', 'config.entregas.' + i + '.nombre', { placeholder: 'Ej.: Entrega en domicilio' }) +
+        campo('Gastos de envío (' + moneda() + ')', 'config.entregas.' + i + '.precio', { tipo: 'num', ayuda: '(0 = gratis)' }) +
         campo('Gratis a partir de (' + moneda() + ')', 'config.entregas.' + i + '.gratisDesde', { tipo: 'num', ayuda: '(vacío = nunca)' }) +
         campo('Plazo', 'config.entregas.' + i + '.plazo', { placeholder: 'Ej.: 2 a 4 días laborables' }) +
         campo('Descripción', 'config.entregas.' + i + '.descripcion', { ancho: true, placeholder: 'Zona, condiciones, cómo se acuerda…' }) +
-        '</div><div class="separa">' + campo('Pedir la dirección de envío al cliente', 'config.entregas.' + i + '.pideDireccion', { tipo: 'bool' }) + '</div>' + zonaHTML(e, i) + '</div>').join('') +
+        '</div><div class="separa">' + campo('Pedir la dirección de envío al cliente', 'config.entregas.' + i + '.pideDireccion', { tipo: 'bool' }) + '</div>' + distanciaHTML(e, i) + '</div>').join('') +
       (ents.length ? '' : '<div class="vacio">No hay formas de entrega. Los pedidos dirán "entrega a acordar".</div>');
   };
 
-  /* Zona de entrega por distancia (por ejemplo, entrega en mano) */
-  function zonaHTML(e, i) {
-    const z = e.zona || {};
-    const r = 'config.entregas.' + i + '.zona';
-    const tienePunto = isFinite(parseFloat(z.lat)) && isFinite(parseFloat(z.lon));
-    return '<div class="caja caja-pers separa"><h3>Zona de entrega por distancia</h3>' +
-      '<p class="caja-ayuda">Si la activas, el cliente tiene que comprobar (con su ubicación o su código postal) que está dentro del radio para poder elegir esta entrega.</p>' +
+  /* Punto desde el que se mide la distancia (común a todas las entregas) */
+  function puntoHTML() {
+    const u = R.config.ubicacionEnvios = R.config.ubicacionEnvios || {};
+    const ok = isFinite(parseFloat(u.lat)) && isFinite(parseFloat(u.lon));
+    const la = ok ? Number(u.lat).toFixed(2) : '', lo = ok ? Number(u.lon).toFixed(2) : '';
+    return '<div class="caja"><h2>Punto de referencia para medir la distancia</h2>' +
+      '<p class="caja-ayuda">El cliente indica su ubicación o su código postal y la tienda calcula a cuántos km está de este punto. Con eso le muestra solo las entregas (y formas de pago) que le corresponden.</p>' +
+      '<div class="rejilla-campos">' + campo('Nombre que ve el cliente', 'config.ubicacionEnvios.nombre', { placeholder: 'Ej.: Los Dolores (Murcia)' }) +
+      '<div class="campo">Coordenadas <small>' + (ok ? '(' + la + ', ' + lo + ')' : '(sin definir)') + '</small><div class="fila">' +
+      '<button type="button" class="btn btn-peq btn-marino" data-punto-gps>Usar mi ubicación actual</button>' +
+      '<button type="button" class="btn btn-peq" data-punto-buscar>Buscar dirección o CP</button>' +
+      (ok ? '<a class="btn btn-peq" href="https://www.openstreetmap.org/?mlat=' + la + '&mlon=' + lo + '#map=11/' + la + '/' + lo + '" target="_blank" rel="noopener">Ver en el mapa ↗</a>' : '') +
+      '</div></div></div>' +
+      '<p class="caja-ayuda separa" style="margin-bottom:0">Por privacidad, el punto se guarda redondeado (unos 500 m): los datos de la tienda son públicos y así no se publica tu dirección exacta.</p></div>';
+  }
+
+  function distanciaHTML(e, i) {
+    const d = e.distancia || {};
+    const r = 'config.entregas.' + i + '.distancia';
+    return '<div class="caja caja-pers separa"><h3>Según la distancia</h3>' +
+      '<p class="caja-ayuda">Si lo activas, esta entrega solo se ofrece a clientes que estén en este tramo de km.</p>' +
       campo('Limitar por distancia', r + '.activa', { tipo: 'bool', repinta: true }) +
-      (z.activa ? '<div class="rejilla-campos separa">' +
-        campo('Radio (km)', r + '.radioKm', { tipo: 'num', ayuda: '(por ejemplo, 10)' }) +
-        campo('Nombre del punto de referencia', r + '.nombre', { placeholder: 'Ej.: Los Dolores (Murcia)', ayuda: '(se muestra al cliente)' }) +
-        '<div class="campo ancho">Punto de referencia <small>' + (tienePunto ? '(' + Number(z.lat).toFixed(2) + ', ' + Number(z.lon).toFixed(2) + ')' : '(sin definir)') + '</small>' +
-        '<div class="fila"><button type="button" class="btn btn-peq btn-marino" data-zona-gps="' + i + '">Usar mi ubicación actual</button>' +
-        '<button type="button" class="btn btn-peq" data-zona-buscar="' + i + '">Buscar por dirección o código postal</button>' +
-        (tienePunto ? '<a class="btn btn-peq" href="https://www.openstreetmap.org/?mlat=' + Number(z.lat).toFixed(2) + '&mlon=' + Number(z.lon).toFixed(2) + '#map=12/' + Number(z.lat).toFixed(2) + '/' + Number(z.lon).toFixed(2) + '" target="_blank" rel="noopener">Ver en el mapa ↗</a>' : '') + '</div>' +
-        '<small>Por privacidad, el punto se guarda redondeado (unos 500 m): los datos de la tienda son públicos y así no se publica tu dirección exacta. Para un radio de varios km no afecta.</small></div>' +
+      (d.activa ? '<div class="rejilla-campos separa">' +
+        campo('A más de (km)', r + '.desdeKm', { tipo: 'num', ayuda: '(vacío o 0 = desde 0)' }) +
+        campo('Hasta (km)', r + '.hastaKm', { tipo: 'num', ayuda: '(vacío = sin límite)' }) +
         '</div>' : '') + '</div>';
   }
 
-  async function fijarPuntoZona(i, metodo) {
-    const e = R.config.entregas[i];
+  async function fijarPunto(metodo) {
     try {
       let pos;
       if (metodo === 'gps') { toast('Obteniendo tu ubicación…'); pos = await miUbicacion(); }
@@ -476,7 +485,7 @@
         toast('Buscando…'); pos = await buscarLugar(q);
         if (!pos) { toast('No se ha encontrado esa dirección', true); return; }
       }
-      e.zona = Object.assign(e.zona || {}, { lat: Math.round(pos.lat * 100) / 100, lon: Math.round(pos.lon * 100) / 100 });
+      R.config.ubicacionEnvios = Object.assign(R.config.ubicacionEnvios || {}, { lat: Math.round(pos.lat * 100) / 100, lon: Math.round(pos.lon * 100) / 100 });
       pintar(); toast('Punto de referencia guardado. Recuerda publicar.');
     } catch (err) { toast(metodo === 'gps' ? 'No se pudo obtener la ubicación (revisa el permiso del navegador)' : 'No se pudo buscar ahora mismo', true); }
   }
@@ -791,8 +800,8 @@
         if (confirm('¿Quitar la subcategoría «' + x.nombre + '»?')) { c.subcategorias.splice(num(d.j), 1); pintar(); }
         return;
       }
-      if (d.zonaGps != null) { fijarPuntoZona(num(d.zonaGps), 'gps'); return; }
-      if (d.zonaBuscar != null) { fijarPuntoZona(num(d.zonaBuscar), 'buscar'); return; }
+      if (d.puntoGps != null) { fijarPunto('gps'); return; }
+      if (d.puntoBuscar != null) { fijarPunto('buscar'); return; }
       if (d.nuevaBase != null) {
         const c = R.categorias[num(d.nuevaBase)];
         c.encargos = c.encargos || { activo: true, titulo: '', texto: '', bases: [] }; c.encargos.bases = c.encargos.bases || [];
