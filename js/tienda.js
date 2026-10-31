@@ -34,8 +34,7 @@
     let h = '';
     if (p.novedad && est === 'disponible') h += '<span class="etiqueta novedad">Novedad</span>';
     if (num(p.precioAnterior) > num(p.precio) && est === 'disponible') h += '<span class="etiqueta oferta">Oferta</span>';
-    if (persActiva(p) && est === 'disponible') h += '<span class="etiqueta personalizable">Personalizable</span>';
-    else if (est !== 'disponible' || !p.novedad) h += '<span class="etiqueta ' + ESTADOS[est].clase + '">' + ESTADOS[est].txt + '</span>';
+    if (est !== 'disponible' || !p.novedad) h += '<span class="etiqueta ' + ESTADOS[est].clase + '">' + ESTADOS[est].txt + '</span>';
     return h;
   }
 
@@ -179,9 +178,7 @@
 
   function tarjetaHTML(p) {
     const est = estadoProducto(p), cat = catDe(p.categoria);
-    const boton = comprable(p) && persActiva(p)
-      ? '<button type="button" class="boton boton-coral boton-pequeno" data-ver="' + esc(p.id) + '">Personalizar</button>'
-      : comprable(p)
+    const boton = comprable(p)
       ? '<button type="button" class="boton boton-coral boton-pequeno" data-anadir="' + esc(p.id) + '">Añadir</button>'
       : '<button type="button" class="boton boton-pequeno" disabled>' + ESTADOS[est].txt + '</button>';
     return '<article class="tarjeta' + (est === 'vendido' ? ' vendida' : '') + '">' +
@@ -209,7 +206,7 @@
     const uds = maxUnidades(p);
     $('#vp-contenido').innerHTML =
       '<div class="producto">' +
-      '<div><div class="galeria-principal" id="galeria-principal">' + imgProducto(p) + (persActiva(p) ? '<span class="texto-pers" id="texto-pers" aria-hidden="true"></span>' : '') + '</div>' +
+      '<div><div class="galeria-principal" id="galeria-principal">' + imgProducto(p) + '</div>' +
       (fotos.length > 1 ? '<div class="miniaturas">' + fotos.map((f, i) =>
         '<button type="button" data-foto="' + esc(f) + '" aria-label="Foto ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + esc(f) + '" alt=""></button>').join('') + '</div>' : '') +
       '</div>' +
@@ -221,18 +218,15 @@
       (ficha.length ? '<dl class="ficha">' + ficha.map((f) => '<dt>' + f[0] + '</dt><dd>' + esc(f[1]) + '</dd>').join('') + '</dl>' : '') +
       (comprable(p) && uds > 1 && uds < 99 ? '<span class="unidades">Quedan ' + uds + ' unidades</span>' : '') +
       (comprable(p) && uds === 1 ? '<span class="unidades">Pieza única</span>' : '') +
-      (comprable(p) && persActiva(p) ? camposPersonalizacion(p) : '') +
       '<img class="separador-cosido" src="img/borde-cosido.webp" alt="">' +
       '<div class="producto-botones">' +
       (comprable(p)
-        ? '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1"' + (persActiva(p) ? ' data-con-pers="1"' : '') + '>Añadir a la cesta</button>'
+        ? '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1">Añadir a la cesta</button>' +
+          (persActiva(p) ? '<button type="button" class="boton boton-agua" data-personalizar="' + esc(p.id) + '">Personalizar</button>' : '')
         : '<button type="button" class="boton" disabled>' + ESTADOS[estadoProducto(p)].txt + '</button>') +
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir viendo</button>' +
-      '</div></div></div>' +
-      (comprable(p) && persActiva(p) ? '<div class="capa-vista" id="capa-vista" hidden></div>' : '');
-    E.persProd = p.id; E.persSel = Object.assign({}, PERS.defecto);
+      '</div></div></div>';
     cerrarTodo(); abrir($('#ventana-producto'));
-    if (persActiva(p)) actualizarTextoPers();
   }
 
   function camposPersonalizacion(p) {
@@ -254,7 +248,6 @@
       grupo('color', 'Color', PERS.colores, (o) => '<span class="pers-color" style="background:' + o.hex + '" title="' + esc(o.nombre) + '"></span><span class="visualmente-oculto">' + esc(o.nombre) + '</span>') +
       '</div>' +
       grupo('posicion', 'Dónde lo pintamos', PERS.posiciones, (o) => '<span class="pers-chip">' + esc(o.nombre) + '</span>') +
-      '<button type="button" class="boton boton-agua boton-pequeno" data-vista-previa>Ver vista previa</button>' +
       '<p class="error-campo" id="error-pers" hidden></p></div>';
   }
 
@@ -264,28 +257,34 @@
     if (!p || !inp) return;
     const texto = inp.value.trim().replace(/\s+/g, ' ');
     const estilo = estiloPersonalizacion(E.persSel, p.subcategoria);
-    document.querySelectorAll('#ventana-producto .texto-pers').forEach((el) => {
-      el.textContent = texto || (el.id === 'texto-pers' ? '' : 'Tu texto aquí');
+    document.querySelectorAll('#ventana-pers .texto-pers').forEach((el) => {
+      el.textContent = texto || 'Tu texto aquí';
       el.style.cssText = estilo;
       el.classList.toggle('ejemplo', !texto);
     });
   }
 
-  function abrirVistaPrevia() {
-    const p = prodDe(E.persProd), capa = $('#capa-vista');
-    if (!p || !capa) return;
-    const img = $('#galeria-principal img');
-    const texto = $('#pers-texto').value.trim();
-    const desc = texto ? describirPersonalizacion(Object.assign({}, E.persSel, { texto })) : ['Escribe un texto para verlo en la prenda.'];
-    capa.innerHTML = '<div class="vista-cab"><h3>Vista previa</h3><button type="button" class="cerrar cerrar-capa" data-cerrar-vista aria-label="Volver a la ficha"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button></div>' +
-      '<div class="vista-lienzo"><img src="' + esc(img ? img.getAttribute('src') : '') + '" alt="' + esc(p.nombre) + ' con tu texto"><span class="texto-pers" aria-hidden="true"></span></div>' +
-      '<div class="vista-info"><p class="vista-nombre">' + esc(p.nombre) + '</p>' + desc.map((x) => '<p>' + esc(x) + '</p>').join('') +
-      '<p class="vista-nota">Es una simulación orientativa: el texto se pinta a mano y puede variar ligeramente.</p></div>' +
-      '<div class="producto-botones"><button type="button" class="boton boton-borde" data-cerrar-vista>Volver a editar</button>' +
-      '<button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1" data-con-pers="1">Añadir a la cesta</button></div>';
-    capa.hidden = false;
+  /* Ventana emergente de personalización (solo productos personalizables) */
+  function abrirPersonalizar(id) {
+    const p = prodDe(id);
+    if (!comprable(p) || !persActiva(p)) return;
+    E.persProd = p.id; E.persSel = Object.assign({}, PERS.defecto);
+    const g = $('#ventana-producto[open] #galeria-principal img');
+    const foto = (g && !g.classList.contains('sin-foto') && g.getAttribute('src')) || fotoDe(p) || iconoCat(p);
+    $('#pers-contenido').innerHTML =
+      '<h2 id="pers-titulo">Personaliza tu pieza</h2>' +
+      '<p class="pers-sub">' + esc(p.nombre) + ' · ' + (sinPrecio(p) ? 'Consultar precio' : esc(pr(p.precio))) + '</p>' +
+      '<div class="pers-layout">' +
+      '<div class="pers-lado-vista"><div class="vista-lienzo"><img src="' + esc(foto) + '" alt="' + esc(p.nombre) + ' con tu texto"><span class="texto-pers ejemplo" aria-hidden="true"></span></div>' +
+      '<p class="vista-nota">Vista previa orientativa: el texto se pinta a mano y puede variar ligeramente.</p></div>' +
+      '<div class="pers-lado-opciones">' + camposPersonalizacion(p) +
+      '<div class="producto-botones"><button type="button" class="boton boton-coral" data-anadir="' + esc(p.id) + '" data-y-cesta="1" data-con-pers="1">Añadir a la cesta</button>' +
+      '<button type="button" class="boton boton-borde" data-cerrar>Cancelar</button></div></div>' +
+      '</div>';
+    abrir($('#ventana-pers'));
+    $('#ventana-pers .ventana-marco').scrollTop = 0;
     actualizarTextoPers();
-    $('#ventana-producto .ventana-marco').scrollTop = 0;
+    setTimeout(() => { const i = $('#pers-texto'); if (i && window.innerWidth > 640) i.focus(); }, 60);
   }
 
   function verPagina(id) {
@@ -387,9 +386,12 @@
     let pers = null;
     if (persActiva(p)) {
       const inp = $('#pers-texto'), err = $('#error-pers');
-      if (!conPers || !inp) { location.hash = '#/producto/' + encodeURIComponent(id); return; }
+      if (!conPers || !inp) {
+        if (p.persObligatorio === true) { abrirPersonalizar(id); return; }
+      } else {
       pers = normalPers(Object.assign({}, E.persSel, { texto: inp.value.replace(/\s+/g, ' ') }));
       if (!pers && p.persObligatorio === true) { err.textContent = 'Escribe el ' + (p.persEtiqueta || 'nombre o texto').toLowerCase() + ' que quieres.'; err.hidden = false; inp.focus(); return; }
+      }
     }
     const k = claveLinea(id, pers);
     const total = E.cesta.filter((x) => x.tipo === 'producto' && x.id === id).reduce((s, x) => s + x.cant, 0);
@@ -683,10 +685,9 @@
       if (ds.anadir) { anadir(ds.anadir, !!ds.yCesta, !!ds.conPers); return; }
       if (ds.encargo) { delete archivos.borrador; location.hash = '#/encargo/' + encodeURIComponent(ds.encargo); return; }
       if (ds.compartirImagen !== undefined) { compartirImagenes(); return; }
-      if (ds.vistaPrevia !== undefined) { abrirVistaPrevia(); return; }
-      if (ds.cerrarVista !== undefined) { const c = $('#capa-vista'); if (c) c.hidden = true; return; }
+      if (ds.personalizar) { abrirPersonalizar(ds.personalizar); return; }
       if (ds.foto) {
-        const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto'); actualizarTextoPers();
+        const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
         return;
       }
@@ -736,7 +737,7 @@
     });
     document.addEventListener('input', (ev) => { if (ev.target.id === 'pers-texto') { const e = $('#error-pers'); if (e) e.hidden = true; actualizarTextoPers(); } });
     document.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-producto [data-anadir]'); if (b) b.click(); }
+      if (ev.key === 'Enter' && ev.target.id === 'pers-texto') { ev.preventDefault(); const b = $('#ventana-pers [data-anadir]'); if (b) b.click(); }
     });
 
     document.querySelectorAll('dialog').forEach((d) => d.addEventListener('close', () => {

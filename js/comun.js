@@ -180,7 +180,7 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.5.0';
+  const VERSION = '1.5.1';
   const FECHA_VERSION = '31/10/2026';
 
   global.HDC = { VERSION, FECHA_VERSION, PERS, estiloPersonalizacion, describirPersonalizacion, esc, num, precio, slug, uid, urlSegura, textoRico, variables, variablesTienda, listaEntregas, listaPagos, paginaHTML, cargarJSON, ESTADOS, estadoProducto };

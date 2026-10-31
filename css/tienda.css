@@ -376,6 +376,21 @@ dialog:focus, dialog:focus-visible { outline: none; }
   .capa-vista { padding: 14px; }
 }
 
+/* Ventana de personalizar */
+.ventana-pers { width: min(1040px, calc(100vw - 32px)); }
+.ventana-pers h2 { margin: 0 56px 2px 0; font-family: var(--fuente-titulo); font-size: 40px; line-height: 1.1; }
+.pers-sub { margin: 0 0 16px; font-weight: 700; color: var(--texto-suave); }
+.pers-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.pers-lado-vista { position: sticky; top: 0; }
+.pers-lado-vista .vista-nota { margin: 8px 0 0; font-size: 13px; color: var(--texto-suave); text-align: center; }
+.pers-lado-opciones { display: flex; flex-direction: column; gap: 14px; }
+@media (max-width: 820px) {
+  .pers-layout { grid-template-columns: 1fr; gap: 14px; }
+  .pers-lado-vista { position: sticky; top: -10px; z-index: 2; background: #fff; padding-bottom: 6px; }
+  .pers-lado-vista .vista-lienzo { width: min(240px, 70%); }
+  .ventana-pers h2 { font-size: 32px; }
+}
+
 /* Móvil */
 @media (max-width: 820px) {
   .producto { grid-template-columns: 1fr; gap: 20px; }

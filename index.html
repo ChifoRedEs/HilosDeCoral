@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@700&family=Dancing+Script:wght@600;700&family=Fredoka:wght@600&family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tienda.css?v=1.5.0">
+<link rel="stylesheet" href="css/tienda.css?v=1.5.1">
 </head>
 <body>
 <a class="saltar" href="#tienda">Ir a la tienda</a>
@@ -126,7 +126,7 @@
     <nav class="pie-enlaces" aria-label="Información" id="menu-pie"></nav>
   </div>
   <div class="contenedor pie-legal">
-    <span>© <span id="anio"></span> <span id="pie-copy">Hilos de Coral</span> · <span class="version-web" id="version-web" title="Versión de la web">v1.5.0</span></span>
+    <span>© <span id="anio"></span> <span id="pie-copy">Hilos de Coral</span> · <span class="version-web" id="version-web" title="Versión de la web">v1.5.1</span></span>
     <span class="pie-redes" id="pie-redes"></span>
   </div>
 </footer>
@@ -151,6 +151,14 @@
   <button type="button" class="cerrar" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
 </dialog>
 
+<!-- Personalizar (solo productos personalizables) -->
+<dialog class="ventana ventana-pers" id="ventana-pers" aria-labelledby="pers-titulo">
+  <div class="ventana-marco marco-agua">
+    <div class="ventana-interior" id="pers-contenido"></div>
+  </div>
+  <button type="button" class="cerrar" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+</dialog>
+
 <!-- Encargo de diseño propio -->
 <dialog class="ventana ventana-pagina ventana-encargo" id="ventana-encargo" aria-labelledby="encargo-titulo">
   <div class="ventana-marco marco-agua">
@@ -171,7 +179,7 @@
 
 <div class="aviso-flotante" id="aviso-flotante" role="status" aria-live="polite"></div>
 
-<script src="js/comun.js?v=1.5.0"></script>
-<script src="js/tienda.js?v=1.5.0"></script>
+<script src="js/comun.js?v=1.5.1"></script>
+<script src="js/tienda.js?v=1.5.1"></script>
 </body>
 </html>
