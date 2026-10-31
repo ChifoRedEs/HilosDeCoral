@@ -191,7 +191,7 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.7.0';
+  const VERSION = '1.7.1';
   const FECHA_VERSION = '31/10/2026';
 
   /* Distancia en km entre dos puntos (fórmula del haversine) */
