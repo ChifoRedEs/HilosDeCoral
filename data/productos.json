@@ -601,7 +601,7 @@
     "id": "textil-totebag-fondo-marino",
     "nombre": "Fondo marino · Totebag",
     "categoria": "textil",
-    "precio": 10,
+    "precio": 0,
     "precioAnterior": "",
     "unidades": "",
     "estado": "disponible",
@@ -615,14 +615,18 @@
       "img/productos/textil-totebag-fondo-marino.webp"
     ],
     "creado": "2026-10-31T16:30:00",
-    "modificado": "2026-10-31T17:12:21.159Z",
-    "subcategoria": "totebag"
+    "modificado": "2026-10-31T19:07:19.236Z",
+    "subcategoria": "totebag",
+    "personalizable": true,
+    "persEtiqueta": "Texto personalizado",
+    "persMax": 20,
+    "persObligatorio": false
   },
   {
     "id": "textil-totebag-sandias",
     "nombre": "Sandías · Totebag",
     "categoria": "textil",
-    "precio": 10,
+    "precio": 0,
     "precioAnterior": "",
     "unidades": "",
     "estado": "disponible",
@@ -636,14 +640,18 @@
       "img/productos/textil-totebag-sandias.webp"
     ],
     "creado": "2026-10-31T16:29:00",
-    "modificado": "2026-10-31T17:12:08.638Z",
-    "subcategoria": "totebag"
+    "modificado": "2026-10-31T19:07:12.862Z",
+    "subcategoria": "totebag",
+    "personalizable": true,
+    "persEtiqueta": "Texto personalizado",
+    "persMax": 20,
+    "persObligatorio": false
   },
   {
     "id": "textil-totebag-rodajas-fruta",
     "nombre": "Rodajas de fruta · Totebag",
     "categoria": "textil",
-    "precio": 10,
+    "precio": 0,
     "precioAnterior": "",
     "unidades": "",
     "estado": "disponible",
@@ -657,8 +665,12 @@
       "img/productos/textil-totebag-rodajas-fruta.webp"
     ],
     "creado": "2026-10-31T16:28:00",
-    "modificado": "2026-10-31T17:12:01.290Z",
-    "subcategoria": "totebag"
+    "modificado": "2026-10-31T19:07:05.458Z",
+    "subcategoria": "totebag",
+    "personalizable": true,
+    "persEtiqueta": "Texto personalizado",
+    "persMax": 20,
+    "persObligatorio": false
   },
   {
     "id": "textil-totebag-estrella-mar",
