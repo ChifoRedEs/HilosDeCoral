@@ -1,5 +1,1017 @@
 [
   {
+    "id": "ceramica-tostada-buenos-dias",
+    "nombre": "Tostada «buenos días» · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato con forma de rebanada de pan, con la corteza pintada a mano en tono tostado y el mensaje «buenos días.» grabado en la arcilla. Esmaltado en blanco crema con brillo. Perfecto para el desayuno, como plato de tostadas o como bandeja decorativa.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-tostada-buenos-dias.webp"
+    ],
+    "creado": "2026-11-01T02:58:00"
+  },
+  {
+    "id": "ceramica-tostada-buen-apetito",
+    "nombre": "Tostada «buen apetito» · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato con forma de rebanada de pan, con la corteza pintada a mano en tono tostado y el mensaje «buen apetito.» grabado en la arcilla. Esmaltado en blanco crema con brillo. Ideal para servir o para regalar a quien disfruta de la cocina.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-tostada-buen-apetito.webp"
+    ],
+    "creado": "2026-11-01T02:57:00"
+  },
+  {
+    "id": "ceramica-te-quiero-infinito",
+    "nombre": "Te quiero hasta el infinito · Bandeja",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Bandeja rectangular con el borde ondulado pellizcado a mano, esmaltada en turquesa con puntitos y con estrellas y flores amarillas pintadas a mano. Lleva grabado el mensaje «te quiero hasta el infinito y un poquito más». Un regalo bonito para alguien especial, para joyas, llaves o pequeños tesoros.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-te-quiero-infinito.webp"
+    ],
+    "creado": "2026-11-01T02:56:00"
+  },
+  {
+    "id": "ceramica-reconecta-renace",
+    "nombre": "Reconecta · Renace · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato redondo de borde rosa, con flores rosas y tallos verdes pintados a mano y las palabras «Reconecta» y «Renace». Acabado mate de aspecto natural. Para decorar, como vaciabolsillos o como un recordatorio diario.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-reconecta-renace.webp"
+    ],
+    "creado": "2026-11-01T02:55:00"
+  },
+  {
+    "id": "ceramica-el-aperitivico",
+    "nombre": "El aperitivico · Plato de aperitivo",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato de aperitivo con el borde ondulado en rosa y un cuenco central para olivas, salsas o frutos secos. Decorado a mano con limones, flores, ramitas de olivo y una hoja, y el texto «el aperitivico». Para compartir en la terraza o en la mesa.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-el-aperitivico.webp"
+    ],
+    "creado": "2026-11-01T02:54:00"
+  },
+  {
+    "id": "ceramica-bienvenido-mundo-bonito",
+    "nombre": "Bienvenido a este mundo bonito · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato redondo de borde morado con el mensaje «Bienvenido a este mundo BONITO» pintado a mano en granate, con dos flores moradas y tallos verdes. Un regalo precioso para un nacimiento o para dar la bienvenida a alguien.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-bienvenido-mundo-bonito.webp"
+    ],
+    "creado": "2026-11-01T02:53:00"
+  },
+  {
+    "id": "ceramica-pendientes-luna-pastel",
+    "nombre": "Luna pastel · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes redondos, con un marmolado de lila, rosa, verde menta y amarillo. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-luna-pastel-plateado.webp",
+      "img/productos/ceramica-pendientes-luna-pastel-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-luna-pastel-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-luna-pastel-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:52:00"
+  },
+  {
+    "id": "ceramica-pendientes-noche-dorada",
+    "nombre": "Noche dorada · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes de dos piezas, un círculo y una media luna, en gris azulado con motas de pan de oro. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-noche-dorada-plateado.webp",
+      "img/productos/ceramica-pendientes-noche-dorada-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-noche-dorada-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-noche-dorada-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:51:00"
+  },
+  {
+    "id": "ceramica-pendientes-rayas-coral",
+    "nombre": "Rayas coral · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes rectangulares, con rayas onduladas en coral y lila. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-rayas-coral-plateado.webp",
+      "img/productos/ceramica-pendientes-rayas-coral-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-rayas-coral-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-rayas-coral-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:50:00"
+  },
+  {
+    "id": "ceramica-pendientes-media-luna-coral",
+    "nombre": "Media luna coral · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes en forma de media luna, en coral con toques de lila. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-media-luna-coral-plateado.webp",
+      "img/productos/ceramica-pendientes-media-luna-coral-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-media-luna-coral-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-media-luna-coral-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:49:00"
+  },
+  {
+    "id": "ceramica-pendientes-lavanda-y-sol",
+    "nombre": "Lavanda y sol · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes de dos piezas, un trapecio lavanda y una media luna amarillo mostaza. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-lavanda-y-sol-plateado.webp",
+      "img/productos/ceramica-pendientes-lavanda-y-sol-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-lavanda-y-sol-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-lavanda-y-sol-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:48:00"
+  },
+  {
+    "id": "ceramica-pendientes-atardecer",
+    "nombre": "Atardecer · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes asimétricos, una pareja desparejada en naranja, teja y lila con vetas marmoladas. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-atardecer-plateado.webp",
+      "img/productos/ceramica-pendientes-atardecer-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-atardecer-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-atardecer-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:47:00"
+  },
+  {
+    "id": "ceramica-pendientes-opalo",
+    "nombre": "Ópalo · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes asimétricos, una pareja desparejada en rosa melocotón y verde menta con vetas lilas y doradas. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-opalo-plateado.webp",
+      "img/productos/ceramica-pendientes-opalo-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-opalo-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-opalo-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:46:00"
+  },
+  {
+    "id": "ceramica-pendientes-aurora",
+    "nombre": "Aurora · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes en forma de lágrima, con un marmolado de rosa, amarillo, lila, menta y azul. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-aurora-plateado.webp",
+      "img/productos/ceramica-pendientes-aurora-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-aurora-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-aurora-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:45:00"
+  },
+  {
+    "id": "ceramica-pendientes-mosaico",
+    "nombre": "Mosaico · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes en forma de lágrima, con manchas de lila, amarillo, verde menta y coral. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-mosaico-plateado.webp",
+      "img/productos/ceramica-pendientes-mosaico-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-mosaico-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-mosaico-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:44:00"
+  },
+  {
+    "id": "ceramica-pendientes-coral",
+    "nombre": "Coral · Pendientes",
+    "categoria": "ceramica",
+    "subcategoria": "pendientes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pendientes ovalados, en naranja y coral con vetas lilas. Ligeros y hechos a mano. Elige el gancho plateado o dorado al añadirlos a la cesta.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · ganchos de metal plateado o dorado",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalos por separado para que no se rayen.",
+    "fotos": [
+      "img/productos/ceramica-pendientes-coral-plateado.webp",
+      "img/productos/ceramica-pendientes-coral-dorado.webp"
+    ],
+    "acabadosEtiqueta": "Gancho",
+    "acabados": [
+      {
+        "nombre": "Plateado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-coral-plateado.webp"
+      },
+      {
+        "nombre": "Dorado",
+        "extra": "",
+        "foto": "img/productos/ceramica-pendientes-coral-dorado.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:43:00"
+  },
+  {
+    "id": "ceramica-colgante-coral",
+    "nombre": "Coral · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante ovalado, en naranja y coral con vetas lilas, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-coral-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-coral-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-coral-cordon-negro.webp",
+      "img/productos/ceramica-colgante-coral-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-coral-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-coral-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-coral-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-coral-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:42:00"
+  },
+  {
+    "id": "ceramica-colgante-mosaico",
+    "nombre": "Mosaico · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante en forma de lágrima, con manchas de lila, amarillo, verde menta y coral, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-mosaico-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-mosaico-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-mosaico-cordon-negro.webp",
+      "img/productos/ceramica-colgante-mosaico-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-mosaico-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-mosaico-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-mosaico-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-mosaico-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:41:00"
+  },
+  {
+    "id": "ceramica-colgante-aurora-lila",
+    "nombre": "Aurora lila · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante en forma de lágrima, con un marmolado de rosa, lila, verde menta y amarillo, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-aurora-lila-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-aurora-lila-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-aurora-lila-cordon-negro.webp",
+      "img/productos/ceramica-colgante-aurora-lila-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-lila-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-lila-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-lila-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-lila-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:40:00"
+  },
+  {
+    "id": "ceramica-colgante-aurora-arcoiris",
+    "nombre": "Aurora arcoíris · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante en forma de lágrima, con un marmolado de rosa, amarillo y azul, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-aurora-arcoiris-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-aurora-arcoiris-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-aurora-arcoiris-cordon-negro.webp",
+      "img/productos/ceramica-colgante-aurora-arcoiris-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-arcoiris-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-arcoiris-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-arcoiris-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-aurora-arcoiris-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:39:00"
+  },
+  {
+    "id": "ceramica-colgante-opalo-rosa",
+    "nombre": "Ópalo rosa · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante rectangular, en rosa melocotón con vetas turquesa y lila, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-opalo-rosa-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-opalo-rosa-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-opalo-rosa-cordon-negro.webp",
+      "img/productos/ceramica-colgante-opalo-rosa-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-rosa-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-rosa-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-rosa-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-rosa-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:38:00"
+  },
+  {
+    "id": "ceramica-colgante-opalo-menta",
+    "nombre": "Ópalo menta · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante rectangular, en verde menta con un marmolado de lila, rosa y dorado, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-opalo-menta-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-opalo-menta-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-opalo-menta-cordon-negro.webp",
+      "img/productos/ceramica-colgante-opalo-menta-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-menta-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-menta-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-menta-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-opalo-menta-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:37:00"
+  },
+  {
+    "id": "ceramica-colgante-atardecer",
+    "nombre": "Atardecer · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante rectangular, en teja con una franja naranja y vetas lilas, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-atardecer-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-atardecer-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-atardecer-cordon-negro.webp",
+      "img/productos/ceramica-colgante-atardecer-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-atardecer-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-atardecer-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-atardecer-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-atardecer-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:36:00"
+  },
+  {
+    "id": "ceramica-colgante-lava-marina",
+    "nombre": "Lava marina · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante en forma de lágrima, con un marmolado de lila, naranja y teja, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-lava-marina-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-lava-marina-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-lava-marina-cordon-negro.webp",
+      "img/productos/ceramica-colgante-lava-marina-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lava-marina-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lava-marina-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lava-marina-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lava-marina-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:35:00"
+  },
+  {
+    "id": "ceramica-colgante-lavanda-y-sol",
+    "nombre": "Lavanda y sol · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante de dos piezas, un trapecio lavanda y una media luna amarillo mostaza, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-lavanda-y-sol-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-lavanda-y-sol-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-lavanda-y-sol-cordon-negro.webp",
+      "img/productos/ceramica-colgante-lavanda-y-sol-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lavanda-y-sol-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lavanda-y-sol-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lavanda-y-sol-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-lavanda-y-sol-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:34:00"
+  },
+  {
+    "id": "ceramica-colgante-media-luna-coral",
+    "nombre": "Media luna coral · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante en forma de media luna, en coral con toques de lila, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-media-luna-coral-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-media-luna-coral-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-media-luna-coral-cordon-negro.webp",
+      "img/productos/ceramica-colgante-media-luna-coral-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-media-luna-coral-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-media-luna-coral-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-media-luna-coral-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-media-luna-coral-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:33:00"
+  },
+  {
+    "id": "ceramica-colgante-rayas-coral",
+    "nombre": "Rayas coral · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante rectangular, con rayas onduladas en coral y lila, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-rayas-coral-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-rayas-coral-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-rayas-coral-cordon-negro.webp",
+      "img/productos/ceramica-colgante-rayas-coral-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-rayas-coral-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-rayas-coral-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-rayas-coral-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-rayas-coral-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:32:00"
+  },
+  {
+    "id": "ceramica-colgante-luna-pastel",
+    "nombre": "Luna pastel · Colgante",
+    "categoria": "ceramica",
+    "subcategoria": "colgantes",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Colgante redondo, con un marmolado de lila, rosa, verde menta y amarillo, hecho a mano. Elige cómo lo quieres al añadirlo a la cesta: con cadena plateada o dorada, o con cordón de cuero negro o marrón con cierre de mosquetón.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Arcilla modelada a mano · cadena de metal o cordón de cuero",
+    "medidas": "",
+    "cuidados": "Evita el contacto con agua, perfumes y cremas. Guárdalo por separado para que no se raye.",
+    "fotos": [
+      "img/productos/ceramica-colgante-luna-pastel-cadena-plateada.webp",
+      "img/productos/ceramica-colgante-luna-pastel-cadena-dorada.webp",
+      "img/productos/ceramica-colgante-luna-pastel-cordon-negro.webp",
+      "img/productos/ceramica-colgante-luna-pastel-cordon-marron.webp"
+    ],
+    "acabadosEtiqueta": "Cadena o cordón",
+    "acabados": [
+      {
+        "nombre": "Cadena plateada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-luna-pastel-cadena-plateada.webp"
+      },
+      {
+        "nombre": "Cadena dorada",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-luna-pastel-cadena-dorada.webp"
+      },
+      {
+        "nombre": "Cordón de cuero negro",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-luna-pastel-cordon-negro.webp"
+      },
+      {
+        "nombre": "Cordón de cuero marrón",
+        "extra": "",
+        "foto": "img/productos/ceramica-colgante-luna-pastel-cordon-marron.webp"
+      }
+    ],
+    "creado": "2026-11-01T02:31:00"
+  },
+  {
     "id": "textil-ballena-mar-body",
     "nombre": "Ballena en el mar · Body",
     "categoria": "textil",

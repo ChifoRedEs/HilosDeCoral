@@ -474,3 +474,15 @@ dialog:focus, dialog:focus-visible { outline: none; }
 .direccion .campo select { width: 100%; min-width: 0; font: inherit; font-weight: 400; color: var(--marino); background: #fff; border: 2px solid var(--arena); border-radius: 12px; padding: 10px 12px; }
 .direccion .campo select:focus { outline: none; border-color: var(--agua); }
 .direccion .enlace-tallas { align-self: flex-start; font-size: 14px; }
+
+/* Acabados: gancho, cadena, cordón… (v1.10.0) */
+.campo-acabado { border: 0; margin: 4px 0 0; padding: 0; }
+.campo-acabado legend { font-weight: 800; padding: 0; margin-bottom: 6px; }
+.acabados { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; }
+.acabado { position: relative; display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 6px; background: #fff; border: 2px solid var(--arena); border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 14px; line-height: 1.2; }
+.acabado input { position: absolute; opacity: 0; pointer-events: none; }
+.acabado img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex: none; }
+.acabado small { font-weight: 800; color: var(--oceano); }
+.acabado:hover { border-color: var(--agua); }
+.acabado:has(input:checked) { border-color: var(--coral); box-shadow: 0 0 0 2px var(--coral) inset; background: #FFF4EE; }
+.acabado:has(input:focus-visible) { outline: 3px solid var(--agua); outline-offset: 2px; }

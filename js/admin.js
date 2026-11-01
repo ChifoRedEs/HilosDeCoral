@@ -236,6 +236,7 @@
       campo('Estado', 'edit.estado', { opciones: Object.keys(ESTADOS).map((k) => [k, ESTADOS[k].txt]) }) +
       '</div>' +
       '<div class="fila">' + campo('Marcar como novedad', 'edit.novedad', { tipo: 'bool' }) + campo('Visible en la tienda', 'edit.visible', { tipo: 'bool' }) + '</div>' +
+      '<div id="acab-edit">' + acabadosHTML() + '</div>' +
       '<div id="pers-edit">' + persHTML() + '</div>' +
       '<div class="rejilla-campos">' +
       campo('Descripción', 'edit.descripcion', { area: true, filas: 4, ancho: true }) +
@@ -269,6 +270,8 @@
     ed.precio = ed.precio === '' || ed.precio == null ? 0 : Math.max(0, num(ed.precio));
     ed.precioAnterior = ed.precioAnterior === '' || ed.precioAnterior == null ? '' : num(ed.precioAnterior);
     ed.unidades = ed.unidades === '' || ed.unidades == null ? '' : Math.max(0, Math.floor(num(ed.unidades)));
+    ed.acabados = (ed.acabados || []).map((a) => ({ nombre: String(a.nombre || '').trim(), extra: a.extra === '' || a.extra == null ? '' : Math.max(0, num(a.extra)), foto: a.foto || '' })).filter((a) => a.nombre);
+    if (!ed.acabados.length) { delete ed.acabados; delete ed.acabadosEtiqueta; }
     if (E.editIndice == null) {
       ed.id = slug(ed.nombre) + '-' + Math.random().toString(36).slice(2, 6);
       ed.creado = new Date().toISOString();
@@ -311,6 +314,7 @@
       } catch (e) { toast('No se pudo leer la imagen ' + f.name, true); }
     }
     $('#fotos-edit').innerHTML = fotosHTML();
+    repintarAcabados();
     marcar();
   }
 
@@ -366,6 +370,23 @@
       }).join('') +
       (subs.length ? '' : '<p class="caja-ayuda separa">Sin subcategorías: al pulsar la categoría se mostrarán todas sus piezas.</p>') + '</div>';
   }
+
+  /* --- Acabados: opciones que elige el cliente (gancho, cadena, cordón…) --- */
+  function acabadosHTML() {
+    const ed = R.edit; if (!ed) return '';
+    const lista = ed.acabados || [], fotos = ed.fotos || [];
+    const ops = [['', 'Sin foto']].concat(fotos.map((f, k) => [f, 'Foto ' + (k + 1)]));
+    return '<div class="caja caja-pers"><h3>Acabados a elegir</h3><p class="caja-ayuda">Opcional. Si añades opciones (por ejemplo, gancho plateado o dorado, cadena o cordón), el cliente tendrá que elegir una y verá su foto. Puedes poner un suplemento a cada opción.</p>' +
+      (lista.length ? campo('Qué elige el cliente', 'edit.acabadosEtiqueta', { placeholder: 'Ej.: Cadena o cordón' }) +
+        lista.map((a, i) => '<div class="sub-fila acab-fila">' +
+          '<span class="acab-mini">' + (a.foto ? '<img src="' + esc(src(a.foto)) + '" alt="">' : '') + '</span>' +
+          campo('Opción', 'edit.acabados.' + i + '.nombre', { placeholder: 'Ej.: Cadena plateada' }) +
+          campo('Suplemento (' + moneda() + ')', 'edit.acabados.' + i + '.extra', { tipo: 'num', placeholder: '0' }) +
+          campo('Foto', 'edit.acabados.' + i + '.foto', { opciones: ops }) +
+          '<button type="button" class="btn btn-icono" data-acab-quitar="' + i + '" aria-label="Quitar opción">✕</button></div>').join('') : '') +
+      '<button type="button" class="btn btn-peq separa" data-acab-nuevo>Añadir opción</button></div>';
+  }
+  function repintarAcabados() { const c = $('#acab-edit'); if (c) c.innerHTML = acabadosHTML(); }
 
   /* --- Personalización (solo en categorías que lo permiten) --- */
   function persHTML() {
@@ -709,6 +730,7 @@
           if (el.dataset.bind === 'edit.categoria' && !subsDe(catDe(R.edit.categoria)).some((x) => x.id === R.edit.subcategoria)) R.edit.subcategoria = '';
           $('#pers-edit').innerHTML = persHTML(); $('#sub-edit').innerHTML = subEditHTML(); marcar(); return;
         }
+        if (/^edit\.acabados\.\d+\.foto$/.test(el.dataset.bind)) { repintarAcabados(); marcar(); return; }
         if (el.dataset.repinta) pintar(); else marcar();
         return;
       }
@@ -755,10 +777,12 @@
         if (confirm('¿Eliminar «' + p.nombre + '»? Si solo se ha vendido, mejor márcalo como Vendido.')) { R.productos.splice(num(d.borrarProd), 1); pintar(); }
         return;
       }
-      if (d.fotoQuitar != null) { R.edit.fotos.splice(num(d.fotoQuitar), 1); $('#fotos-edit').innerHTML = fotosHTML(); marcar(); return; }
+      if (d.acabNuevo != null) { R.edit.acabados = R.edit.acabados || []; if (!R.edit.acabadosEtiqueta) R.edit.acabadosEtiqueta = 'Acabado'; R.edit.acabados.push({ nombre: '', extra: '', foto: '' }); repintarAcabados(); marcar(); const ins = $$('#acab-edit [data-bind$=".nombre"]'); if (ins.length) ins[ins.length - 1].focus(); return; }
+      if (d.acabQuitar != null) { R.edit.acabados.splice(num(d.acabQuitar), 1); repintarAcabados(); marcar(); return; }
+      if (d.fotoQuitar != null) { R.edit.fotos.splice(num(d.fotoQuitar), 1); $('#fotos-edit').innerHTML = fotosHTML(); repintarAcabados(); marcar(); return; }
       if (d.fotoMover != null) {
         const i = num(d.fotoMover), j = i + num(d.dir), f = R.edit.fotos;
-        if (j >= 0 && j < f.length) { [f[i], f[j]] = [f[j], f[i]]; $('#fotos-edit').innerHTML = fotosHTML(); }
+        if (j >= 0 && j < f.length) { [f[i], f[j]] = [f[j], f[i]]; $('#fotos-edit').innerHTML = fotosHTML(); repintarAcabados(); }
         return;
       }
       if (d.mover) {

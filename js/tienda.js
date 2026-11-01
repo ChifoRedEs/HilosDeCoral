@@ -201,6 +201,27 @@
   /* ---------- Tallas ---------- */
   function pideTalla(p) { const c = catDe(p && p.categoria); return !!(c && (c.subcategorias || []).some((x) => x.id === p.subcategoria && x.pideTalla)); }
 
+  /* ---------- Acabados (gancho, cadena, cordón…) ---------- */
+  const acabadosDe = (p) => ((p && p.acabados) || []).filter((a) => a && String(a.nombre || '').trim());
+  const acabadoDe = (p, nombre) => acabadosDe(p).find((a) => a.nombre === nombre) || null;
+  const etiquetaAcabado = (p) => String((p && p.acabadosEtiqueta) || '').trim() || 'Acabado';
+  E.acabadoSel = {};
+
+  function selectorAcabado(p) {
+    const lista = acabadosDe(p), sel = E.acabadoSel[p.id] || '';
+    return '<fieldset class="campo campo-acabado"><legend>' + esc(etiquetaAcabado(p)) + ' *</legend><div class="acabados">' +
+      lista.map((a) => '<label class="acabado"><input type="radio" name="acabado" value="' + esc(a.nombre) + '"' + (a.nombre === sel ? ' checked' : '') + '>' +
+        (a.foto ? '<img src="' + esc(a.foto) + '" alt="" loading="lazy">' : '') +
+        '<span>' + esc(a.nombre) + (num(a.extra) > 0 ? ' <small>+' + esc(pr(a.extra)) + '</small>' : '') + '</span></label>').join('') +
+      '</div><p class="error-campo" hidden>Elige ' + esc(etiquetaAcabado(p).toLowerCase()) + '.</p></fieldset>';
+  }
+
+  function mostrarFoto(f) {
+    const g = $('#galeria-principal img'); if (!g || !f) return;
+    g.src = f; g.classList.remove('sin-foto');
+    document.querySelectorAll('#ventana-producto .miniaturas button').forEach((b) => b.setAttribute('aria-current', String(b.dataset.foto === f)));
+  }
+
   function selectorTalla(idSel, valor) {
     return '<div class="campo campo-talla"><label for="' + idSel + '">Talla *</label>' +
       '<div class="talla-fila"><select id="' + idSel + '" class="selector-talla">' +
@@ -239,6 +260,7 @@
       (comprable(p) && uds > 1 && uds < 99 ? '<span class="unidades">Quedan ' + uds + ' unidades</span>' : '') +
       (comprable(p) && uds === 1 ? '<span class="unidades">Pieza única</span>' : '') +
       (comprable(p) && pideTalla(p) ? selectorTalla('ficha-talla') : '') +
+      (comprable(p) && acabadosDe(p).length ? selectorAcabado(p) : '') +
       '<img class="separador-cosido" src="img/borde-cosido.webp" alt="">' +
       '<div class="producto-botones">' +
       (comprable(p)
@@ -248,6 +270,7 @@
       '<button type="button" class="boton boton-borde" data-cerrar>Seguir viendo</button>' +
       '</div></div></div>';
     cerrarTodo(); abrir($('#ventana-producto'));
+    const ac = acabadoDe(p, E.acabadoSel[p.id]); if (ac && ac.foto) mostrarFoto(ac.foto);
   }
 
   function camposPersonalizacion(p) {
@@ -333,7 +356,7 @@
   const urls = {};
   function urlArchivo(k) { return urls[k] || (urls[k] = URL.createObjectURL(archivos[k])); }
 
-  function claveLinea(id, pers, talla) { return 'p:' + id + '|' + (talla || '') + '|' + (pers ? JSON.stringify([pers.texto.toLowerCase(), pers.fuente, pers.tamano, pers.posicion, pers.color]) : ''); }
+  function claveLinea(id, pers, talla, acabado) { return 'p:' + id + '|' + (talla || '') + '|' + (pers ? JSON.stringify([pers.texto.toLowerCase(), pers.fuente, pers.tamano, pers.posicion, pers.color]) : '') + (acabado ? '|' + acabado : ''); }
 
   function normalPers(v) {
     if (!v) return null;
@@ -366,17 +389,20 @@
         unidad: consultar ? 0 : num(b.precio), consultar, desde: !consultar, detalles, max: 20
       };
     }
-    const p = prodDe(l.id), cat = catDe(p.categoria);
+    const p = prodDe(l.id), cat = catDe(p.categoria), ac = acabadoDe(p, l.acabado);
     return {
-      nombre: p.nombre, cat: cat ? cat.nombre : '', img: imgProducto(p), unidad: sinPrecio(p) ? 0 : num(p.precio) + (l.pers ? extraPers(p) : 0),
-      consultar: sinPrecio(p), desde: false, detalles: (tallaDe(l.talla) ? ['Talla: ' + tallaDe(l.talla).talla + ' (' + tallaDe(l.talla).edad + ')'] : []).concat(l.pers ? describirPersonalizacion(l.pers) : []), max: maxUnidades(p)
+      nombre: p.nombre, cat: cat ? cat.nombre : '',
+      img: ac && ac.foto ? '<img src="' + esc(ac.foto) + '" alt="' + esc(p.nombre) + '" loading="lazy">' : imgProducto(p),
+      unidad: sinPrecio(p) ? 0 : num(p.precio) + (l.pers ? extraPers(p) : 0) + (ac ? num(ac.extra) : 0),
+      consultar: sinPrecio(p), desde: false,
+      detalles: (ac ? [etiquetaAcabado(p) + ': ' + ac.nombre + (num(ac.extra) > 0 ? ' (+' + pr(ac.extra) + ')' : '')] : []).concat(tallaDe(l.talla) ? ['Talla: ' + tallaDe(l.talla).talla + ' (' + tallaDe(l.talla).edad + ')'] : []).concat(l.pers ? describirPersonalizacion(l.pers) : []), max: maxUnidades(p)
     };
   }
 
   function lineaValida(l) {
     if (l.tipo === 'encargo') return !!baseEncargo(l.enc);
     const p = prodDe(l.id);
-    return comprable(p) && (!l.pers || persActiva(p));
+    return comprable(p) && (!l.pers || persActiva(p)) && (!acabadosDe(p).length || !!acabadoDe(p, l.acabado));
   }
 
   function hayEncargos() { return E.cesta.some((l) => l.tipo === 'encargo' || infoLinea(l).consultar); }
@@ -397,7 +423,8 @@
       if (tipo === 'encargo') return Object.assign(base, { k: String(l.k || 'e:' + Date.now()), enc: l.enc || {} });
       const pers = normalPers(l.pers);
       const talla = tallaDe(l.talla) ? l.talla : '';
-      return Object.assign(base, { id: String(l.id), pers, talla, k: claveLinea(l.id, pers, talla) });
+      const acabado = l.acabado ? String(l.acabado) : '';
+      return Object.assign(base, { id: String(l.id), pers, talla, acabado, k: claveLinea(l.id, pers, talla, acabado) });
     }).filter(lineaValida).map((l) => { l.cant = Math.min(l.cant, infoLinea(l).max); return l; });
     guardarCesta();
   }
@@ -422,14 +449,24 @@
       talla = sel.value;
       if (!tallaDe(talla)) { const e = sel.closest('.campo-talla').querySelector('.error-campo'); e.hidden = false; sel.focus(); return; }
     }
-    const k = claveLinea(id, pers, talla);
+    let acabado = '';
+    if (acabadosDe(p).length) {
+      const caja = $('#ventana-producto[open] .campo-acabado');
+      if (caja) {
+        const r = caja.querySelector('input[name=acabado]:checked');
+        if (!r) { caja.querySelector('.error-campo').hidden = false; caja.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+        acabado = r.value;
+      } else if (conPers && acabadoDe(p, E.acabadoSel[id])) acabado = E.acabadoSel[id];
+      else { location.hash = '#/producto/' + encodeURIComponent(id); aviso('Elige ' + etiquetaAcabado(p).toLowerCase() + ' antes de añadirlo'); return; }
+    }
+    const k = claveLinea(id, pers, talla, acabado);
     const total = E.cesta.filter((x) => x.tipo === 'producto' && x.id === id).reduce((s, x) => s + x.cant, 0);
     if (total >= maxUnidades(p)) { aviso(maxUnidades(p) === 1 ? 'Es una pieza única y ya está en tu cesta' : 'No quedan más unidades'); return; }
     const l = E.cesta.find((x) => x.k === k);
-    if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, talla, cant: 1 });
+    if (l) l.cant++; else E.cesta.push({ k, tipo: 'producto', id, pers, talla, acabado, cant: 1 });
     E.vista = 'lineas';
     guardarCesta();
-    aviso('«' + p.nombre + '»' + (talla ? ' talla ' + tallaDe(talla).talla : '') + (pers ? ' (' + pers.texto + ')' : '') + ' añadido a la cesta');
+    aviso('«' + p.nombre + '»' + (acabado ? ' · ' + acabado : '') + (talla ? ' talla ' + tallaDe(talla).talla : '') + (pers ? ' (' + pers.texto + ')' : '') + ' añadido a la cesta');
     if (abrirLuego) { cerrarTodo(); limpiarHash(); abrirCesta(); }
   }
 
@@ -968,6 +1005,8 @@
       if (ds.cambiarEntrega) { leerForm(); E.pedido.entrega = ds.cambiarEntrega; E.pedido.pago = ''; pintarPedido(); return; }
       if (ds.foto) {
         const g = $('#galeria-principal img'); g.src = ds.foto; g.classList.remove('sin-foto');
+        const r = Array.from(document.querySelectorAll('#ventana-producto input[name=acabado]')).find((x) => { const a = x.closest('.acabado').querySelector('img'); return a && a.getAttribute('src') === ds.foto; });
+        if (r && !r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
         t.parentElement.querySelectorAll('button').forEach((b) => b.setAttribute('aria-current', String(b === t)));
         return;
       }
@@ -1013,6 +1052,12 @@
         E.dir = null; programarVerificacion(); return;
       }
       if (el.closest('#form-pedido') && el.name === 'numero') { leerForm(); E.dir = null; programarVerificacion(); return; }
+      if (el.name === 'acabado' && el.closest('#ventana-producto')) {
+        const id = (($('#ventana-producto [data-anadir]') || {}).dataset || {}).anadir, p = prodDe(id);
+        if (p) { E.acabadoSel[p.id] = el.value; const ac = acabadoDe(p, el.value); if (ac && ac.foto) mostrarFoto(ac.foto); }
+        const e = el.closest('.campo-acabado').querySelector('.error-campo'); if (e) e.hidden = true;
+        return;
+      }
       if (el.classList.contains('selector-talla')) { const e = el.closest('.campo-talla').querySelector('.error-campo'); if (e) e.hidden = true; return; }
       if (/^pers-(fuente|tamano|posicion|color)$/.test(el.name)) { E.persSel[el.name.slice(5)] = el.value; actualizarTextoPers(); return; }
       if (el.id === 'encargo-imagen') {

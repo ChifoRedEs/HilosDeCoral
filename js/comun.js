@@ -193,8 +193,8 @@
       'Posición: ' + nom('posiciones', pers.posicion) + ' · Color: ' + nom('colores', pers.color)];
   }
 
-  const VERSION = '1.9.0';
-  const FECHA_VERSION = '31/10/2026';
+  const VERSION = '1.10.0';
+  const FECHA_VERSION = '01/11/2026';
 
   /* Distancia en km entre dos puntos (fórmula del haversine) */
   function distanciaKm(lat1, lon1, lat2, lon2) {
