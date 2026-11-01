@@ -169,7 +169,9 @@ button { font-family: inherit; }
 .pie-lema { margin: 0; font-size: 14px; color: #D8E6EC; }
 .pie-enlaces { display: flex; flex-wrap: wrap; gap: 10px 22px; font-weight: 700; font-size: 15px; }
 .pie-legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; border-top: 1px solid rgba(251, 248, 244, .15); padding-top: 16px; padding-bottom: 28px; font-size: 14px; color: #D8E6EC; }
-.pie-redes { display: flex; gap: 18px; }
+.pie-redes { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.pie-redes a { display: inline-flex; align-items: center; gap: 6px; }
+.pie-redes img { width: 16px; height: 16px; flex: none; }
 
 /* Ventanas (producto y páginas) */
 dialog { border: 0; padding: 0; background: transparent; color: var(--marino); max-height: calc(100dvh - 32px); }
