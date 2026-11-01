@@ -80,7 +80,7 @@
       "gratisDesde": null,
       "plazo": "4 a 6 días laborables",
       "pideDireccion": true,
-      "activo": false
+      "activo": true
     }
   ],
   "pagos": [
