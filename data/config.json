@@ -24,7 +24,7 @@
     "pedidoMinimo": 0,
     "saludo": "¡Hola! Quiero hacer este pedido en Hilos de Coral:",
     "despedida": "Quedo a la espera de vuestra confirmación. ¡Gracias!",
-    "horasReserva": 48
+    "horasReserva": 72
   },
   "entregas": [
     {
@@ -113,7 +113,7 @@
   ],
   "politicas": {
     "devolucionesDias": 14,
-    "garantiaAnios": 3,
+    "garantiaAnios": 2,
     "titular": "Antonio Pérez Moreno",
     "nif": "48712057Q",
     "domicilio": "Calle Murcia, 1 bajo. 30.011 - Los Dolores (Murcia)"
