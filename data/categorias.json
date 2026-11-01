@@ -103,13 +103,6 @@
         "pideTalla": false
       },
       {
-        "id": "broches",
-        "nombre": "Broches",
-        "icono": "img/sub-ceramica-broches.webp",
-        "visible": true,
-        "pideTalla": false
-      },
-      {
         "id": "vajilla",
         "nombre": "Vajilla",
         "icono": "img/sub-ceramica-vajilla.webp",
