@@ -1,0 +1,177 @@
+/* ===== Juegos Reunidos · Marca =====
+   Capa de identidad visual común. Se carga justo después de base.css y fija:
+   · tokens de marca (radios, sombras, degradado, tipografías, tamaños),
+   · botones (.btn, .btn.on, .btn.grande, .btn.danger) y segmentos (.seg),
+   · el MENÚ DE PARTIDA que comparten todos los juegos: filas «etiqueta + opciones» (.bar > .lbl),
+     opciones en tarjeta (.chk, .ops) y barra de acciones (.bar con botón 🎨 Apariencia),
+   · tarjetas, marcadores y ventanas emergentes.
+   Guía de uso: docs/MARCA.md */
+
+:root{
+  --f-titulo:'Baloo 2',system-ui,sans-serif;
+  --f-texto:Nunito,system-ui,sans-serif;
+  --r-s:10px;--r-m:14px;--r-l:20px;--r-xl:24px;--r-pill:99px;
+  --grad-marca:linear-gradient(135deg,var(--purple),var(--blue));
+  --sombra-s:0 2px 6px rgba(60,40,200,.10);
+  --sombra-m:0 4px 14px rgba(60,40,200,.14);
+  --sombra-marca:0 3px 9px rgba(80,60,230,.35);
+  --alto-btn:44px;--alto-btn-grande:54px;
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sombra-s:0 2px 6px rgba(0,0,0,.35);--sombra-m:0 4px 14px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--sombra-s:0 2px 6px rgba(0,0,0,.35);--sombra-m:0 4px 14px rgba(0,0,0,.4)}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:var(--alto-btn);padding:8px 14px;border:2px solid var(--line);border-radius:var(--r-m);
+  background:var(--card);color:var(--ink);font-family:var(--f-texto);font-weight:800;font-size:14px;line-height:1.15;text-align:center;box-shadow:var(--sombra-s);
+  transition:transform .08s,box-shadow .15s,background .15s,border-color .15s}
+.btn:hover:not(:disabled):not(.on){border-color:color-mix(in srgb,var(--purple) 45%,var(--line))}
+.btn.on{background:var(--grad-marca);border-color:transparent;color:#fff;box-shadow:var(--sombra-marca)}
+.btn.danger{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+.btn.grande{min-height:var(--alto-btn-grande);font-size:17px;font-family:var(--f-titulo);letter-spacing:.2px;border-radius:var(--r-l)}
+
+/* ---------- menú de partida (filas de opciones) ---------- */
+.bar:has(> .lbl){flex-wrap:wrap;align-items:center;gap:6px;margin:14px 0}
+.bar:has(> .lbl) > .lbl{flex:0 0 100%;min-width:0;font-size:12.5px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.bar:has(> .lbl) > .seg{flex:1 1 100%}
+.bar:has(> .lbl) > .btn,.seg > .btn{flex:1 1 auto}
+.seg{gap:6px}
+.seg > .btn{min-width:0}
+.bar:has(> .lbl) > .note{flex:1 1 100%;margin:0}
+
+/* fila de jugador del menú (Partxis, Oca, Ruleta, Trivia Quesitos, Magnate…): color + nombre + Persona / CPU / Nadie */
+.jugfila{--c:var(--purple);display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:8px 0;padding:10px 12px;background:var(--card);border:2px solid var(--line);
+  border-left:7px solid var(--c);border-radius:var(--r-l);box-shadow:var(--sombra-s)}
+.jf-dot{flex:none;width:18px;height:18px;border-radius:50%;background:var(--c);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)}
+.jugfila .nom{flex:1 1 110px;min-width:0;font:800 16px var(--f-texto);color:var(--ink);padding:9px 11px;border:2px solid var(--line);border-radius:var(--r-m);background:var(--bg)}
+.jugfila .nom:focus{outline:none;border-color:var(--purple)}
+.jugfila .seg{flex:1 1 100%}
+
+/* introducción y notas del menú */
+.juego > .note:first-child{font-size:14px;line-height:1.4;margin:2px 0 6px}
+
+/* opciones sí/no y ajustes plegables, en tarjeta */
+.chk{border-radius:var(--r-m);box-shadow:var(--sombra-s)}
+.chk input{accent-color:var(--purple)}
+.ops{border-radius:var(--r-m);box-shadow:var(--sombra-s)}
+.ops > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:800;color:var(--ink);min-height:40px}
+.ops > summary::-webkit-details-marker{display:none}
+.ops > summary::after{content:"›";font-size:22px;line-height:1;color:var(--mut);transition:transform .2s}
+.ops[open] > summary::after{transform:rotate(90deg);color:var(--purple)}
+
+/* barra de acciones de un menú: botón principal grande + Apariencia / Reglas… */
+.bar:has(> .btn[data-ac="aspecto"]){display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 10px}
+.bar:has(> .btn[data-ac="aspecto"]) > .btn{flex:1 1 124px}
+.bar:has(> .btn[data-ac="aspecto"]) > .btn.on:first-child{flex:1 1 100%;min-height:var(--alto-btn-grande);font-size:17px;font-family:var(--f-titulo);border-radius:var(--r-l)}
+
+/* ---------- tarjetas y marcadores ---------- */
+.panel,.ops,.chk,.reto,.duM>div,.bihud>span,.bicesto{border-radius:var(--r-l)}
+.panel{box-shadow:var(--sombra-m)}
+.duM>div,.bihud>span{box-shadow:var(--sombra-s)}
+.msg{font-family:var(--f-texto)}
+
+/* ---------- ventanas emergentes ---------- */
+.hoja{border-radius:var(--r-xl) var(--r-xl) 0 0;box-shadow:0 -10px 40px rgba(20,10,80,.3)}
+.hoja h2{font-family:var(--f-titulo)}
+
+/* ventana «elige a qué jugar» de las fichas de grupo (Partxis y Oca, Ajedrez y Damas…) */
+.ficha{font:inherit;text-align:left;border:0;cursor:pointer;width:100%}
+button.ficha{display:flex}
+.elegir{display:grid;gap:10px;margin:10px 0 4px}
+.eleg{--c:var(--purple);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r-l);color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--c) 92%,#fff),color-mix(in srgb,var(--c) 70%,#000));box-shadow:var(--sombra-m);position:relative;overflow:hidden}
+.eleg:active{transform:scale(.98)}
+.eleg .ico{font-size:38px;line-height:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.28))}
+.eleg-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.eleg-t b{font-family:var(--f-titulo);font-size:21px;line-height:1.05;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.eleg-t small{font-size:12.5px;font-weight:700;line-height:1.25;color:rgba(255,255,255,.95)}
+.eleg > i{font-style:normal;font-size:28px;font-weight:800;opacity:.85}
+
+/* marca en la cabecera de Inicio */
+.top h1 .logo{width:30px;height:30px;border-radius:9px;vertical-align:-8px;margin:0 6px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+
+/* ---------- vistas 3D (Three.js): contenedor y botones de cámara comunes ---------- */
+.e3d{position:relative;width:min(calc(100vw - 28px),620px);aspect-ratio:1/1;margin:6px auto;border-radius:var(--r-l);overflow:hidden;box-shadow:var(--sombra-m);
+  background:radial-gradient(circle at 50% 38%,var(--tb-soft,#E4EDFF),var(--tb-alt,#D6E4FF) 70%,var(--tb-line,#9DB8F5))}
+.e3d[hidden]{display:none}
+.e3d-cam{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.e3d-cam .btn{min-height:38px;width:38px;padding:0;font-size:18px;border-radius:50%;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(4px)}
+.e3d-carga{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--mut);font-weight:800}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .e3d{background:radial-gradient(circle at 50% 38%,#2C3770,#1E2756 70%,#141A3C)}}
+:root[data-theme="dark"] .e3d{background:radial-gradient(circle at 50% 38%,#2C3770,#1E2756 70%,#141A3C)}
+
+/* botón flotante para cambiar entre vista 2D y 3D */
+.vista-flot{position:fixed;top:120px;left:10px;z-index:15;min-height:36px;padding:0 14px;font-size:13px;border-radius:99px;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(4px);box-shadow:var(--sombra-m)}
+.juego.con-vista{padding-top:44px}
+
+/* ---------- Barra inferior común de los juegos (Nuevo panel · Configurar · Apariencia · Pausa/Salir) ---------- */
+.barra-gen{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;margin:14px 0 6px;padding-top:12px;border-top:2px dashed var(--line)}
+.barra-gen button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;padding:6px 4px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:800 12px/1.15 var(--f-titulo,system-ui);text-align:center;cursor:pointer;touch-action:manipulation}
+.barra-gen button span{font-size:20px;line-height:1}
+@media (max-width:440px){.barra-gen{gap:5px}.barra-gen button{padding:6px 1px;font-size:10px;letter-spacing:-.2px;hyphens:none}.barra-gen button span{font-size:18px}}
+.barra-gen button:active{transform:scale(.96)}
+.barra-gen button[data-gen="nueva"]{border-color:var(--purple)}
+.barra-gen button[data-gen="salir"]{border-color:#E0553D}
+/* diálogo Configurar partida */
+.cfg-g{margin:10px 0}.cfg-g .lbl{display:block;font-size:13px;font-weight:800;color:var(--mut);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+/* Apariencia: secciones desplegables */
+.ap-acordeon{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.ap-det{margin:0;border:2px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+.ap-det[open]{border-color:var(--purple)}
+.ap-det>summary.ap-link{list-style:none;border:0;border-radius:0;margin:0;cursor:pointer}
+.ap-det>summary.ap-link::-webkit-details-marker{display:none}
+.ap-det>summary.ap-link::after{content:"›";margin-left:8px;font-size:24px;font-weight:800;color:var(--mut);transition:transform .2s}
+.ap-det[open]>summary.ap-link::after{transform:rotate(90deg);color:var(--purple)}
+.ap-cuerpo{padding:4px 12px 12px}
+.ap-cuerpo.ap-rej{margin:0}
+
+
+/* ---------- menú flotante común (core/flotante.js) ---------- */
+.flotante{position:fixed;z-index:40;width:min(calc(100vw - 12px),420px);background:color-mix(in srgb,var(--card) 94%,transparent);border:2px solid var(--line);border-radius:18px;box-shadow:0 12px 30px rgba(20,15,60,.35);padding:0 8px 8px;touch-action:none;cursor:grab;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);user-select:none;-webkit-user-select:none;transition:opacity .2s}
+.flotante.mov{box-shadow:0 20px 44px rgba(20,15,60,.5);opacity:.9}
+.flasa{display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 0 5px;cursor:grab;touch-action:none}
+.flotante.mov .flasa{cursor:grabbing}
+.flasa span{width:40px;height:5px;border-radius:99px;background:var(--line)}
+.flasa small{font-size:11px;font-weight:800;color:var(--mut)}
+.flbtns{display:grid;grid-template-columns:repeat(var(--nb),1fr);gap:6px}
+.flbtns .btn{padding:8px 2px;font-size:13.5px;line-height:1.15;min-height:44px;white-space:nowrap;touch-action:manipulation}
+.flbtns .btn.on{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border-color:transparent}
+.flbtns .btn:disabled{opacity:.4}
+.flhueco{width:100%}
+/* variante con círculo táctil en medio (Catapulta) */
+.flcuerpo{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}
+.flcol{display:flex;flex-direction:column;gap:6px}
+.flcol .btn{padding:10px 3px;font-size:13.5px;line-height:1.15;min-height:48px;white-space:normal;touch-action:manipulation}
+.flcol .btn.on{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border-color:transparent}
+.flcol .btn:disabled{opacity:.4}
+.flcentro{display:flex;flex-direction:column;align-items:center;gap:4px}
+
+/* Cabecera: banner 8:1 con los dos logos en los extremos; el nombre va encima, en el centro blanco */
+.top h1{position:relative;display:flex;align-items:center;justify-content:center;flex:1 1 100%;width:100%;max-width:1000px;margin:0 auto;padding:0;aspect-ratio:8/1;background:#fff url(../img/banner-cabecera.webp) center/100% 100% no-repeat;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(20,10,80,.25)}
+.top h1 #titulotxt{display:block;max-width:56%;color:#2347B8;font-family:Chewy,'Baloo 2',system-ui,sans-serif;font-weight:400;font-size:var(--tit-fs,clamp(15px,4.5vw,30px));line-height:1.1;letter-spacing:.2px;white-space:nowrap;overflow:visible;text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 16px rgba(255,255,255,.9)}
+
+/* Título «Juegos Reunidos»: colores del logo (J amarilla, R azul), algo más oscuros para contrastar con el blanco */
+.top h1 #titulotxt .cj{color:#D98E00}
+.top h1 #titulotxt .cr{color:#1F55C8}
+
+/* ---------- dado 3D común (core/dado3d.js) ---------- */
+.dadozona{display:flex;flex-direction:column;align-items:center;margin:4px 0 2px}
+.dado3d{width:min(100%,240px);height:116px;margin:0 auto;border-radius:18px;outline:none;cursor:default;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.dado3d.dos{width:min(100%,340px)}
+.dado3d.listo{cursor:pointer;animation:dadoPulso 1.3s ease-in-out infinite}
+.dado3d:focus-visible{box-shadow:0 0 0 3px var(--blue)}
+@keyframes dadoPulso{0%,100%{filter:drop-shadow(0 0 3px rgba(255,190,0,.0))}50%{filter:drop-shadow(0 0 12px rgba(255,190,0,.95))}}
+.dado3d-aviso{display:block;text-align:center;font-weight:800;font-size:12.5px;color:var(--mut);margin:0 0 4px}
+.dado3d.plano{display:flex;align-items:center;justify-content:center;gap:16px}
+.dado3d .d2{width:72px;height:72px;border-radius:16px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:10px;box-shadow:0 4px 10px rgba(0,0,0,.3),inset 0 -3px 0 rgba(0,0,0,.12)}
+.dado3d .d2 i{width:12px;height:12px;margin:auto;border-radius:50%}
+.dado3d .d2 i.on{background:currentColor}
+.dado3d .d2 b{grid-area:1/1/4/4;display:grid;place-items:center;font-size:30px}
+.dado3d .d2.roda{animation:dadogiro .35s linear infinite}
+@keyframes dadogiro{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.dado3d.listo{animation:none;filter:drop-shadow(0 0 8px rgba(255,190,0,.9))}}
+.dado3d-aviso[hidden]{display:none}
+.ficha b{white-space:pre-line}
+.dado3d .d2[data-forma=cuadrado] i{border-radius:2px}
+.dado3d .d2[data-forma=rombo] i{border-radius:0;transform:rotate(45deg) scale(.85)}
+.dado3d .d2[data-forma=estrella] i{border-radius:0;clip-path:polygon(50% 0,62% 36%,100% 38%,70% 60%,80% 100%,50% 76%,20% 100%,30% 60%,0 38%,38% 36%)}
