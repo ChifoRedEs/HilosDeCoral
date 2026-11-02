@@ -1,5 +1,65 @@
 [
   {
+    "id": "bisuteria-pulsera-lila-y-crema",
+    "nombre": "Lila y crema · Pulsera",
+    "categoria": "bisuteria",
+    "subcategoria": "pulseras",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pulsera fina de macramé con nudo en espiral, en cordón de satén morado y blanco crema que se alternan formando una espiral. Cierre de nudo corredizo para ajustarla a cualquier muñeca.\n\nCada pulsera está anudada a mano, una a una, así que puede tener pequeñas diferencias respecto a la foto. Eso la hace única.",
+    "materiales": "Cordón de satén (cola de ratón) anudado a mano",
+    "medidas": "Ajustable con nudo corredizo",
+    "cuidados": "Evita mojarla y el contacto con perfumes y cremas. Para limpiarla, un paño húmedo.",
+    "fotos": [
+      "img/productos/bisuteria-pulsera-lila-y-crema.webp"
+    ],
+    "creado": "2026-11-02T20:42:00"
+  },
+  {
+    "id": "bisuteria-pulsera-sol-y-fucsia",
+    "nombre": "Sol y fucsia · Pulsera",
+    "categoria": "bisuteria",
+    "subcategoria": "pulseras",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pulsera ancha de macramé de nudo plano, con nudos amarillo limón a los lados y una línea fucsia en el centro, en cordón de satén. Cierre de nudo corredizo fucsia para ajustarla a cualquier muñeca.\n\nCada pulsera está anudada a mano, una a una, así que puede tener pequeñas diferencias respecto a la foto. Eso la hace única.",
+    "materiales": "Cordón de satén (cola de ratón) anudado a mano",
+    "medidas": "Ajustable con nudo corredizo",
+    "cuidados": "Evita mojarla y el contacto con perfumes y cremas. Para limpiarla, un paño húmedo.",
+    "fotos": [
+      "img/productos/bisuteria-pulsera-sol-y-fucsia.webp"
+    ],
+    "creado": "2026-11-02T20:41:00"
+  },
+  {
+    "id": "bisuteria-pulsera-rojo-y-oro",
+    "nombre": "Rojo y oro · Pulsera",
+    "categoria": "bisuteria",
+    "subcategoria": "pulseras",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": "",
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Pulsera de macramé con nudo en espiral, en cordón de satén rojo y dorado que se alternan. Cierre de nudo corredizo para ajustarla a cualquier muñeca.\n\nCada pulsera está anudada a mano, una a una, así que puede tener pequeñas diferencias respecto a la foto. Eso la hace única.",
+    "materiales": "Cordón de satén (cola de ratón) anudado a mano",
+    "medidas": "Ajustable con nudo corredizo",
+    "cuidados": "Evita mojarla y el contacto con perfumes y cremas. Para limpiarla, un paño húmedo.",
+    "fotos": [
+      "img/productos/bisuteria-pulsera-rojo-y-oro.webp"
+    ],
+    "creado": "2026-11-02T20:40:00"
+  },
+  {
     "id": "ceramica-tostada-buenos-dias",
     "nombre": "Tostada «buenos días» · Plato",
     "categoria": "ceramica",
