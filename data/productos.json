@@ -1,5 +1,85 @@
 [
   {
+    "id": "ceramica-ok-but-first-pizza",
+    "nombre": "Ok, but first pizza · Plato de pizza",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato grande de tamaño pizza familiar, con el borde irregular modelado a mano y el mensaje «OK, but first PIZZA..» pintado a mano en negro, con un corazón rojo. Perfecto para servir pizza casera, para compartir en la mesa o para regalar a un amante de la pizza.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "Tamaño pizza familiar",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-ok-but-first-pizza.webp"
+    ],
+    "creado": "2026-11-04T19:33:00"
+  },
+  {
+    "id": "ceramica-florece-amapolas",
+    "nombre": "Amapolas lilas · Florece · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato redondo de borde irregular modelado a mano, con dos amapolas lilas de centro rosa y sus capullos pintados a mano sobre tallos verdes. Lleva grabada la palabra «FLORECE» con un pequeño corazón rosa. Para decorar, como vaciabolsillos, para el postre o como un regalo con mensaje.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-florece-amapolas.webp"
+    ],
+    "creado": "2026-11-04T19:32:00"
+  },
+  {
+    "id": "ceramica-florece-girasol",
+    "nombre": "Girasol · Florece · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato redondo de borde irregular modelado a mano, con un gran girasol amarillo de centro marrón con puntitos pintado a mano y la palabra «FLORECE» grabada con un pequeño corazón. Un plato alegre para el desayuno, para decorar o para regalar.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-florece-girasol.webp"
+    ],
+    "creado": "2026-11-04T19:31:00"
+  },
+  {
+    "id": "ceramica-florece-cactus",
+    "nombre": "Cactus en flor · Florece · Plato",
+    "categoria": "ceramica",
+    "subcategoria": "vajilla",
+    "precio": 0,
+    "precioAnterior": "",
+    "unidades": 1,
+    "estado": "disponible",
+    "novedad": false,
+    "visible": true,
+    "descripcion": "Plato redondo de borde irregular modelado a mano, con un cactus verde con dos flores rojas pintado a mano y la palabra «FLORECE» grabada con un pequeño corazón rojo. Para decorar, como vaciabolsillos o como un regalo con mensaje.\n\nCada pieza está hecha a mano, una a una, así que puede tener pequeñas diferencias de color y forma respecto a la foto. Eso la hace única.",
+    "materiales": "Cerámica modelada y pintada a mano",
+    "medidas": "",
+    "cuidados": "Lavar a mano con agua y jabón suave. No apto para microondas ni lavavajillas.",
+    "fotos": [
+      "img/productos/ceramica-vajilla-florece-cactus.webp"
+    ],
+    "creado": "2026-11-04T19:30:00"
+  },
+  {
     "id": "bisuteria-pulsera-lila-y-crema",
     "nombre": "Lila y crema · Pulsera",
     "categoria": "bisuteria",
