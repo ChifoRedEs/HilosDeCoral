@@ -85,7 +85,7 @@
     const ic = (n) => '<img src="img/ic-red-' + n + '.webp" alt="" width="16" height="16">';
     if (ct.instagram) redes.push('<a href="https://instagram.com/' + esc(ct.instagram.replace(/^@/, '')) + '" target="_blank" rel="noopener">' + ic('instagram') + 'Instagram</a>');
     if (numeroWhatsApp()) redes.push('<a href="https://wa.me/' + numeroWhatsApp() + '" target="_blank" rel="noopener">' + ic('whatsapp') + 'WhatsApp</a>');
-    if (ct.email) redes.push('<a href="mailto:' + esc(ct.email) + '" title="' + esc(ct.email) + '" aria-label="Correo: ' + esc(ct.email) + '">' + ic('email') + esc(String(ct.email).split('@')[0]) + '</a>');
+    if (ct.email) redes.push('<a href="mailto:' + esc(ct.email) + '" title="' + esc(ct.email) + '" aria-label="Correo: ' + esc(ct.email) + '">' + ic('email') + 'Correo</a>');
     $('#pie-redes').innerHTML = redes.join('');
 
     const pagos = (c.pagos || []).filter((p) => p.activo).map((p) => p.nombre.replace(/\s*\(.*\)$/, ''));
